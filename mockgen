@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+MOCKS=(
+    "common_contract/hasher.go|common_mock/hasher.go"
+    "user_contract/user_repository.go|user_mock/repository.go"
+    "user_contract/user_service.go|user_mock/user_service.go"
+    "user_contract/user_aggregator.go|user_mock/user_aggregator.go"
+    "user_contract/user_api.go|user_mock/user_api.go"
+)
+
+for params in ${MOCKS[*]}
+do
+    IFS=$'|' read -r source destination <<< "$params"
+    IFS=$'/' read -r package _ <<< "$destination"
+    ~/go/bin/mockgen -source=${source} -destination=${destination} -package=${package}
+done
