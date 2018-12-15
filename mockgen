@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 MOCKS=(
-    "common_contract/hasher.go|common_mock/hasher.go"
-    "user_contract/user_repository.go|user_mock/repository.go"
-    "user_contract/user_service.go|user_mock/user_service.go"
-    "user_contract/user_aggregator.go|user_mock/user_aggregator.go"
-    "user_contract/user_api.go|user_mock/user_api.go"
+    "contracts/hasher.go|mocks/hasher.go"
+    "contracts/user_repository.go|mocks/user_repository.go"
+    "contracts/user_service.go|mocks/user_service.go"
+    "contracts/user_aggregator.go|mocks/user_aggregator.go"
+    "contracts/user_api.go|mocks/user_api.go"
+    "contracts/post_api.go|mocks/post_api.go"
 )
 
 for params in ${MOCKS[*]}
