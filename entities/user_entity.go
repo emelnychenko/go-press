@@ -2,6 +2,7 @@ package entities
 
 import (
 	"github.com/emelnychenko/go-press/models"
+	"time"
 )
 
 const (
@@ -16,11 +17,14 @@ type (
 		Email string `gorm:"type:varchar(100);unique_index"`
 		Password string
 		Verified bool
+		Created *time.Time
+		Updated *time.Time
 	}
 )
 
 func NewUserEntity() *UserEntity {
-	return &UserEntity{Id: models.NewModelId(), Verified: false}
+	created := time.Now().UTC()
+	return &UserEntity{Id: models.NewModelId(), Verified: false, Created: &created}
 }
 
 func (*UserEntity) TableName() string {

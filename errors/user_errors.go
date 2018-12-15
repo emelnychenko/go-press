@@ -12,7 +12,7 @@ type (
 )
 
 func (e UserNotFoundError) Error() string {
-	return fmt.Sprintf("The aggregator was not found on request: %s", string(e.NotFoundError))
+	return fmt.Sprintf("The user was not found on request: %s", string(e.NotFoundError))
 }
 
 func NewUserNotFoundError(query string) UserNotFoundError {

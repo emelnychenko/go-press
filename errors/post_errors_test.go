@@ -7,10 +7,10 @@ import (
 	"testing"
 )
 
-func TestUserErrors(t *testing.T) {
+func TestPostErrors(t *testing.T) {
 	t.Run("PostNotFound", func(t *testing.T) {
-		err := NewUserNotFoundError("check")
-		assert.Equal(t, fmt.Sprintf("The user was not found on request: %s", "check"), err.Error())
+		err := NewPostNotFoundError("check")
+		assert.Equal(t, fmt.Sprintf("The post was not found on request: %s", "check"), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())
 	})
 }

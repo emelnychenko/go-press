@@ -7,7 +7,10 @@ import (
 
 type (
 	PostApi interface {
-		ListPosts() ([]*models.Post, common.Error)
-		GetPost(postId models.PostId) (*models.Post, common.Error)
+		ListPosts() (posts []*models.Post, err common.Error)
+		GetPost(postId *models.PostId) (post *models.Post, err common.Error)
+		CreatePost(data *models.PostCreate) (post *models.Post, err common.Error)
+		UpdatePost(postId *models.PostId, data *models.PostUpdate) (err common.Error)
+		DeletePost(postId *models.PostId) (err common.Error)
 	}
 )

@@ -6,6 +6,9 @@ MOCKS=(
     "contracts/user_service.go|mocks/user_service.go"
     "contracts/user_aggregator.go|mocks/user_aggregator.go"
     "contracts/user_api.go|mocks/user_api.go"
+    "contracts/post_repository.go|mocks/post_repository.go"
+    "contracts/post_service.go|mocks/post_service.go"
+    "contracts/post_aggregator.go|mocks/post_aggregator.go"
     "contracts/post_api.go|mocks/post_api.go"
 )
 

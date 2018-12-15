@@ -50,7 +50,7 @@ func (mr *MockPostApiMockRecorder) ListPosts() *gomock.Call {
 }
 
 // GetPost mocks base method
-func (m *MockPostApi) GetPost(postId models.PostId) (*models.Post, common.Error) {
+func (m *MockPostApi) GetPost(postId *models.PostId) (*models.Post, common.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPost", postId)
 	ret0, _ := ret[0].(*models.Post)
@@ -62,4 +62,47 @@ func (m *MockPostApi) GetPost(postId models.PostId) (*models.Post, common.Error)
 func (mr *MockPostApiMockRecorder) GetPost(postId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPost", reflect.TypeOf((*MockPostApi)(nil).GetPost), postId)
+}
+
+// CreatePost mocks base method
+func (m *MockPostApi) CreatePost(data *models.PostCreate) (*models.Post, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreatePost", data)
+	ret0, _ := ret[0].(*models.Post)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// CreatePost indicates an expected call of CreatePost
+func (mr *MockPostApiMockRecorder) CreatePost(data interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockPostApi)(nil).CreatePost), data)
+}
+
+// UpdatePost mocks base method
+func (m *MockPostApi) UpdatePost(postId *models.PostId, data *models.PostUpdate) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdatePost", postId, data)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// UpdatePost indicates an expected call of UpdatePost
+func (mr *MockPostApiMockRecorder) UpdatePost(postId, data interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePost", reflect.TypeOf((*MockPostApi)(nil).UpdatePost), postId, data)
+}
+
+// DeletePost mocks base method
+func (m *MockPostApi) DeletePost(postId *models.PostId) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeletePost", postId)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// DeletePost indicates an expected call of DeletePost
+func (mr *MockPostApiMockRecorder) DeletePost(postId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePost", reflect.TypeOf((*MockPostApi)(nil).DeletePost), postId)
 }

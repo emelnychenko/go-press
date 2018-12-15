@@ -39,18 +39,25 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(NewServer)
 	_ = container.Provide(hasher.NewBCryptHasher)
 	_ = container.Provide(repositories.NewUserRepository)
+	_ = container.Provide(repositories.NewPostRepository)
 	_ = container.Provide(services.NewUserService)
+	_ = container.Provide(services.NewPostService)
 	_ = container.Provide(aggregator.NewUserAggregator)
+	_ = container.Provide(aggregator.NewPostAggregator)
 	_ = container.Provide(apis.NewUserApi)
+	_ = container.Provide(apis.NewPostApi)
 	_ = container.Provide(controllers.NewUserController)
+	_ = container.Provide(controllers.NewPostController)
 	return
 }
 
 func BindControllers(
 	echo *echo.Echo,
 	userController *controllers.UserController,
+	postController *controllers.PostController,
 ) {
 	controllers.BindUserController(echo, userController)
+	controllers.BindPostController(echo, postController)
 }
 
 func main() {

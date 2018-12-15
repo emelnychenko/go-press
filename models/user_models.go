@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type (
 	User struct {
 		Id *UserId `json:"id" xml:"id"`
@@ -7,6 +9,8 @@ type (
 		LastName string `json:"lastName" xml:"lastName"`
 		Email string `json:"email" xml:"email"`
 		Verified bool `json:"verified" xml:"verified"`
+		Created *time.Time `json:"created" xml:"created"`
+		Updated *time.Time `json:"updated" xml:"updated"`
 	}
 
 	UserCreate struct {

@@ -1,20 +1,35 @@
 package entities
 
 import (
+	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
+	"time"
+)
+
+const (
+	PostTable = "posts"
 )
 
 type (
 	PostEntity struct {
 		Id *models.PostId `gorm:"primary_key;type:char(36);column:id"`
-		Content string `json:"content" xml:"content"`
+		Title string
+		Description string `gorm:"type:text"`
+		Content string
+		Status enums.PostStatus
+		Privacy enums.PostPrivacy
+		Views int
+		Published *time.Time
+		Created *time.Time
+		Updated *time.Time
 	}
 )
 
 func NewPostEntity() *PostEntity {
-	return &PostEntity{Id: models.NewModelId()}
+	created := time.Now().UTC()
+	return &PostEntity{Id: models.NewModelId(), Created: &created}
 }
 
 func (*PostEntity) TableName() string {
-	return "posts"
+	return PostTable
 }
