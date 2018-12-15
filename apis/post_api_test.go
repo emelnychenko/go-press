@@ -73,13 +73,14 @@ func TestPostApi(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postAggregator := mocks.NewMockPostAggregator(ctrl)
 		postApi := NewPostApi(postService, postAggregator)
+		postAuthor := models.NewSystemUser()
 		var postEntity *entities.PostEntity
 		var data *models.PostCreate
 		var reply *models.Post
 
-		postService.EXPECT().CreatePost(data).Return(postEntity, nil)
+		postService.EXPECT().CreatePost(postAuthor, data).Return(postEntity, nil)
 		postAggregator.EXPECT().AggregateObject(postEntity).Return(reply)
-		post, err := postApi.CreatePost(data)
+		post, err := postApi.CreatePost(postAuthor, data)
 
 		assert.Equal(t, reply, post)
 		assert.Nil(t, err)
@@ -88,10 +89,11 @@ func TestPostApi(t *testing.T) {
 	t.Run("CreatePost:Error", func(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postApi := NewPostApi(postService, nil)
+		postAuthor := models.NewSystemUser()
 		var data *models.PostCreate
 
-		postService.EXPECT().CreatePost(data).Return(nil, testErr)
-		post, err := postApi.CreatePost(data)
+		postService.EXPECT().CreatePost(postAuthor, data).Return(nil, testErr)
+		post, err := postApi.CreatePost(postAuthor, data)
 
 		assert.Nil(t, post)
 		assert.Error(t, err)
@@ -115,6 +117,26 @@ func TestPostApi(t *testing.T) {
 
 		postService.EXPECT().GetPost(postId).Return(nil, testErr)
 		assert.Error(t, postApi.UpdatePost(postId, data))
+	})
+
+	t.Run("ChangePostAuthor", func(t *testing.T) {
+		postService := mocks.NewMockPostService(ctrl)
+		postApi := NewPostApi(postService, nil)
+		systemUser := models.NewSystemUser()
+		var postEntity *entities.PostEntity
+
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+		postService.EXPECT().ChangePostAuthor(postEntity, systemUser).Return(nil)
+		assert.Nil(t, postApi.ChangePostAuthor(postId, systemUser))
+	})
+
+	t.Run("ChangePostAuthor:Error", func(t *testing.T) {
+		postService := mocks.NewMockPostService(ctrl)
+		postApi := NewPostApi(postService, nil)
+		systemUser := models.NewSystemUser()
+
+		postService.EXPECT().GetPost(postId).Return(nil, testErr)
+		assert.Error(t, postApi.ChangePostAuthor(postId, systemUser))
 	})
 
 	t.Run("DeletePost", func(t *testing.T) {

@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -29,4 +30,12 @@ func NewUserEntity() *UserEntity {
 
 func (*UserEntity) TableName() string {
 	return UserTable
+}
+
+func (c *UserEntity) SubjectId() *models.ModelId {
+	return c.Id
+}
+
+func (*UserEntity) SubjectType() enums.SubjectType {
+	return enums.UserSubjectType
 }

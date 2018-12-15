@@ -54,7 +54,8 @@ func (c *PostController) CreatePost(context echo.Context) error {
 		return context.JSON(http.StatusBadRequest, err)
 	}
 
-	post, err := c.postApi.CreatePost(data)
+	systemUser := models.NewSystemUser() // TODO: Replace stub
+	post, err := c.postApi.CreatePost(systemUser, data)
 
 	if err != nil {
 		return context.JSON(err.Code(), err)

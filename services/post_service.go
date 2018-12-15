@@ -26,7 +26,7 @@ func (c *postServiceImpl) GetPost(postId *models.PostId) (*entities.PostEntity, 
 	return c.postRepository.GetPost(postId)
 }
 
-func (c *postServiceImpl) CreatePost(data *models.PostCreate) (postEntity *entities.PostEntity, err common.Error) {
+func (c *postServiceImpl) CreatePost(postAuthor models.Subject, data *models.PostCreate) (postEntity *entities.PostEntity, err common.Error) {
 	postEntity = entities.NewPostEntity()
 	postEntity.Title = data.Title
 	postEntity.Description = data.Description
@@ -35,6 +35,7 @@ func (c *postServiceImpl) CreatePost(data *models.PostCreate) (postEntity *entit
 	postEntity.Privacy = data.Privacy
 	postEntity.Published = data.Published
 	postEntity.Views = data.Views
+	postEntity.SetAuthor(postAuthor)
 
 	err = c.postRepository.SavePost(postEntity)
 	return
@@ -51,6 +52,12 @@ func (c *postServiceImpl) UpdatePost(postEntity *entities.PostEntity, data *mode
 
 	updated := time.Now().UTC()
 	postEntity.Updated = &updated
+
+	return c.postRepository.SavePost(postEntity)
+}
+
+func (c *postServiceImpl) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor models.Subject) (err common.Error) {
+	postEntity.SetAuthor(postAuthor)
 
 	return c.postRepository.SavePost(postEntity)
 }

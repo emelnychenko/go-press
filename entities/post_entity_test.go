@@ -18,4 +18,12 @@ func TestPostEntity(t *testing.T) {
 		e := NewPostEntity()
 		assert.Equal(t, PostTable, e.TableName())
 	})
+
+	t.Run("SetAuthor", func(t *testing.T) {
+		postEntity := NewPostEntity()
+		userEntity := NewUserEntity()
+		postEntity.SetAuthor(userEntity)
+		assert.Equal(t, userEntity.SubjectId(), postEntity.AuthorId)
+		assert.Equal(t, userEntity.SubjectType(), postEntity.AuthorType)
+	})
 }

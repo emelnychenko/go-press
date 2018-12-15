@@ -7,6 +7,7 @@ import (
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/hasher"
 	"github.com/emelnychenko/go-press/repositories"
+	"github.com/emelnychenko/go-press/resolvers"
 	"github.com/emelnychenko/go-press/services"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -38,6 +39,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(ConnectDatabase)
 	_ = container.Provide(NewServer)
 	_ = container.Provide(hasher.NewBCryptHasher)
+	_ = container.Provide(resolvers.NewSubjectResolver)
 	_ = container.Provide(repositories.NewUserRepository)
 	_ = container.Provide(repositories.NewPostRepository)
 	_ = container.Provide(services.NewUserService)

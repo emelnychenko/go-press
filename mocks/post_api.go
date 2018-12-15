@@ -65,18 +65,18 @@ func (mr *MockPostApiMockRecorder) GetPost(postId interface{}) *gomock.Call {
 }
 
 // CreatePost mocks base method
-func (m *MockPostApi) CreatePost(data *models.PostCreate) (*models.Post, common.Error) {
+func (m *MockPostApi) CreatePost(postAuthor models.Subject, data *models.PostCreate) (*models.Post, common.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePost", data)
+	ret := m.ctrl.Call(m, "CreatePost", postAuthor, data)
 	ret0, _ := ret[0].(*models.Post)
 	ret1, _ := ret[1].(common.Error)
 	return ret0, ret1
 }
 
 // CreatePost indicates an expected call of CreatePost
-func (mr *MockPostApiMockRecorder) CreatePost(data interface{}) *gomock.Call {
+func (mr *MockPostApiMockRecorder) CreatePost(postAuthor, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockPostApi)(nil).CreatePost), data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockPostApi)(nil).CreatePost), postAuthor, data)
 }
 
 // UpdatePost mocks base method
@@ -91,6 +91,20 @@ func (m *MockPostApi) UpdatePost(postId *models.PostId, data *models.PostUpdate)
 func (mr *MockPostApiMockRecorder) UpdatePost(postId, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePost", reflect.TypeOf((*MockPostApi)(nil).UpdatePost), postId, data)
+}
+
+// ChangePostAuthor mocks base method
+func (m *MockPostApi) ChangePostAuthor(postId *models.PostId, postAuthor models.Subject) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangePostAuthor", postId, postAuthor)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// ChangePostAuthor indicates an expected call of ChangePostAuthor
+func (mr *MockPostApiMockRecorder) ChangePostAuthor(postId, postAuthor interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostAuthor", reflect.TypeOf((*MockPostApi)(nil).ChangePostAuthor), postId, postAuthor)
 }
 
 // DeletePost mocks base method

@@ -9,8 +9,9 @@ type (
 	PostApi interface {
 		ListPosts() (posts []*models.Post, err common.Error)
 		GetPost(postId *models.PostId) (post *models.Post, err common.Error)
-		CreatePost(data *models.PostCreate) (post *models.Post, err common.Error)
+		CreatePost(postAuthor models.Subject, data *models.PostCreate) (post *models.Post, err common.Error)
 		UpdatePost(postId *models.PostId, data *models.PostUpdate) (err common.Error)
+		ChangePostAuthor(postId *models.PostId, postAuthor models.Subject) (err common.Error)
 		DeletePost(postId *models.PostId) (err common.Error)
 	}
 )

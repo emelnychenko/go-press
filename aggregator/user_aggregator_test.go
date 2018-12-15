@@ -10,7 +10,7 @@ import (
 func TestUserAggregator(t *testing.T) {
 	t.Run("AggregateObject", func(t *testing.T) {
 		userAggregator := NewUserAggregator()
-		userModel := userAggregator.AggregateObject(&entities.UserEntity{})
+		userModel := userAggregator.AggregateObject(&entities.UserEntity{Id: models.NewModelId()})
 
 		assert.IsType(t, &models.User{}, userModel)
 	})

@@ -6,10 +6,12 @@ import (
 	"github.com/emelnychenko/go-press/models"
 )
 
-type postAggregatorImpl struct {}
+type postAggregatorImpl struct {
+	subjectResolver contracts.SubjectResolver
+}
 
-func NewPostAggregator() contracts.PostAggregator {
-	return new(postAggregatorImpl)
+func NewPostAggregator(subjectResolver contracts.SubjectResolver) contracts.PostAggregator {
+	return &postAggregatorImpl{subjectResolver}
 }
 
 func (c *postAggregatorImpl) AggregateObject(postEntity *entities.PostEntity) (post *models.Post) {
@@ -24,6 +26,8 @@ func (c *postAggregatorImpl) AggregateObject(postEntity *entities.PostEntity) (p
 	post.Views = postEntity.Views
 	post.Created = postEntity.Created
 	post.Updated = postEntity.Updated
+	post.Author, _ = c.subjectResolver.ResolveSubject(postEntity.AuthorId, postEntity.AuthorType)
+
 	return
 }
 

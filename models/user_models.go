@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"github.com/emelnychenko/go-press/enums"
+	"time"
+)
 
 type (
 	User struct {
@@ -34,3 +37,11 @@ type (
 		Email string `json:"email" xml:"email"`
 	}
 )
+
+func (c *User) SubjectId() *ModelId {
+	return c.Id
+}
+
+func (*User) SubjectType() enums.SubjectType {
+	return enums.UserSubjectType
+}

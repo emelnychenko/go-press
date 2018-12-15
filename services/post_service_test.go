@@ -19,18 +19,19 @@ func TestPostService(t *testing.T) {
 	t.Run("ListPosts", func(t *testing.T) {
 		postRepository := mocks.NewMockPostRepository(ctrl)
 		postService := NewPostService(postRepository)
-		var commonReply []*entities.PostEntity
+		var replies []*entities.PostEntity
 
-		postRepository.EXPECT().ListPosts().Return(commonReply, nil)
+		postRepository.EXPECT().ListPosts().Return(replies, nil)
 		postEntities, err := postService.ListPosts()
 
-		assert.Equal(t, commonReply, postEntities)
+		assert.Equal(t, replies, postEntities)
 		assert.Nil(t, err)
 	})
 
 	t.Run("CreatePost", func(t *testing.T) {
 		postRepository := mocks.NewMockPostRepository(ctrl)
 		postService := NewPostService(postRepository)
+		systemUser := models.NewSystemUser()
 		data := &models.PostCreate{
 			Title:       "0",
 			Description: "1",
@@ -42,7 +43,7 @@ func TestPostService(t *testing.T) {
 		}
 
 		postRepository.EXPECT().SavePost(gomock.Any()).Return(nil)
-		postEntity, err := postService.CreatePost(data)
+		postEntity, err := postService.CreatePost(systemUser, data)
 
 		assert.IsType(t, new(entities.PostEntity), postEntity)
 		assert.Nil(t, err)
@@ -58,12 +59,12 @@ func TestPostService(t *testing.T) {
 	t.Run("GetPost", func(t *testing.T) {
 		postRepository := mocks.NewMockPostRepository(ctrl)
 		postService := NewPostService(postRepository)
-		var commonReply *entities.PostEntity
+		var reply *entities.PostEntity
 
-		postRepository.EXPECT().GetPost(postId).Return(commonReply, nil)
+		postRepository.EXPECT().GetPost(postId).Return(reply, nil)
 		postEntity, err := postService.GetPost(postId)
 
-		assert.Equal(t, commonReply, postEntity)
+		assert.Equal(t, reply, postEntity)
 		assert.Nil(t, err)
 	})
 
@@ -103,6 +104,16 @@ func TestPostService(t *testing.T) {
 		assert.Equal(t, data.Views, postEntity.Views)
 		assert.Equal(t, data.Published, postEntity.Published)
 		assert.NotNil(t, postEntity.Updated)
+	})
+
+	t.Run("ChangePostAuthor", func(t *testing.T) {
+		postRepository := mocks.NewMockPostRepository(ctrl)
+		postService := NewPostService(postRepository)
+		systemUser := models.NewSystemUser()
+		postEntity := &entities.PostEntity{}
+
+		postRepository.EXPECT().SavePost(postEntity).Return(nil)
+		assert.Nil(t, postService.ChangePostAuthor(postEntity, systemUser))
 	})
 
 	t.Run("DeletePost", func(t *testing.T) {

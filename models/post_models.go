@@ -8,6 +8,7 @@ import (
 type (
 	Post struct {
 		Id *PostId `json:"id" xml:"id"`
+		Author interface{} `json:"author" xml:"author"`
 		Title string `json:"title" xml:"title"`
 		Description string `json:"description" xml:"description"`
 		Content string `json:"content" xml:"content"`

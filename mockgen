@@ -2,6 +2,7 @@
 
 MOCKS=(
     "contracts/hasher.go|mocks/hasher.go"
+    "contracts/subject_resolver.go|mocks/subject_resolver.go"
     "contracts/user_repository.go|mocks/user_repository.go"
     "contracts/user_service.go|mocks/user_service.go"
     "contracts/user_aggregator.go|mocks/user_aggregator.go"

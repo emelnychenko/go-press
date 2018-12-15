@@ -66,18 +66,18 @@ func (mr *MockPostServiceMockRecorder) GetPost(postId interface{}) *gomock.Call 
 }
 
 // CreatePost mocks base method
-func (m *MockPostService) CreatePost(data *models.PostCreate) (*entities.PostEntity, common.Error) {
+func (m *MockPostService) CreatePost(postAuthor models.Subject, data *models.PostCreate) (*entities.PostEntity, common.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePost", data)
+	ret := m.ctrl.Call(m, "CreatePost", postAuthor, data)
 	ret0, _ := ret[0].(*entities.PostEntity)
 	ret1, _ := ret[1].(common.Error)
 	return ret0, ret1
 }
 
 // CreatePost indicates an expected call of CreatePost
-func (mr *MockPostServiceMockRecorder) CreatePost(data interface{}) *gomock.Call {
+func (mr *MockPostServiceMockRecorder) CreatePost(postAuthor, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockPostService)(nil).CreatePost), data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockPostService)(nil).CreatePost), postAuthor, data)
 }
 
 // UpdatePost mocks base method
@@ -92,6 +92,20 @@ func (m *MockPostService) UpdatePost(postEntity *entities.PostEntity, data *mode
 func (mr *MockPostServiceMockRecorder) UpdatePost(postEntity, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePost", reflect.TypeOf((*MockPostService)(nil).UpdatePost), postEntity, data)
+}
+
+// ChangePostAuthor mocks base method
+func (m *MockPostService) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor models.Subject) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangePostAuthor", postEntity, postAuthor)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// ChangePostAuthor indicates an expected call of ChangePostAuthor
+func (mr *MockPostServiceMockRecorder) ChangePostAuthor(postEntity, postAuthor interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostAuthor", reflect.TypeOf((*MockPostService)(nil).ChangePostAuthor), postEntity, postAuthor)
 }
 
 // DeletePost mocks base method
