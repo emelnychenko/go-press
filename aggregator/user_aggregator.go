@@ -32,4 +32,3 @@ func (c *userAggregatorImpl) AggregateCollection(e []*entities.UserEntity) []*mo
 
 	return m
 }
-

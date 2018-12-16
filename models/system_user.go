@@ -22,4 +22,3 @@ func (c *SystemUser) SubjectId() *ModelId {
 func (*SystemUser) SubjectType() enums.SubjectType {
 	return enums.SystemSubjectType
 }
-

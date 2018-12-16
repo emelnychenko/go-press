@@ -7,25 +7,25 @@ import (
 
 type (
 	User struct {
-		Id *UserId `json:"id" xml:"id"`
-		FirstName string `json:"firstName" xml:"firstName"`
-		LastName string `json:"lastName" xml:"lastName"`
-		Email string `json:"email" xml:"email"`
-		Verified bool `json:"verified" xml:"verified"`
-		Created *time.Time `json:"created" xml:"created"`
-		Updated *time.Time `json:"updated" xml:"updated"`
+		Id        *UserId    `json:"id" xml:"id"`
+		FirstName string     `json:"firstName" xml:"firstName"`
+		LastName  string     `json:"lastName" xml:"lastName"`
+		Email     string     `json:"email" xml:"email"`
+		Verified  bool       `json:"verified" xml:"verified"`
+		Created   *time.Time `json:"created" xml:"created"`
+		Updated   *time.Time `json:"updated" xml:"updated"`
 	}
 
 	UserCreate struct {
 		FirstName string `json:"firstName" xml:"firstName"`
-		LastName string `json:"lastName" xml:"lastName"`
-		Email string `json:"email" xml:"email"`
-		Password string `json:"password" xml:"password"`
+		LastName  string `json:"lastName" xml:"lastName"`
+		Email     string `json:"email" xml:"email"`
+		Password  string `json:"password" xml:"password"`
 	}
 
 	UserUpdate struct {
 		FirstName string `json:"firstName" xml:"firstName"`
-		LastName string `json:"lastName" xml:"lastName"`
+		LastName  string `json:"lastName" xml:"lastName"`
 	}
 
 	UserChangePassword struct {

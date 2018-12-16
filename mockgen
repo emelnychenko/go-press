@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 
+USER="`whoami`"
+HOME="`eval echo \"~$USER\"`"
+
 MOCKS=(
+    "$HOME/go/src/github.com/labstack/echo/context.go|echo_mocks/context.go"
+    "$HOME/go/src/github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface/interface.go|aws_mocks/s3manager.go"
     "contracts/hasher.go|mocks/hasher.go"
+    "contracts/aws_s3_parameters.go|mocks/aws_s3_parameters.go"
+    "contracts/aws_s3_writer_proxy.go|mocks/aws_s3_writer_proxy.go"
+    "contracts/aws_s3_writer_proxy_factory.go|mocks/aws_s3_writer_proxy_factory.go"
+    "contracts/aws_s3_uploader_factory.go|mocks/aws_s3_uploader_factory.go"
+    "contracts/aws_s3_downloader_factory.go|mocks/aws_s3_downloader_factory.go"
+    "contracts/aws_s3_writer_proxy_factory.go|mocks/aws_s3_writer_proxy_factory.go"
     "contracts/subject_resolver.go|mocks/subject_resolver.go"
     "contracts/user_repository.go|mocks/user_repository.go"
     "contracts/user_service.go|mocks/user_service.go"
@@ -11,6 +22,13 @@ MOCKS=(
     "contracts/post_service.go|mocks/post_service.go"
     "contracts/post_aggregator.go|mocks/post_aggregator.go"
     "contracts/post_api.go|mocks/post_api.go"
+    "contracts/storage_provider.go|mocks/storage_provider.go"
+    "contracts/file_model_factory.go|mocks/file_model_factory.go"
+    "contracts/file_echo_helper.go|mocks/file_echo_helper.go"
+    "contracts/file_repository.go|mocks/file_repository.go"
+    "contracts/file_service.go|mocks/file_service.go"
+    "contracts/file_aggregator.go|mocks/file_aggregator.go"
+    "contracts/file_api.go|mocks/file_api.go"
 )
 
 for params in ${MOCKS[*]}

@@ -16,5 +16,3 @@ func BindUserController(e *echo.Echo, c *UserController) {
 
 	e.DELETE(fmt.Sprintf("/user/:%s", UserId), c.DeleteUser)
 }
-
-

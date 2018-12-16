@@ -39,4 +39,3 @@ func (*BCryptHasher) Check(hashedPassword, password string) common.Error {
 
 	return nil
 }
-

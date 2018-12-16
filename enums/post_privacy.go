@@ -5,7 +5,7 @@ type (
 )
 
 const (
-	PostPublicPrivacy PostPrivacy = "public"
+	PostPublicPrivacy    PostPrivacy = "public"
 	PostProtectedPrivacy PostPrivacy = "protected"
-	PostPrivatePrivacy PostPrivacy = "private"
+	PostPrivatePrivacy   PostPrivacy = "private"
 )

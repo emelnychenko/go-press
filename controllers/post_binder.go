@@ -14,5 +14,3 @@ func BindPostController(e *echo.Echo, c *PostController) {
 
 	e.DELETE(fmt.Sprintf("/v0/post/:%s", PostId), c.DeletePost)
 }
-
-

@@ -28,7 +28,7 @@ func (c *postRepositoryImpl) ListPosts() (postEntities []*entities.PostEntity, e
 }
 
 func (c *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entities.PostEntity, err common.Error) {
-	postEntity = &entities.PostEntity{}
+	postEntity = new(entities.PostEntity)
 
 	if err := c.db.First(postEntity, "id = ?", postId).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {

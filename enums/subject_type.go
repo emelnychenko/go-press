@@ -6,5 +6,5 @@ type (
 
 const (
 	SystemSubjectType SubjectType = "system"
-	UserSubjectType SubjectType = "user"
+	UserSubjectType   SubjectType = "user"
 )

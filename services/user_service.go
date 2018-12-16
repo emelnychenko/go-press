@@ -5,6 +5,7 @@ import (
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/models"
+	"time"
 )
 
 type (
@@ -64,6 +65,9 @@ func (c *userServiceImpl) ChallengeUser(userEntity *entities.UserEntity, passwor
 func (c *userServiceImpl) UpdateUser(userEntity *entities.UserEntity, data *models.UserUpdate) common.Error {
 	userEntity.FirstName = data.FirstName
 	userEntity.LastName = data.LastName
+
+	updated := time.Now().UTC()
+	userEntity.Updated = &updated
 
 	return c.repository.SaveUser(userEntity)
 }

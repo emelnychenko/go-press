@@ -17,7 +17,6 @@ func NewPostApi(postService contracts.PostService, postAggregator contracts.Post
 	return &postApiImpl{postService, postAggregator}
 }
 
-
 func (c *postApiImpl) ListPosts() (posts []*models.Post, err common.Error) {
 	postEntities, err := c.postService.ListPosts()
 
@@ -83,5 +82,3 @@ func (c *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
 
 	return postService.DeletePost(postEntity)
 }
-
-

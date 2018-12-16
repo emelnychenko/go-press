@@ -34,8 +34,8 @@ func TestUserService(t *testing.T) {
 		userService := NewUserService(nil, userRepository)
 		data := &models.UserCreate{
 			FirstName: "foo",
-			LastName: "bar",
-			Email: "foo@bar",
+			LastName:  "bar",
+			Email:     "foo@bar",
 		}
 
 		userRepository.EXPECT().SaveUser(gomock.Any()).Return(nil)
@@ -140,7 +140,7 @@ func TestUserService(t *testing.T) {
 	t.Run("UpdateUser(UserEntity,UserUpdate)", func(t *testing.T) {
 		userRepository := mocks.NewMockUserRepository(ctrl)
 		userService := NewUserService(nil, userRepository)
-		data := &models.UserUpdate{FirstName: "foo",LastName:"bar"}
+		data := &models.UserUpdate{FirstName: "foo", LastName: "bar"}
 		userEntity := &entities.UserEntity{}
 
 		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
@@ -149,6 +149,7 @@ func TestUserService(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, data.FirstName, userEntity.FirstName)
 		assert.Equal(t, data.LastName, userEntity.LastName)
+		assert.NotNil(t, userEntity.Updated)
 	})
 
 	t.Run("VerifyUser(UserEntity)", func(t *testing.T) {

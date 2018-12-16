@@ -7,5 +7,5 @@ type (
 const (
 	PostPublishedStatus PostStatus = "published"
 	PostScheduledStatus PostStatus = "scheduled"
-	PostDraftStatus PostStatus = "draft"
+	PostDraftStatus     PostStatus = "draft"
 )

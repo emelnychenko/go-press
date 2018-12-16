@@ -11,7 +11,7 @@ type (
 		Code() int
 	}
 
-	ServerError string
+	ServerError   string
 	NotFoundError string
 )
 

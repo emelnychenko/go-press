@@ -40,5 +40,3 @@ func (c *postAggregatorImpl) AggregateCollection(postEntities []*entities.PostEn
 
 	return
 }
-
-

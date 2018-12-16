@@ -69,7 +69,7 @@ func (c *userApiImpl) VerifyUser(userId *models.UserId) common.Error {
 	return userService.VerifyUser(userEntity)
 }
 
-func (c *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.UserChangeIdentity) common.Error  {
+func (c *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.UserChangeIdentity) common.Error {
 	userService := c.userService
 	userEntity, err := userService.GetUser(userId)
 
@@ -80,7 +80,7 @@ func (c *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.Use
 	return userService.ChangeUserIdentity(userEntity, data)
 }
 
-func (c *userApiImpl) ChangeUserPassword(userId *models.UserId, input *models.UserChangePassword) common.Error  {
+func (c *userApiImpl) ChangeUserPassword(userId *models.UserId, input *models.UserChangePassword) common.Error {
 	userService := c.userService
 	userEntity, err := userService.GetUser(userId)
 

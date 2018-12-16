@@ -12,14 +12,14 @@ const (
 
 type (
 	UserEntity struct {
-		Id *models.UserId `gorm:"primary_key;type:char(36);column:id"`
+		Id        *models.UserId `gorm:"primary_key;type:char(36);column:id"`
 		FirstName string
-		LastName string
-		Email string `gorm:"type:varchar(100);unique_index"`
-		Password string
-		Verified bool
-		Created *time.Time
-		Updated *time.Time
+		LastName  string
+		Email     string `gorm:"type:varchar(100);unique_index"`
+		Password  string
+		Verified  bool
+		Created   *time.Time
+		Updated   *time.Time
 	}
 )
 
