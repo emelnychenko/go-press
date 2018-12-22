@@ -11,6 +11,7 @@ import (
 
 type (
 	fileServiceImpl struct {
+		filePathStrategy  contracts.FilePathStrategy
 		fileEntityFactory contracts.FileEntityFactory
 		fileRepository    contracts.FileRepository
 		storageProvider   contracts.StorageProvider
@@ -18,11 +19,13 @@ type (
 )
 
 func NewFileService(
+	filePathStrategy contracts.FilePathStrategy,
 	fileEntityFactory contracts.FileEntityFactory,
 	fileRepository contracts.FileRepository,
 	storageProvider contracts.StorageProvider,
 ) (fileService contracts.FileService) {
 	return &fileServiceImpl{
+		filePathStrategy,
 		fileEntityFactory,
 		fileRepository,
 		storageProvider,
@@ -42,9 +45,13 @@ func (s *fileServiceImpl) UploadFile(fileSource io.Reader, data *models.FileUplo
 	fileEntity.Name = data.Name
 	fileEntity.Type = data.Type
 	fileEntity.Size = data.Size
-	fileEntity.Path, err = s.storageProvider.UploadFile(fileEntity, fileSource)
+	fileEntity.Path, err = s.filePathStrategy.BuildPath(fileEntity)
 
 	if nil != err {
+		return
+	}
+
+	if err = s.storageProvider.UploadFile(fileEntity, fileSource); nil != err {
 		return
 	}
 

@@ -8,7 +8,7 @@ import (
 
 type (
 	StorageProvider interface {
-		UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (filePath string, err common.Error)
+		UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (err common.Error)
 		DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) (err common.Error)
 	}
 )

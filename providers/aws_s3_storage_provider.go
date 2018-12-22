@@ -49,18 +49,17 @@ func NewAwsS3StorageProvider(
 	}
 }
 
-func (a *awsS3StorageProviderImpl) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (filePath string, err common.Error) {
-	filePath = fileEntity.Id.String()
+func (a *awsS3StorageProviderImpl) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (err common.Error) {
 	bucket := a.awsS3Parameters.Bucket()
 
 	_, err2 := a.uploaderAPI.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),
-		Key:    aws.String(filePath),
+		Key:    aws.String(fileEntity.Path),
 		Body:   fileSource,
 	})
 	if err2 != nil {
 		// Print the error and exit.
-		err = common.ServerError(fmt.Sprintf("Unable to upload %q to %q, %v", filePath, bucket, err2))
+		err = common.ServerError(fmt.Sprintf("Unable to upload %q to %q, %v", fileEntity.Path, bucket, err2))
 	}
 	return
 }

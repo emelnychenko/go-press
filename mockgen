@@ -28,6 +28,7 @@ MOCKS=(
     "contracts/post_aggregator.go|mocks/post_aggregator.go"
     "contracts/post_api.go|mocks/post_api.go"
     "contracts/storage_provider.go|mocks/storage_provider.go"
+    "contracts/file_path_strategy.go|mocks/file_path_strategy.go"
     "contracts/file_model_factory.go|mocks/file_model_factory.go"
     "contracts/file_entity_factory.go|mocks/file_entity_factory.go"
     "contracts/file_echo_helper.go|mocks/file_echo_helper.go"

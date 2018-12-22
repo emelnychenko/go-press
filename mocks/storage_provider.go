@@ -36,12 +36,11 @@ func (m *MockStorageProvider) EXPECT() *MockStorageProviderMockRecorder {
 }
 
 // UploadFile mocks base method
-func (m *MockStorageProvider) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (string, common.Error) {
+func (m *MockStorageProvider) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) common.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadFile", fileEntity, fileSource)
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(common.Error)
-	return ret0, ret1
+	ret0, _ := ret[0].(common.Error)
+	return ret0
 }
 
 // UploadFile indicates an expected call of UploadFile

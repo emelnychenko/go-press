@@ -58,10 +58,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		}
 
 		fileEntity := entities.NewFileEntity()
-		filePath, err := awsS3StorageProvider.UploadFile(fileEntity, nil)
-
-		assert.Equal(t, fileEntity.Id.String(), filePath)
-		assert.Nil(t, err)
+		assert.Nil(t, awsS3StorageProvider.UploadFile(fileEntity, nil))
 	})
 
 	t.Run("UploadFile:Error", func(t *testing.T) {
@@ -77,10 +74,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		}
 
 		fileEntity := entities.NewFileEntity()
-		filePath, err := awsS3StorageProvider.UploadFile(fileEntity, nil)
-
-		assert.Equal(t, fileEntity.Id.String(), filePath)
-		assert.Error(t, err)
+		assert.Error(t, awsS3StorageProvider.UploadFile(fileEntity, nil))
 	})
 
 	t.Run("DownloadFile", func(t *testing.T) {
