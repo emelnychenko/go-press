@@ -6,7 +6,6 @@ import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
 	errors2 "github.com/emelnychenko/go-press/errors"
-	"github.com/emelnychenko/go-press/models"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -19,7 +18,7 @@ func TestPostRepository(t *testing.T) {
 	db, _ := gorm.Open(mocket.DriverName, "")
 	postRepository := NewPostRepository(db)
 
-	postId := models.NewModelId()
+	postId := common.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": postId.String(),
 	}}

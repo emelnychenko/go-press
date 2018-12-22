@@ -34,30 +34,30 @@ func (m *MockUserAggregator) EXPECT() *MockUserAggregatorMockRecorder {
 	return m.recorder
 }
 
-// AggregateObject mocks base method
-func (m *MockUserAggregator) AggregateObject(object *entities.UserEntity) *models.User {
+// AggregateUser mocks base method
+func (m *MockUserAggregator) AggregateUser(object *entities.UserEntity) *models.User {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AggregateObject", object)
+	ret := m.ctrl.Call(m, "AggregateUser", object)
 	ret0, _ := ret[0].(*models.User)
 	return ret0
 }
 
-// AggregateObject indicates an expected call of AggregateObject
-func (mr *MockUserAggregatorMockRecorder) AggregateObject(object interface{}) *gomock.Call {
+// AggregateUser indicates an expected call of AggregateUser
+func (mr *MockUserAggregatorMockRecorder) AggregateUser(object interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateObject", reflect.TypeOf((*MockUserAggregator)(nil).AggregateObject), object)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateUser", reflect.TypeOf((*MockUserAggregator)(nil).AggregateUser), object)
 }
 
-// AggregateCollection mocks base method
-func (m *MockUserAggregator) AggregateCollection(collection []*entities.UserEntity) []*models.User {
+// AggregateUsers mocks base method
+func (m *MockUserAggregator) AggregateUsers(collection []*entities.UserEntity) []*models.User {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AggregateCollection", collection)
+	ret := m.ctrl.Call(m, "AggregateUsers", collection)
 	ret0, _ := ret[0].([]*models.User)
 	return ret0
 }
 
-// AggregateCollection indicates an expected call of AggregateCollection
-func (mr *MockUserAggregatorMockRecorder) AggregateCollection(collection interface{}) *gomock.Call {
+// AggregateUsers indicates an expected call of AggregateUsers
+func (mr *MockUserAggregatorMockRecorder) AggregateUsers(collection interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateCollection", reflect.TypeOf((*MockUserAggregator)(nil).AggregateCollection), collection)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateUsers", reflect.TypeOf((*MockUserAggregator)(nil).AggregateUsers), collection)
 }

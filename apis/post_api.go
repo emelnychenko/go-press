@@ -24,7 +24,7 @@ func (c *postApiImpl) ListPosts() (posts []*models.Post, err common.Error) {
 		return
 	}
 
-	posts = c.postAggregator.AggregateCollection(postEntities)
+	posts = c.postAggregator.AggregatePosts(postEntities)
 	return
 }
 
@@ -35,18 +35,18 @@ func (c *postApiImpl) GetPost(postId *models.PostId) (post *models.Post, err com
 		return
 	}
 
-	post = c.postAggregator.AggregateObject(postEntity)
+	post = c.postAggregator.AggregatePost(postEntity)
 	return
 }
 
-func (c *postApiImpl) CreatePost(postAuthor models.Subject, data *models.PostCreate) (post *models.Post, err common.Error) {
+func (c *postApiImpl) CreatePost(postAuthor common.Subject, data *models.PostCreate) (post *models.Post, err common.Error) {
 	postEntity, err := c.postService.CreatePost(postAuthor, data)
 
 	if nil != err {
 		return
 	}
 
-	post = c.postAggregator.AggregateObject(postEntity)
+	post = c.postAggregator.AggregatePost(postEntity)
 	return
 }
 
@@ -61,7 +61,7 @@ func (c *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate)
 	return postService.UpdatePost(postEntity, data)
 }
 
-func (c *postApiImpl) ChangePostAuthor(postId *models.PostId, postAuthor models.Subject) (err common.Error) {
+func (c *postApiImpl) ChangePostAuthor(postId *models.PostId, postAuthor common.Subject) (err common.Error) {
 	postService := c.postService
 	postEntity, err := postService.GetPost(postId)
 

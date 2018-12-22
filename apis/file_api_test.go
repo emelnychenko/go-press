@@ -16,7 +16,7 @@ func TestFileApi(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	fileId := models.NewModelId()
+	fileId := common.NewModelId()
 	testErr := common.ServerError("err0")
 
 	t.Run("NewFileApi", func(t *testing.T) {

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/labstack/echo"
@@ -14,7 +15,7 @@ type PostController struct {
 }
 
 func ParsePostIdFromContext(context echo.Context) (*models.PostId, error) {
-	return models.ParseModelId(context.Param(PostId))
+	return common.ParseModelId(context.Param(PostId))
 }
 
 func NewPostController(postApi contracts.PostApi) (c *PostController) {

@@ -22,7 +22,7 @@ func TestFileController(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	fileId := models.NewModelId()
+	fileId := common.NewModelId()
 	testErr := common.ServerError("err0")
 
 	t.Run("NewFileController", func(t *testing.T) {
@@ -146,7 +146,7 @@ func TestFileController(t *testing.T) {
 
 		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
 		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+			fileEchoHelper: fileEchoHelper,
 		}
 		assert.Nil(t, fileController.UploadFile(context))
 	})

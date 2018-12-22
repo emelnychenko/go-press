@@ -66,7 +66,7 @@ func (mr *MockPostServiceMockRecorder) GetPost(postId interface{}) *gomock.Call 
 }
 
 // CreatePost mocks base method
-func (m *MockPostService) CreatePost(postAuthor models.Subject, data *models.PostCreate) (*entities.PostEntity, common.Error) {
+func (m *MockPostService) CreatePost(postAuthor common.Subject, data *models.PostCreate) (*entities.PostEntity, common.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePost", postAuthor, data)
 	ret0, _ := ret[0].(*entities.PostEntity)
@@ -95,7 +95,7 @@ func (mr *MockPostServiceMockRecorder) UpdatePost(postEntity, data interface{}) 
 }
 
 // ChangePostAuthor mocks base method
-func (m *MockPostService) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor models.Subject) common.Error {
+func (m *MockPostService) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor common.Subject) common.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostAuthor", postEntity, postAuthor)
 	ret0, _ := ret[0].(common.Error)

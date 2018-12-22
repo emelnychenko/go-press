@@ -14,216 +14,230 @@ func TestUserService(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	userId := new(models.UserId)
 	testErr := common.ServerError("err0")
-	testPass := "pass0"
 
-	t.Run("ListUsers()", func(t *testing.T) {
+	t.Run("NewUserService", func(t *testing.T) {
+		hasher := mocks.NewMockHasher(ctrl)
+		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
 
-		userRepository.EXPECT().ListUsers().Return([]*entities.UserEntity{}, nil)
-		results, err := userService.ListUsers()
+		userService, isUserService := NewUserService(hasher, userEntityFactory, userRepository).(*userServiceImpl)
 
-		assert.IsType(t, []*entities.UserEntity{}, results)
+		assert.True(t, isUserService)
+		assert.Equal(t, hasher, userService.hasher)
+		assert.Equal(t, userEntityFactory, userService.userEntityFactory)
+		assert.Equal(t, userRepository, userService.userRepository)
+	})
+
+	t.Run("ListUsers", func(t *testing.T) {
+		var userEntities []*entities.UserEntity
+		userRepository := mocks.NewMockUserRepository(ctrl)
+		userRepository.EXPECT().ListUsers().Return(userEntities, nil)
+
+		userService := &userServiceImpl{userRepository: userRepository}
+		response, err := userService.ListUsers()
+
+		assert.Equal(t, userEntities, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("CreateUser(UserCreate) NoPassword", func(t *testing.T) {
+	t.Run("CreateUser:WithoutPassword", func(t *testing.T) {
+		userEntity := new(entities.UserEntity)
+		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
+		userEntityFactory.EXPECT().CreateUserEntity().Return(userEntity)
+
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		data := &models.UserCreate{
-			FirstName: "foo",
-			LastName:  "bar",
-			Email:     "foo@bar",
-		}
+		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
 
-		userRepository.EXPECT().SaveUser(gomock.Any()).Return(nil)
-		userEntity, err := userService.CreateUser(data)
+		data := &models.UserCreate{FirstName: "foo", LastName: "bar", Email: "foo@bar"}
+		userService := &userServiceImpl{userEntityFactory: userEntityFactory, userRepository: userRepository}
+		response, err := userService.CreateUser(data)
 
-		assert.IsType(t, &entities.UserEntity{}, userEntity)
+		assert.Equal(t, userEntity, response)
 		assert.Nil(t, err)
 		assert.Equal(t, data.FirstName, userEntity.FirstName)
 		assert.Equal(t, data.LastName, userEntity.LastName)
 		assert.Equal(t, data.Email, userEntity.Email)
+		assert.Empty(t, userEntity.Password)
 	})
 
-	t.Run("CreateUser(UserCreate) UserRepository.SaveUser() Error", func(t *testing.T) {
+	t.Run("CreateUser:SaveError", func(t *testing.T) {
+		userEntity := new(entities.UserEntity)
+		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
+		userEntityFactory.EXPECT().CreateUserEntity().Return(userEntity)
+
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		data := &models.UserCreate{}
+		userRepository.EXPECT().SaveUser(userEntity).Return(testErr)
 
-		userRepository.EXPECT().SaveUser(gomock.Any()).Return(testErr)
-		userEntity, err := userService.CreateUser(data)
+		data := new(models.UserCreate)
+		userService := &userServiceImpl{userEntityFactory: userEntityFactory, userRepository: userRepository}
+		response, err := userService.CreateUser(data)
 
-		assert.Nil(t, userEntity)
+		assert.Nil(t, response)
 		assert.Error(t, err)
 	})
 
-	t.Run("CreateUser(UserCreate) Password", func(t *testing.T) {
-		userRepository := mocks.NewMockUserRepository(ctrl)
+	t.Run("CreateUser:WithPassword", func(t *testing.T) {
+		password := "pass0";
+		hashedPassword := "<hash>pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		userService := NewUserService(hasher, userRepository)
-		data := &models.UserCreate{
-			Password: testPass,
+		hasher.EXPECT().Make(password).Return(hashedPassword, nil)
+
+		userEntity := new(entities.UserEntity)
+		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
+		userEntityFactory.EXPECT().CreateUserEntity().Return(userEntity)
+
+		userRepository := mocks.NewMockUserRepository(ctrl)
+		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
+
+		data := &models.UserCreate{Password: password}
+		userService := &userServiceImpl{
+			hasher:            hasher,
+			userEntityFactory: userEntityFactory,
+			userRepository:    userRepository,
 		}
+		response, _ := userService.CreateUser(data)
 
-		hasher.EXPECT().Make(data.Password).Return(data.Password, nil)
-		userRepository.EXPECT().SaveUser(gomock.Any()).Return(nil)
-		userEntity, _ := userService.CreateUser(data)
-
-		assert.Equal(t, data.Password, userEntity.Password)
+		assert.Equal(t, hashedPassword, response.Password)
 	})
 
-	t.Run("CreateUser(UserCreate) Password Error", func(t *testing.T) {
-		userRepository := mocks.NewMockUserRepository(ctrl)
+	t.Run("CreateUser:HasherError", func(t *testing.T) {
+		password := "pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		userService := NewUserService(hasher, userRepository)
-		data := &models.UserCreate{
-			Password: testPass,
-		}
+		hasher.EXPECT().Make(password).Return("", testErr)
 
-		hasher.EXPECT().Make(data.Password).Return("", testErr)
+		userEntity := new(entities.UserEntity)
+		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
+		userEntityFactory.EXPECT().CreateUserEntity().Return(userEntity)
+
+		userService := &userServiceImpl{hasher: hasher, userEntityFactory: userEntityFactory}
+		data := &models.UserCreate{Password: password}
 		_, err := userService.CreateUser(data)
 
 		assert.Error(t, err)
 	})
 
-	t.Run("GetUser(UUID)", func(t *testing.T) {
+	t.Run("GetUser", func(t *testing.T) {
+		userId := new(models.UserId)
+		userEntity := new(entities.UserEntity)
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
+		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
 
-		userRepository.EXPECT().GetUser(userId).Return(&entities.UserEntity{}, nil)
-		results, err := userService.GetUser(userId)
+		userService := &userServiceImpl{userRepository: userRepository}
+		response, err := userService.GetUser(userId)
 
-		assert.IsType(t, &entities.UserEntity{}, results)
+		assert.Equal(t, userEntity, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("LookupUser(string)", func(t *testing.T) {
+	t.Run("LookupUser", func(t *testing.T) {
+		userIdentity := "u_identity";
+		userEntity := new(entities.UserEntity)
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		userIdentity := ""
+		userRepository.EXPECT().LookupUser(userIdentity).Return(userEntity, nil)
 
-		userRepository.EXPECT().LookupUser(userIdentity).Return(&entities.UserEntity{}, nil)
-		results, err := userService.LookupUser(userIdentity)
+		userService := &userServiceImpl{userRepository: userRepository}
+		response, err := userService.LookupUser(userIdentity)
 
-		assert.IsType(t, &entities.UserEntity{}, results)
+		assert.Equal(t, userEntity, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("ChallengeUser(string) NoPassword Error", func(t *testing.T) {
-		userService := NewUserService(nil, nil)
-
-		err := userService.ChallengeUser(&entities.UserEntity{}, "")
-		assert.Error(t, err)
-	})
-
-	t.Run("ChallengeUser(string) NotMatch Error", func(t *testing.T) {
+	t.Run("ChallengeUser", func(t *testing.T) {
+		password := "pass0";
+		hashedPassword := "<hash>pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		userService := NewUserService(hasher, nil)
+		hasher.EXPECT().Check(hashedPassword, password).Return(nil)
 
-		hasher.EXPECT().Check(testPass, testPass).Return(testErr)
-		err := userService.ChallengeUser(&entities.UserEntity{Password: testPass}, testPass)
-		assert.Error(t, err)
+		userEntity := &entities.UserEntity{Password: hashedPassword}
+		userService := &userServiceImpl{hasher: hasher}
+		assert.Nil(t, userService.ChallengeUser(userEntity, password))
 	})
 
-	t.Run("ChallengeUser(string)", func(t *testing.T) {
-		hasher := mocks.NewMockHasher(ctrl)
-		userService := NewUserService(hasher, nil)
-
-		hasher.EXPECT().Check(testPass, testPass).Return(nil)
-		err := userService.ChallengeUser(&entities.UserEntity{Password: testPass}, testPass)
-		assert.Nil(t, err)
+	t.Run("ChallengeUser:NoPasswordError", func(t *testing.T) {
+		userEntity := new(entities.UserEntity)
+		userService := &userServiceImpl{}
+		assert.Error(t, userService.ChallengeUser(userEntity, ""))
 	})
 
-	t.Run("UpdateUser(UserEntity,UserUpdate)", func(t *testing.T) {
+	t.Run("UpdateUser", func(t *testing.T) {
+		userEntity := new(entities.UserEntity)
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		data := &models.UserUpdate{FirstName: "foo", LastName: "bar"}
-		userEntity := &entities.UserEntity{}
-
 		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
-		err := userService.UpdateUser(userEntity, data)
 
-		assert.Nil(t, err)
+		data := &models.UserUpdate{FirstName: "foo", LastName: "bar"}
+		userService := &userServiceImpl{userRepository: userRepository}
+		assert.Nil(t, userService.UpdateUser(userEntity, data))
 		assert.Equal(t, data.FirstName, userEntity.FirstName)
 		assert.Equal(t, data.LastName, userEntity.LastName)
 		assert.NotNil(t, userEntity.Updated)
 	})
 
-	t.Run("VerifyUser(UserEntity)", func(t *testing.T) {
+	t.Run("VerifyUser", func(t *testing.T) {
+		userEntity := &entities.UserEntity{Verified: false}
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		userEntity := &entities.UserEntity{}
-
 		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
-		err := userService.VerifyUser(userEntity)
 
-		assert.Nil(t, err)
-		assert.Equal(t, true, userEntity.Verified)
+		userService := &userServiceImpl{userRepository: userRepository}
+		assert.Nil(t, userService.VerifyUser(userEntity))
+		assert.True(t, userEntity.Verified)
 	})
 
-	t.Run("ChangeUserIdentity(UserEntity,UserChangeIdentity)", func(t *testing.T) {
+	t.Run("ChangeUserIdentity", func(t *testing.T) {
+		userEntity := new(entities.UserEntity)
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		userEntity := &entities.UserEntity{}
-		data := &models.UserChangeIdentity{Email: "foo@bar"}
-
 		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
-		err := userService.ChangeUserIdentity(userEntity, data)
 
-		assert.Nil(t, err)
+		data := &models.UserChangeIdentity{Email: "foo@bar"}
+		userService := &userServiceImpl{userRepository: userRepository}
+		assert.Nil(t, userService.ChangeUserIdentity(userEntity, data))
 		assert.Equal(t, data.Email, userEntity.Email)
 	})
 
-	t.Run("ChangeUserPassword(UserEntity,UserChangePassword) NoPassword", func(t *testing.T) {
+	t.Run("ChangeUserPassword:NoPassword", func(t *testing.T) {
+		userEntity := &entities.UserEntity{Password: "pass0"}
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		userEntity := &entities.UserEntity{}
-		data := &models.UserChangePassword{NewPassword: ""}
-
 		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
-		err := userService.ChangeUserPassword(userEntity, data)
 
-		assert.Nil(t, err)
-		assert.Equal(t, data.NewPassword, userEntity.Password)
+		data := new(models.UserChangePassword)
+		userService := &userServiceImpl{userRepository: userRepository}
+		assert.Nil(t, userService.ChangeUserPassword(userEntity, data))
+		assert.Empty(t, userEntity.Password)
 	})
 
-	t.Run("ChangeUserPassword(UserEntity,UserChangePassword)", func(t *testing.T) {
-		userRepository := mocks.NewMockUserRepository(ctrl)
+	t.Run("ChangeUserPassword", func(t *testing.T) {
+		password := "pass0";
+		hashedPassword := "<hash>pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		userService := NewUserService(hasher, userRepository)
-		userEntity := &entities.UserEntity{}
-		data := &models.UserChangePassword{NewPassword: testPass}
+		hasher.EXPECT().Make(password).Return(hashedPassword, nil)
 
-		hasher.EXPECT().Make(testPass).Return(testPass, nil)
+		userEntity := new(entities.UserEntity)
+		userRepository := mocks.NewMockUserRepository(ctrl)
 		userRepository.EXPECT().SaveUser(userEntity).Return(nil)
-		err := userService.ChangeUserPassword(userEntity, data)
 
-		assert.Nil(t, err)
-		assert.Equal(t, data.NewPassword, userEntity.Password)
+		data := &models.UserChangePassword{NewPassword: password}
+		userService := &userServiceImpl{hasher: hasher, userRepository: userRepository}
+		assert.Nil(t, userService.ChangeUserPassword(userEntity, data))
+		assert.Equal(t, hashedPassword, userEntity.Password)
 	})
 
-	t.Run("ChangeUserPassword(UserEntity,UserChangePassword) Error", func(t *testing.T) {
-		userRepository := mocks.NewMockUserRepository(ctrl)
+	t.Run("ChangeUserPassword:Error", func(t *testing.T) {
+		password := "pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		userService := NewUserService(hasher, userRepository)
-		userEntity := &entities.UserEntity{}
-		data := &models.UserChangePassword{NewPassword: testPass}
+		hasher.EXPECT().Make(password).Return("", testErr)
 
-		hasher.EXPECT().Make(testPass).Return("", testErr)
-		err := userService.ChangeUserPassword(userEntity, data)
-
-		assert.Error(t, err)
+		userEntity := new(entities.UserEntity)
+		data := &models.UserChangePassword{NewPassword: password}
+		userService := &userServiceImpl{hasher: hasher}
+		assert.Error(t, userService.ChangeUserPassword(userEntity, data))
 	})
 
-	t.Run("DeleteUser(UserEntity)", func(t *testing.T) {
+	t.Run("DeleteUser", func(t *testing.T) {
+		userEntity := new(entities.UserEntity)
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userService := NewUserService(nil, userRepository)
-		userEntity := &entities.UserEntity{}
-
 		userRepository.EXPECT().RemoveUser(userEntity).Return(nil)
+
+		userService := &userServiceImpl{userRepository: userRepository}
 		err := userService.DeleteUser(userEntity)
 
 		assert.Nil(t, err)

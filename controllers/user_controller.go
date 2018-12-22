@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/labstack/echo"
@@ -18,7 +19,7 @@ func NewUserController(api contracts.UserApi) (c *UserController) {
 }
 
 func parseUserId(context echo.Context) (*models.UserId, error) {
-	return models.ParseModelId(context.Param(UserId))
+	return common.ParseModelId(context.Param(UserId))
 }
 
 func (c *UserController) ListUsers(context echo.Context) error {

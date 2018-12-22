@@ -7,23 +7,23 @@ import (
 
 func TestFileModelsFactory(t *testing.T) {
 	t.Run("NewFileModelFactory", func(t *testing.T) {
-		_, isFileModelsFactory := NewFileModelFactory().(*fileModelFactoryImpl)
+		_, isFileModelFactory := NewFileModelFactory().(*fileModelFactoryImpl)
 
-		assert.True(t, isFileModelsFactory)
+		assert.True(t, isFileModelFactory)
 	})
 
 	t.Run("CreateFile", func(t *testing.T) {
-		fileModelFactory := &fileModelFactoryImpl{}
+		fileModelFactory := new(fileModelFactoryImpl)
 		assert.NotNil(t, fileModelFactory.CreateFile())
 	})
 
 	t.Run("CreateFileUpload", func(t *testing.T) {
-		fileModelFactory := &fileModelFactoryImpl{}
+		fileModelFactory := new(fileModelFactoryImpl)
 		assert.NotNil(t, fileModelFactory.CreateFileUpload())
 	})
 
 	t.Run("CreateFileUpdate", func(t *testing.T) {
-		fileModelFactory := &fileModelFactoryImpl{}
+		fileModelFactory := new(fileModelFactoryImpl)
 		assert.NotNil(t, fileModelFactory.CreateFileUpdate())
 	})
 }

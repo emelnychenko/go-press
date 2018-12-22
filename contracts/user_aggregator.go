@@ -7,7 +7,7 @@ import (
 
 type (
 	UserAggregator interface {
-		AggregateObject(object *entities.UserEntity) *models.User
-		AggregateCollection(collection []*entities.UserEntity) []*models.User
+		AggregateUser(object *entities.UserEntity) *models.User
+		AggregateUsers(collection []*entities.UserEntity) []*models.User
 	}
 )

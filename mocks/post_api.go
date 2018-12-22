@@ -65,7 +65,7 @@ func (mr *MockPostApiMockRecorder) GetPost(postId interface{}) *gomock.Call {
 }
 
 // CreatePost mocks base method
-func (m *MockPostApi) CreatePost(postAuthor models.Subject, data *models.PostCreate) (*models.Post, common.Error) {
+func (m *MockPostApi) CreatePost(postAuthor common.Subject, data *models.PostCreate) (*models.Post, common.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePost", postAuthor, data)
 	ret0, _ := ret[0].(*models.Post)
@@ -94,7 +94,7 @@ func (mr *MockPostApiMockRecorder) UpdatePost(postId, data interface{}) *gomock.
 }
 
 // ChangePostAuthor mocks base method
-func (m *MockPostApi) ChangePostAuthor(postId *models.PostId, postAuthor models.Subject) common.Error {
+func (m *MockPostApi) ChangePostAuthor(postId *models.PostId, postAuthor common.Subject) common.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostAuthor", postId, postAuthor)
 	ret0, _ := ret[0].(common.Error)

@@ -14,14 +14,23 @@ import (
 func TestAwsS3WriterProxy(t *testing.T) {
 	t.Run("NewAwsS3WriterProxy", func(t *testing.T) {
 		writer := new(bufio.Writer)
-		var awsS3WriterProxy = NewAwsS3WriterProxy(writer)
-		assert.IsType(t, new(awsS3WriterProxyImpl), awsS3WriterProxy)
+		awsS3WriterProxy, isAwsS3WriterProxy := NewAwsS3WriterProxy(writer).(*awsS3WriterProxyImpl)
+
+		assert.True(t, isAwsS3WriterProxy)
+		assert.Equal(t, writer, awsS3WriterProxy.writer)
+		assert.Equal(t, writer, awsS3WriterProxy.Writer())
+	})
+
+	t.Run("Writer", func(t *testing.T) {
+		writer := new(bufio.Writer)
+		awsS3WriterProxy := &awsS3WriterProxyImpl{writer: writer}
+
 		assert.Equal(t, writer, awsS3WriterProxy.Writer())
 	})
 
 	t.Run("WriteAt", func(t *testing.T) {
 		writer := iotest.NewWriteLogger("AwsS3WriterProxy", bytes.NewBuffer(nil))
-		awsS3WriterProxy := NewAwsS3WriterProxy(writer)
+		awsS3WriterProxy := &awsS3WriterProxyImpl{writer: writer}
 
 		chunk := []byte("test")
 		off := 5

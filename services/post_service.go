@@ -10,24 +10,28 @@ import (
 
 type (
 	postServiceImpl struct {
-		postRepository contracts.PostRepository
+		postEntityFactory contracts.PostEntityFactory
+		postRepository    contracts.PostRepository
 	}
 )
 
-func NewPostService(postRepository contracts.PostRepository) (postService contracts.PostService) {
-	return &postServiceImpl{postRepository}
+func NewPostService(
+	postEntityFactory contracts.PostEntityFactory,
+	postRepository contracts.PostRepository,
+) (postService contracts.PostService) {
+	return &postServiceImpl{postEntityFactory, postRepository}
 }
 
-func (c *postServiceImpl) ListPosts() ([]*entities.PostEntity, common.Error) {
-	return c.postRepository.ListPosts()
+func (s *postServiceImpl) ListPosts() ([]*entities.PostEntity, common.Error) {
+	return s.postRepository.ListPosts()
 }
 
-func (c *postServiceImpl) GetPost(postId *models.PostId) (*entities.PostEntity, common.Error) {
-	return c.postRepository.GetPost(postId)
+func (s *postServiceImpl) GetPost(postId *models.PostId) (*entities.PostEntity, common.Error) {
+	return s.postRepository.GetPost(postId)
 }
 
-func (c *postServiceImpl) CreatePost(postAuthor models.Subject, data *models.PostCreate) (postEntity *entities.PostEntity, err common.Error) {
-	postEntity = entities.NewPostEntity()
+func (s *postServiceImpl) CreatePost(postAuthor common.Subject, data *models.PostCreate) (postEntity *entities.PostEntity, err common.Error) {
+	postEntity = s.postEntityFactory.CreatePostEntity()
 	postEntity.Title = data.Title
 	postEntity.Description = data.Description
 	postEntity.Content = data.Content
@@ -37,11 +41,11 @@ func (c *postServiceImpl) CreatePost(postAuthor models.Subject, data *models.Pos
 	postEntity.Views = data.Views
 	postEntity.SetAuthor(postAuthor)
 
-	err = c.postRepository.SavePost(postEntity)
+	err = s.postRepository.SavePost(postEntity)
 	return
 }
 
-func (c *postServiceImpl) UpdatePost(postEntity *entities.PostEntity, data *models.PostUpdate) common.Error {
+func (s *postServiceImpl) UpdatePost(postEntity *entities.PostEntity, data *models.PostUpdate) common.Error {
 	postEntity.Title = data.Title
 	postEntity.Description = data.Description
 	postEntity.Content = data.Content
@@ -53,15 +57,15 @@ func (c *postServiceImpl) UpdatePost(postEntity *entities.PostEntity, data *mode
 	updated := time.Now().UTC()
 	postEntity.Updated = &updated
 
-	return c.postRepository.SavePost(postEntity)
+	return s.postRepository.SavePost(postEntity)
 }
 
-func (c *postServiceImpl) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor models.Subject) (err common.Error) {
+func (s *postServiceImpl) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor common.Subject) (err common.Error) {
 	postEntity.SetAuthor(postAuthor)
 
-	return c.postRepository.SavePost(postEntity)
+	return s.postRepository.SavePost(postEntity)
 }
 
-func (c *postServiceImpl) DeletePost(postEntity *entities.PostEntity) common.Error {
-	return c.postRepository.RemovePost(postEntity)
+func (s *postServiceImpl) DeletePost(postEntity *entities.PostEntity) common.Error {
+	return s.postRepository.RemovePost(postEntity)
 }

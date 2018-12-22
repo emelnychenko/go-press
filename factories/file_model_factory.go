@@ -11,7 +11,7 @@ type (
 )
 
 func NewFileModelFactory() contracts.FileModelFactory {
-	return &fileModelFactoryImpl{}
+	return new(fileModelFactoryImpl)
 }
 
 func (*fileModelFactoryImpl) CreateFile() *models.File {

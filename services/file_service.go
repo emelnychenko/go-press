@@ -11,13 +11,22 @@ import (
 
 type (
 	fileServiceImpl struct {
-		fileRepository  contracts.FileRepository
-		storageProvider contracts.StorageProvider
+		fileEntityFactory contracts.FileEntityFactory
+		fileRepository    contracts.FileRepository
+		storageProvider   contracts.StorageProvider
 	}
 )
 
-func NewFileService(fileRepository contracts.FileRepository, storageProvider contracts.StorageProvider) (fileService contracts.FileService) {
-	return &fileServiceImpl{fileRepository, storageProvider}
+func NewFileService(
+	fileEntityFactory contracts.FileEntityFactory,
+	fileRepository contracts.FileRepository,
+	storageProvider contracts.StorageProvider,
+) (fileService contracts.FileService) {
+	return &fileServiceImpl{
+		fileEntityFactory,
+		fileRepository,
+		storageProvider,
+	}
 }
 
 func (s *fileServiceImpl) ListFiles() ([]*entities.FileEntity, common.Error) {
@@ -29,7 +38,7 @@ func (s *fileServiceImpl) GetFile(fileId *models.FileId) (*entities.FileEntity, 
 }
 
 func (s *fileServiceImpl) UploadFile(fileSource io.Reader, data *models.FileUpload) (fileEntity *entities.FileEntity, err common.Error) {
-	fileEntity = entities.NewFileEntity()
+	fileEntity = s.fileEntityFactory.CreateFileEntity()
 	fileEntity.Name = data.Name
 	fileEntity.Type = data.Type
 	fileEntity.Size = data.Size

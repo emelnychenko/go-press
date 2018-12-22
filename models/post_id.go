@@ -1,5 +1,7 @@
 package models
 
+import "github.com/emelnychenko/go-press/common"
+
 type (
-	PostId = ModelId
+	PostId = common.ModelId
 )

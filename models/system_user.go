@@ -1,21 +1,22 @@
 package models
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
 	"github.com/google/uuid"
 )
 
 type (
 	SystemUser struct {
-		Id *ModelId
+		Id *common.ModelId
 	}
 )
 
 func NewSystemUser() *SystemUser {
-	return &SystemUser{Id: &ModelId{uuid.Nil}}
+	return &SystemUser{Id: &common.ModelId{uuid.Nil}}
 }
 
-func (c *SystemUser) SubjectId() *ModelId {
+func (c *SystemUser) SubjectId() *common.ModelId {
 	return c.Id
 }
 

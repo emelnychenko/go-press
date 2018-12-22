@@ -3,9 +3,9 @@ package repositories
 import (
 	"errors"
 	mocket "github.com/Selvatico/go-mocket"
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
-	"github.com/emelnychenko/go-press/models"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -15,7 +15,7 @@ func SetupUserRepository() contracts.UserRepository {
 	mocket.Catcher.Register()
 	mocket.Catcher.Logging = true
 
-	db, _ := gorm.Open(mocket.DriverName, "connection_string") // Can be any connection string
+	db, _ := gorm.Open(mocket.DriverName, "")
 
 	return NewUserRepository(db)
 }
@@ -23,7 +23,7 @@ func SetupUserRepository() contracts.UserRepository {
 func TestUserRepository(t *testing.T) {
 	repository := SetupUserRepository()
 
-	userId := models.NewModelId()
+	userId := common.NewModelId()
 	userIdString := userId.String()
 	commonReply := []map[string]interface{}{{
 		"id":        userIdString,

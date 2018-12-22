@@ -7,7 +7,7 @@ import (
 
 type (
 	PostAggregator interface {
-		AggregateObject(postEntity *entities.PostEntity) (post *models.Post)
-		AggregateCollection(postEntities []*entities.PostEntity) (posts []*models.Post)
+		AggregatePost(postEntity *entities.PostEntity) (post *models.Post)
+		AggregatePosts(postEntities []*entities.PostEntity) (posts []*models.Post)
 	}
 )

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
 	"time"
 )
@@ -38,7 +39,7 @@ type (
 	}
 )
 
-func (c *User) SubjectId() *ModelId {
+func (c *User) SubjectId() *common.ModelId {
 	return c.Id
 }
 

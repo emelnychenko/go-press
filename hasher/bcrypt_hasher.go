@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	BCryptHasher struct {
+	bCryptHasherImpl struct {
 		cost int
 	}
 )
@@ -17,10 +17,10 @@ const (
 )
 
 func NewBCryptHasher() contracts.Hasher {
-	return &BCryptHasher{cost: BCryptPasswordCost}
+	return &bCryptHasherImpl{cost: BCryptPasswordCost}
 }
 
-func (h *BCryptHasher) Make(password string) (string, common.Error) {
+func (h *bCryptHasherImpl) Make(password string) (string, common.Error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), h.cost)
 
 	if nil != err {
@@ -30,7 +30,7 @@ func (h *BCryptHasher) Make(password string) (string, common.Error) {
 	return string(hash), nil
 }
 
-func (*BCryptHasher) Check(hashedPassword, password string) common.Error {
+func (*bCryptHasherImpl) Check(hashedPassword, password string) common.Error {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 
 	if nil != err {

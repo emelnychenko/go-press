@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/echo_mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -16,7 +17,7 @@ func TestFileEchoHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	var fileId = models.NewModelId()
+	var fileId = common.NewModelId()
 
 	t.Run("NewFileEchoHelper", func(t *testing.T) {
 		_, isFileParamParser := NewFileEchoHelper().(*fileEchoHelperImpl)
@@ -63,8 +64,8 @@ func TestFileEchoHelper(t *testing.T) {
 		fileType := "application/test"
 		var fileSize int64 = 99
 		file := &models.File{
-			Size:fileSize,
-			Type:fileType,
+			Size: fileSize,
+			Type: fileType,
 		}
 
 		fileEchoHelper := &fileEchoHelperImpl{}

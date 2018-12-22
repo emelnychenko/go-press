@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 	"time"
@@ -25,14 +26,14 @@ type (
 
 func NewUserEntity() *UserEntity {
 	created := time.Now().UTC()
-	return &UserEntity{Id: models.NewModelId(), Verified: false, Created: &created}
+	return &UserEntity{Id: common.NewModelId(), Created: &created}
 }
 
 func (*UserEntity) TableName() string {
 	return UserTable
 }
 
-func (c *UserEntity) SubjectId() *models.ModelId {
+func (c *UserEntity) SubjectId() *common.ModelId {
 	return c.Id
 }
 

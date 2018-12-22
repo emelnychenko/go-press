@@ -14,214 +14,247 @@ func TestUserApi(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	userId := new(models.UserId)
-	testPass := "pass0"
 	testErr := common.ServerError("err0")
 
-	t.Run("ListUsers", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
+	t.Run("NewUserApi", func(t *testing.T) {
+		userService := mocks.NewMockUserService(ctrl)
 		userAggregator := mocks.NewMockUserAggregator(ctrl)
-		userApi := NewUserApi(userRepository, userAggregator)
+		userApi, isUserApi := NewUserApi(userService, userAggregator).(*userApiImpl)
+
+		assert.True(t, isUserApi)
+		assert.Equal(t, userService, userApi.userService)
+		assert.Equal(t, userAggregator, userApi.userAggregator)
+	})
+
+	t.Run("ListUsers", func(t *testing.T) {
 		var userEntities []*entities.UserEntity
+		var users []*models.User
 
-		userRepository.EXPECT().ListUsers().Return(userEntities, nil)
-		userAggregator.EXPECT().AggregateCollection(userEntities).Return([]*models.User{})
-		userModels, err := userApi.ListUsers()
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().ListUsers().Return(userEntities, nil)
 
-		assert.IsType(t, []*models.User{}, userModels)
+		userAggregator := mocks.NewMockUserAggregator(ctrl)
+		userAggregator.EXPECT().AggregateUsers(userEntities).Return(users)
+
+		userApi := &userApiImpl{userService: userService, userAggregator: userAggregator}
+		response, err := userApi.ListUsers()
+
+		assert.Equal(t, users, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("ListUsers: Error", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("ListUsers:Error", func(t *testing.T) {
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().ListUsers().Return(nil, testErr)
 
-		userRepository.EXPECT().ListUsers().Return(nil, testErr)
-		userModels, err := userApi.ListUsers()
+		userApi := &userApiImpl{userService: userService}
+		response, err := userApi.ListUsers()
 
-		assert.Nil(t, userModels)
+		assert.Nil(t, response)
 		assert.Error(t, err)
 	})
 
 	t.Run("CreateUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
+		userEntity := new(entities.UserEntity)
+		user := new(models.User)
+		data := new(models.UserCreate)
+
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().CreateUser(data).Return(userEntity, nil)
+
 		userAggregator := mocks.NewMockUserAggregator(ctrl)
-		userApi := NewUserApi(userRepository, userAggregator)
-		userEntity := &entities.UserEntity{}
-		data := &models.UserCreate{}
+		userAggregator.EXPECT().AggregateUser(userEntity).Return(user)
 
-		userRepository.EXPECT().CreateUser(data).Return(userEntity, nil)
-		userAggregator.EXPECT().AggregateObject(userEntity).Return(&models.User{})
-		model, err := userApi.CreateUser(data)
+		userApi := &userApiImpl{userService: userService, userAggregator: userAggregator}
+		response, err := userApi.CreateUser(data)
 
-		assert.IsType(t, &models.User{}, model)
+		assert.Equal(t, user, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("CreateUser:Error", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		data := &models.UserCreate{}
+		data := new(models.UserCreate)
 
-		userRepository.EXPECT().CreateUser(data).Return(nil, testErr)
-		model, err := userApi.CreateUser(data)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().CreateUser(data).Return(nil, testErr)
 
-		assert.Nil(t, model)
+		userApi := &userApiImpl{userService: userService}
+		response, err := userApi.CreateUser(data)
+
+		assert.Nil(t, response)
 		assert.Error(t, err)
 	})
 
 	t.Run("GetUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
+		userId := new(models.UserId)
+		userEntity := new(entities.UserEntity)
+		user := new(models.User)
+
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+
 		userAggregator := mocks.NewMockUserAggregator(ctrl)
-		userApi := NewUserApi(userRepository, userAggregator)
-		userEntity := &entities.UserEntity{}
+		userAggregator.EXPECT().AggregateUser(userEntity).Return(user)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userAggregator.EXPECT().AggregateObject(userEntity).Return(&models.User{})
-		model, err := userApi.GetUser(userId)
+		userApi := &userApiImpl{userService: userService, userAggregator: userAggregator}
+		response, err := userApi.GetUser(userId)
 
-		assert.IsType(t, &models.User{}, model)
+		assert.Equal(t, user, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("GetUser: NoUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("GetUser:GetUserError", func(t *testing.T) {
+		userId := new(models.UserId)
 
-		userRepository.EXPECT().GetUser(userId).Return(nil, testErr)
-		model, err := userApi.GetUser(userId)
-		assert.Nil(t, model)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+
+		userApi := &userApiImpl{userService: userService}
+		response, err := userApi.GetUser(userId)
+
+		assert.Nil(t, response)
 		assert.Error(t, err)
 	})
 
 	t.Run("UpdateUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{}
-		form := &models.UserUpdate{}
+		userId := new(models.UserId)
+		userEntity := new(entities.UserEntity)
+		data := new(models.UserUpdate)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().UpdateUser(userEntity, form).Return(nil)
-		err := userApi.UpdateUser(userId, form)
-		assert.Nil(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().UpdateUser(userEntity, data).Return(nil)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Nil(t, userApi.UpdateUser(userId, data))
 	})
 
-	t.Run("UpdateUser: NoUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("UpdateUser:GetUserError", func(t *testing.T) {
+		userId := new(models.UserId)
 
-		userRepository.EXPECT().GetUser(userId).Return(nil, testErr)
-		err := userApi.UpdateUser(userId, nil)
-		assert.Error(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Error(t, userApi.UpdateUser(userId, nil))
 	})
 
-	t.Run("ChangeUserIduserEntity", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{}
-		model := &models.UserChangeIdentity{}
+	t.Run("ChangeUserIdentity", func(t *testing.T) {
+		userId := new(models.UserId)
+		userEntity := new(entities.UserEntity)
+		data := new(models.UserChangeIdentity)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().ChangeUserIdentity(userEntity, model).Return(nil)
-		err := userApi.ChangeUserIdentity(userId, model)
-		assert.Nil(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().ChangeUserIdentity(userEntity, data).Return(nil)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Nil(t, userApi.ChangeUserIdentity(userId, data))
 	})
 
-	t.Run("ChangeUserIduserEntity: NoUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("ChangeUserIdentity:GetUserError", func(t *testing.T) {
+		userId := new(models.UserId)
 
-		userRepository.EXPECT().GetUser(userId).Return(nil, testErr)
-		err := userApi.ChangeUserIdentity(userId, nil)
-		assert.Error(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Error(t, userApi.ChangeUserIdentity(userId, nil))
 	})
 
-	t.Run("ChangeUserPassword: NoUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("ChangeUserPassword", func(t *testing.T) {
+		userId := new(models.UserId)
+		password := "pass0"
+		userEntity := &entities.UserEntity{Password: password}
+		data := &models.UserChangePassword{OldPassword: password, NewPassword: ""}
 
-		userRepository.EXPECT().GetUser(userId).Return(nil, testErr)
-		err := userApi.ChangeUserPassword(userId, nil)
-		assert.Error(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().ChallengeUser(userEntity, data.OldPassword).Return(nil)
+		userService.EXPECT().ChangeUserPassword(userEntity, data).Return(nil)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Nil(t, userApi.ChangeUserPassword(userId, data))
 	})
 
-	t.Run("ChangeUserPassword: NoPassword", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{}
-		formData := &models.UserChangePassword{}
+	t.Run("ChangeUserPassword:GetUserError", func(t *testing.T) {
+		userId := new(models.UserId)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().ChangeUserPassword(userEntity, formData).Return(nil)
-		err := userApi.ChangeUserPassword(userId, formData)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(nil, testErr)
 
-		assert.Nil(t, err)
+		userApi := &userApiImpl{userService: userService}
+		assert.Error(t, userApi.ChangeUserPassword(userId, nil))
 	})
 
-	t.Run("ChangeUserPassword: ChallengeUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{Password: testPass}
-		formData := &models.UserChangePassword{OldPassword: testPass, NewPassword: ""}
+	t.Run("ChangeUserPassword:NoPassword", func(t *testing.T) {
+		userId := new(models.UserId)
+		data := &models.UserChangePassword{}
+		userEntity := new(entities.UserEntity)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().ChallengeUser(userEntity, formData.OldPassword).Return(nil)
-		userRepository.EXPECT().ChangeUserPassword(userEntity, formData).Return(nil)
-		err := userApi.ChangeUserPassword(userId, formData)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().ChangeUserPassword(userEntity, data).Return(nil)
 
-		assert.Nil(t, err)
+		userApi := &userApiImpl{userService: userService}
+		assert.Nil(t, userApi.ChangeUserPassword(userId, data))
 	})
 
-	t.Run("ChangeUserPassword: FailChallenge", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{Password: testPass}
-		formData := &models.UserChangePassword{OldPassword: testPass, NewPassword: ""}
+	t.Run("ChangeUserPassword:CheckError", func(t *testing.T) {
+		userId := new(models.UserId)
+		password := "pass0"
+		userEntity := &entities.UserEntity{Password: password}
+		data := &models.UserChangePassword{OldPassword: password, NewPassword: ""}
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().ChallengeUser(userEntity, formData.OldPassword).Return(testErr)
-		err := userApi.ChangeUserPassword(userId, formData)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().ChallengeUser(userEntity, data.OldPassword).Return(testErr)
 
-		assert.Error(t, err)
+		userApi := &userApiImpl{userService: userService}
+		assert.Error(t, userApi.ChangeUserPassword(userId, data))
 	})
 
 	t.Run("VerifyUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{}
+		userId := new(models.UserId)
+		userEntity := new(entities.UserEntity)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().VerifyUser(userEntity).Return(nil)
-		err := userApi.VerifyUser(userId)
-		assert.Nil(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().VerifyUser(userEntity).Return(nil)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Nil(t, userApi.VerifyUser(userId))
 	})
 
-	t.Run("VerifyUser: NoUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("VerifyUser:GetUserError", func(t *testing.T) {
+		userId := new(models.UserId)
 
-		userRepository.EXPECT().GetUser(userId).Return(nil, testErr)
-		err := userApi.VerifyUser(userId)
-		assert.Error(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Error(t, userApi.VerifyUser(userId))
 	})
 
 	t.Run("DeleteUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
-		userEntity := &entities.UserEntity{}
+		userId := new(models.UserId)
+		userEntity := new(entities.UserEntity)
 
-		userRepository.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userRepository.EXPECT().DeleteUser(userEntity).Return(nil)
-		err := userApi.DeleteUser(userId)
-		assert.Nil(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
+		userService.EXPECT().DeleteUser(userEntity).Return(nil)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Nil(t, userApi.DeleteUser(userId))
 	})
 
-	t.Run("DeleteUser: NoUser", func(t *testing.T) {
-		userRepository := mocks.NewMockUserService(ctrl)
-		userApi := NewUserApi(userRepository, nil)
+	t.Run("DeleteUser:GetUserError", func(t *testing.T) {
+		userId := new(models.UserId)
 
-		userRepository.EXPECT().GetUser(userId).Return(nil, testErr)
-		err := userApi.DeleteUser(userId)
-		assert.Error(t, err)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+
+		userApi := &userApiImpl{userService: userService}
+		assert.Error(t, userApi.DeleteUser(userId))
 	})
 }

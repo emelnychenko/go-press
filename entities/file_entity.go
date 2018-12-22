@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -24,8 +25,7 @@ type (
 func NewFileEntity() *FileEntity {
 	created := time.Now().UTC()
 	return &FileEntity{
-		Id:      models.NewModelId(),
-		Size:    0,
+		Id:      common.NewModelId(),
 		Created: &created,
 	}
 }

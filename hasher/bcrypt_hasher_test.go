@@ -7,34 +7,41 @@ import (
 )
 
 func TestBCryptHasher(t *testing.T) {
-	hasher := NewBCryptHasher()
-	testPass := "pass0"
+	t.Run("NewBCryptHasher", func(t *testing.T) {
+		bCryptHasher, isBCryptHasher := NewBCryptHasher().(*bCryptHasherImpl)
 
-	t.Run("Make(string)", func(t *testing.T) {
-		hash, err := hasher.Make(testPass)
+		assert.True(t, isBCryptHasher)
+		assert.Equal(t, BCryptPasswordCost, bCryptHasher.cost)
+	})
 
-		assert.Nil(t, bcrypt.CompareHashAndPassword([]byte(hash), []byte(testPass)))
+	t.Run("Make", func(t *testing.T) {
+		password := "pass0"
+		bCryptHasher := &bCryptHasherImpl{cost: BCryptPasswordCost}
+		hash, err := bCryptHasher.Make(password)
+
+		assert.Nil(t, bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)))
 		assert.Nil(t, err)
 	})
 
-	t.Run("Make(string) Error", func(t *testing.T) {
-		hasher2 := &BCryptHasher{cost: 100}
-		hash, err := hasher2.Make("")
+	t.Run("Make:Error", func(t *testing.T) {
+		bCryptHasher := &bCryptHasherImpl{cost: 100}
+		hash, err := bCryptHasher.Make("")
 
 		assert.Empty(t, hash)
 		assert.Error(t, err)
 	})
 
-	t.Run("Check(string,string)", func(t *testing.T) {
-		hash, _ := bcrypt.GenerateFromPassword([]byte(testPass), BCryptPasswordCost)
-		err := hasher.Check(string(hash), testPass)
+	t.Run("Check", func(t *testing.T) {
+		password := "pass0"
+		bCryptHasher := &bCryptHasherImpl{cost: BCryptPasswordCost}
+		hash, _ := bcrypt.GenerateFromPassword([]byte(password), BCryptPasswordCost)
 
-		assert.Nil(t, err)
+		assert.Nil(t, bCryptHasher.Check(string(hash), password))
 	})
 
-	t.Run("Check(string,string)", func(t *testing.T) {
-		err := hasher.Check(testPass, testPass)
+	t.Run("Check:Error", func(t *testing.T) {
+		bCryptHasher := new(bCryptHasherImpl)
 
-		assert.Error(t, err)
+		assert.Error(t, bCryptHasher.Check("", ""))
 	})
 }

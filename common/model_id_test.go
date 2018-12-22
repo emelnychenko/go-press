@@ -1,4 +1,4 @@
-package models
+package common
 
 import (
 	"github.com/google/uuid"
@@ -18,7 +18,7 @@ func TestModelId(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("ParseModelId: Error", func(t *testing.T) {
+	t.Run("ParseModelId:Error", func(t *testing.T) {
 		userId, err := ParseModelId("")
 		assert.Nil(t, userId)
 		assert.Error(t, err)

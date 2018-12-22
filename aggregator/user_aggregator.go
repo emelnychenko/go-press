@@ -7,14 +7,15 @@ import (
 )
 
 type userAggregatorImpl struct {
+	userModelFactory contracts.UserModelFactory
 }
 
-func NewUserAggregator() contracts.UserAggregator {
-	return new(userAggregatorImpl)
+func NewUserAggregator(userModelFactory contracts.UserModelFactory) contracts.UserAggregator {
+	return &userAggregatorImpl{userModelFactory}
 }
 
-func (*userAggregatorImpl) AggregateObject(e *entities.UserEntity) *models.User {
-	m := new(models.User)
+func (a *userAggregatorImpl) AggregateUser(e *entities.UserEntity) *models.User {
+	m := a.userModelFactory.CreateUser()
 	m.Id = e.Id
 	m.FirstName = e.FirstName
 	m.LastName = e.LastName
@@ -23,11 +24,11 @@ func (*userAggregatorImpl) AggregateObject(e *entities.UserEntity) *models.User 
 	return m
 }
 
-func (c *userAggregatorImpl) AggregateCollection(e []*entities.UserEntity) []*models.User {
+func (a *userAggregatorImpl) AggregateUsers(e []*entities.UserEntity) []*models.User {
 	m := make([]*models.User, len(e))
 
 	for k, v := range e {
-		m[k] = c.AggregateObject(v)
+		m[k] = a.AggregateUser(v)
 	}
 
 	return m

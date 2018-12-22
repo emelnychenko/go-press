@@ -22,26 +22,26 @@ func TestFileAggregator(t *testing.T) {
 	})
 
 	t.Run("AggregateFile", func(t *testing.T) {
-		reply := new(models.File)
+		file := new(models.File)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
-		fileModelFactory.EXPECT().CreateFile().Return(reply)
+		fileModelFactory.EXPECT().CreateFile().Return(file)
 
 		fileAggregator := &fileAggregatorImpl{fileModelFactory: fileModelFactory}
+		response := fileAggregator.AggregateFile(new(entities.FileEntity))
 
-		file := fileAggregator.AggregateFile(new(entities.FileEntity))
-		assert.Equal(t, reply, file)
+		assert.Equal(t, file, response)
 	})
 
-	t.Run("AggregateCollection", func(t *testing.T) {
-		reply := new(models.File)
+	t.Run("AggregateFiles", func(t *testing.T) {
+		files := new(models.File)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
-		fileModelFactory.EXPECT().CreateFile().Return(reply)
+		fileModelFactory.EXPECT().CreateFile().Return(files)
 
 		fileAggregator := &fileAggregatorImpl{fileModelFactory: fileModelFactory}
-		fileEntities := []*entities.FileEntity{entities.NewFileEntity()}
+		fileEntities := []*entities.FileEntity{new(entities.FileEntity)}
+		response := fileAggregator.AggregateFiles(fileEntities)
 
-		files := fileAggregator.AggregateFiles(fileEntities)
-		assert.IsType(t, []*models.File{}, files)
-		assert.Equal(t, len(fileEntities), len(files))
+		assert.IsType(t, []*models.File{}, response)
+		assert.Equal(t, len(fileEntities), len(response))
 	})
 }

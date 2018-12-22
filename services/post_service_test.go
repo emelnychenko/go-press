@@ -14,24 +14,38 @@ func TestPostService(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	postId := models.NewModelId()
+	t.Run("NewPostService", func(t *testing.T) {
+		postEntityFactory := mocks.NewMockPostEntityFactory(ctrl)
+		postRepository := mocks.NewMockPostRepository(ctrl)
+
+		postService, isPostService := NewPostService(postEntityFactory, postRepository).(*postServiceImpl)
+
+		assert.True(t, isPostService)
+		assert.Equal(t, postEntityFactory, postService.postEntityFactory)
+		assert.Equal(t, postRepository, postService.postRepository)
+	})
 
 	t.Run("ListPosts", func(t *testing.T) {
+		var postEntities []*entities.PostEntity
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postService := NewPostService(postRepository)
-		var replies []*entities.PostEntity
+		postRepository.EXPECT().ListPosts().Return(postEntities, nil)
 
-		postRepository.EXPECT().ListPosts().Return(replies, nil)
-		postEntities, err := postService.ListPosts()
+		postService := &postServiceImpl{postRepository: postRepository}
+		response, err := postService.ListPosts()
 
-		assert.Equal(t, replies, postEntities)
+		assert.Equal(t, postEntities, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("CreatePost", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		postEntityFactory := mocks.NewMockPostEntityFactory(ctrl)
+		postEntityFactory.EXPECT().CreatePostEntity().Return(postEntity)
+
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postService := NewPostService(postRepository)
-		systemUser := models.NewSystemUser()
+		postRepository.EXPECT().SavePost(postEntity).Return(nil)
+
+		postAuthor := models.NewSystemUser()
 		data := &models.PostCreate{
 			Title:       "0",
 			Description: "1",
@@ -41,11 +55,10 @@ func TestPostService(t *testing.T) {
 			Views:       5,
 			Published:   new(time.Time),
 		}
+		postService := &postServiceImpl{postEntityFactory: postEntityFactory, postRepository: postRepository}
+		response, err := postService.CreatePost(postAuthor, data)
 
-		postRepository.EXPECT().SavePost(gomock.Any()).Return(nil)
-		postEntity, err := postService.CreatePost(systemUser, data)
-
-		assert.IsType(t, new(entities.PostEntity), postEntity)
+		assert.IsType(t, postEntity, response)
 		assert.Nil(t, err)
 		assert.Equal(t, data.Title, postEntity.Title)
 		assert.Equal(t, data.Description, postEntity.Description)
@@ -57,20 +70,23 @@ func TestPostService(t *testing.T) {
 	})
 
 	t.Run("GetPost", func(t *testing.T) {
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postService := NewPostService(postRepository)
-		var reply *entities.PostEntity
+		postRepository.EXPECT().GetPost(postId).Return(postEntity, nil)
 
-		postRepository.EXPECT().GetPost(postId).Return(reply, nil)
-		postEntity, err := postService.GetPost(postId)
+		postService := &postServiceImpl{postRepository: postRepository}
+		response, err := postService.GetPost(postId)
 
-		assert.Equal(t, reply, postEntity)
+		assert.Equal(t, postEntity, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("UpdatePost", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postService := NewPostService(postRepository)
+		postRepository.EXPECT().SavePost(postEntity).Return(nil)
+
 		data := &models.PostUpdate{
 			Title:       "0",
 			Description: "1",
@@ -80,20 +96,7 @@ func TestPostService(t *testing.T) {
 			Views:       5,
 			Published:   new(time.Time),
 		}
-		postEntity := &entities.PostEntity{
-			Id:          nil,
-			Title:       "",
-			Description: "",
-			Content:     "",
-			Status:      "",
-			Privacy:     "",
-			Views:       0,
-			Published:   nil,
-			Created:     nil,
-			Updated:     nil,
-		}
-
-		postRepository.EXPECT().SavePost(postEntity).Return(nil)
+		postService := &postServiceImpl{postRepository: postRepository}
 		assert.Nil(t, postService.UpdatePost(postEntity, data))
 
 		assert.Equal(t, data.Title, postEntity.Title)
@@ -107,21 +110,22 @@ func TestPostService(t *testing.T) {
 	})
 
 	t.Run("ChangePostAuthor", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postService := NewPostService(postRepository)
-		systemUser := models.NewSystemUser()
-		postEntity := &entities.PostEntity{}
-
 		postRepository.EXPECT().SavePost(postEntity).Return(nil)
-		assert.Nil(t, postService.ChangePostAuthor(postEntity, systemUser))
+
+		postAuthor := models.NewSystemUser()
+		postService := &postServiceImpl{postRepository: postRepository}
+
+		assert.Nil(t, postService.ChangePostAuthor(postEntity, postAuthor))
 	})
 
 	t.Run("DeletePost", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postService := NewPostService(postRepository)
-		postEntity := entities.NewPostEntity()
-
 		postRepository.EXPECT().RemovePost(postEntity).Return(nil)
+
+		postService := &postServiceImpl{postRepository: postRepository}
 		assert.Nil(t, postService.DeletePost(postEntity))
 	})
 }

@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/labstack/echo"
@@ -24,7 +25,7 @@ func NewFileEchoHelper() contracts.FileEchoHelper {
 }
 
 func (*fileEchoHelperImpl) ParseId(context echo.Context) (*models.FileId, error) {
-	return models.ParseModelId(context.Param(FileIdParam))
+	return common.ParseModelId(context.Param(FileIdParam))
 }
 
 func (*fileEchoHelperImpl) GetFileHeader(context echo.Context) (*multipart.FileHeader, error) {

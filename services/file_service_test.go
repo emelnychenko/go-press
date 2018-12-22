@@ -15,59 +15,69 @@ func TestFileService(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	fileId := models.NewModelId()
-
 	t.Run("NewFileService", func(t *testing.T) {
+		fileEntityFactory := mocks.NewMockFileEntityFactory(ctrl)
 		fileRepository := mocks.NewMockFileRepository(ctrl)
 		storageProvider := mocks.NewMockStorageProvider(ctrl)
-		fileService, isFileService := NewFileService(fileRepository, storageProvider).(*fileServiceImpl)
+		fileService, isFileService := NewFileService(fileEntityFactory, fileRepository, storageProvider).(*fileServiceImpl)
 
 		assert.True(t, isFileService)
+		assert.Equal(t, fileService.fileEntityFactory, fileEntityFactory)
 		assert.Equal(t, fileService.fileRepository, fileRepository)
 		assert.Equal(t, fileService.storageProvider, storageProvider)
 	})
 
 	t.Run("ListFiles", func(t *testing.T) {
+		var fileEntities []*entities.FileEntity
 		fileRepository := mocks.NewMockFileRepository(ctrl)
+		fileRepository.EXPECT().ListFiles().Return(fileEntities, nil)
+
 		fileService := &fileServiceImpl{fileRepository: fileRepository}
-		var replies []*entities.FileEntity
+		response, err := fileService.ListFiles()
 
-		fileRepository.EXPECT().ListFiles().Return(replies, nil)
-		fileEntities, err := fileService.ListFiles()
-
-		assert.Equal(t, replies, fileEntities)
+		assert.Equal(t, fileEntities, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("GetFile", func(t *testing.T) {
+		fileId := new(models.FileId)
+		fileEntity := new(entities.FileEntity)
 		fileRepository := mocks.NewMockFileRepository(ctrl)
+		fileRepository.EXPECT().GetFile(fileId).Return(fileEntity, nil)
+
 		fileService := &fileServiceImpl{fileRepository: fileRepository}
-		var reply *entities.FileEntity
+		response, err := fileService.GetFile(fileId)
 
-		fileRepository.EXPECT().GetFile(fileId).Return(reply, nil)
-		fileEntity, err := fileService.GetFile(fileId)
-
-		assert.Equal(t, reply, fileEntity)
+		assert.Equal(t, fileEntity, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("UploadFile", func(t *testing.T) {
+		fileEntity := new(entities.FileEntity)
+		fileEntityFactory := mocks.NewMockFileEntityFactory(ctrl)
+		fileEntityFactory.EXPECT().CreateFileEntity().Return(fileEntity)
+
 		fileRepository := mocks.NewMockFileRepository(ctrl)
-		storageProvider := mocks.NewMockStorageProvider(ctrl)
-		fileService := &fileServiceImpl{fileRepository: fileRepository, storageProvider: storageProvider}
+		fileRepository.EXPECT().SaveFile(fileEntity).Return(nil)
+
 		fileSource := bytes.NewBufferString("test")
+		filePath := ""
+		storageProvider := mocks.NewMockStorageProvider(ctrl)
+		storageProvider.EXPECT().UploadFile(fileEntity, fileSource).Return(filePath, nil)
+
 		data := &models.FileUpload{
 			Name: "0",
 			Size: 10,
 			Type: "1",
 		}
-		filePath := ""
+		fileService := &fileServiceImpl{
+			fileEntityFactory: fileEntityFactory,
+			fileRepository:    fileRepository,
+			storageProvider:   storageProvider,
+		}
+		response, err := fileService.UploadFile(fileSource, data)
 
-		fileRepository.EXPECT().SaveFile(gomock.Any()).Return(nil)
-		storageProvider.EXPECT().UploadFile(gomock.Any(), fileSource).Return(filePath, nil)
-		fileEntity, err := fileService.UploadFile(fileSource, data)
-
-		assert.IsType(t, new(entities.FileEntity), fileEntity)
+		assert.Equal(t, fileEntity, response)
 		assert.Nil(t, err)
 		assert.Equal(t, data.Name, fileEntity.Name)
 		assert.Equal(t, data.Size, fileEntity.Size)
@@ -76,51 +86,51 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("UploadFile:Error", func(t *testing.T) {
-		storageProvider := mocks.NewMockStorageProvider(ctrl)
-		fileService := &fileServiceImpl{storageProvider: storageProvider}
+		fileEntity := new(entities.FileEntity)
+		fileEntityFactory := mocks.NewMockFileEntityFactory(ctrl)
+		fileEntityFactory.EXPECT().CreateFileEntity().Return(fileEntity)
+
 		fileSource := bytes.NewBufferString("test")
+		storageProvider := mocks.NewMockStorageProvider(ctrl)
+		storageProvider.EXPECT().UploadFile(fileEntity, fileSource).Return("", common.ServerError(""))
+
 		data := new(models.FileUpload)
+		fileService := &fileServiceImpl{fileEntityFactory: fileEntityFactory, storageProvider: storageProvider}
+		response, err := fileService.UploadFile(fileSource, data)
 
-		storageProvider.EXPECT().UploadFile(gomock.Any(), fileSource).Return("", common.ServerError(""))
-		fileEntity, err := fileService.UploadFile(fileSource, data)
-
-		assert.IsType(t, new(entities.FileEntity), fileEntity)
+		assert.Equal(t, fileEntity, response)
 		assert.Error(t, err)
 	})
 
 	t.Run("DownloadFile", func(t *testing.T) {
-		storageProvider := mocks.NewMockStorageProvider(ctrl)
-		fileService := &fileServiceImpl{storageProvider: storageProvider}
 		fileEntity := new(entities.FileEntity)
 		fileDestination := bytes.NewBuffer(nil)
-
+		storageProvider := mocks.NewMockStorageProvider(ctrl)
 		storageProvider.EXPECT().DownloadFile(fileEntity, fileDestination).Return(nil)
-		err := fileService.DownloadFile(fileEntity, fileDestination)
 
-		assert.Nil(t, err)
+		fileService := &fileServiceImpl{storageProvider: storageProvider}
+		assert.Nil(t, fileService.DownloadFile(fileEntity, fileDestination))
 	})
 
 	t.Run("UpdateFile", func(t *testing.T) {
-		fileRepository := mocks.NewMockFileRepository(ctrl)
-		fileService := &fileServiceImpl{fileRepository: fileRepository}
-		data := &models.FileUpdate{
-			Name: "0",
-		}
 		fileEntity := new(entities.FileEntity)
-
+		fileRepository := mocks.NewMockFileRepository(ctrl)
 		fileRepository.EXPECT().SaveFile(fileEntity).Return(nil)
-		assert.Nil(t, fileService.UpdateFile(fileEntity, data))
 
+		data := &models.FileUpdate{Name: "0"}
+		fileService := &fileServiceImpl{fileRepository: fileRepository}
+
+		assert.Nil(t, fileService.UpdateFile(fileEntity, data))
 		assert.Equal(t, data.Name, fileEntity.Name)
 		assert.NotNil(t, fileEntity.Updated)
 	})
 
 	t.Run("DeleteFile", func(t *testing.T) {
-		fileRepository := mocks.NewMockFileRepository(ctrl)
-		fileService := &fileServiceImpl{fileRepository: fileRepository}
 		fileEntity := new(entities.FileEntity)
-
+		fileRepository := mocks.NewMockFileRepository(ctrl)
 		fileRepository.EXPECT().RemoveFile(fileEntity).Return(nil)
+
+		fileService := &fileServiceImpl{fileRepository: fileRepository}
 		assert.Nil(t, fileService.DeleteFile(fileEntity))
 	})
 }

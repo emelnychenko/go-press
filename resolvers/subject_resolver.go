@@ -17,7 +17,7 @@ func NewSubjectResolver(userApi contracts.UserApi) (subjectResolver contracts.Su
 	return &subjectResolverImpl{userApi}
 }
 
-func (c *subjectResolverImpl) ResolveSubject(subjectId *models.ModelId, subjectType enums.SubjectType) (subject interface{}, err common.Error) {
+func (c *subjectResolverImpl) ResolveSubject(subjectId *common.ModelId, subjectType enums.SubjectType) (subject interface{}, err common.Error) {
 	switch subjectType {
 	case enums.SystemSubjectType:
 		subject = models.NewSystemUser()

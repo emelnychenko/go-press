@@ -34,30 +34,30 @@ func (m *MockPostAggregator) EXPECT() *MockPostAggregatorMockRecorder {
 	return m.recorder
 }
 
-// AggregateObject mocks base method
-func (m *MockPostAggregator) AggregateObject(postEntity *entities.PostEntity) *models.Post {
+// AggregatePost mocks base method
+func (m *MockPostAggregator) AggregatePost(postEntity *entities.PostEntity) *models.Post {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AggregateObject", postEntity)
+	ret := m.ctrl.Call(m, "AggregatePost", postEntity)
 	ret0, _ := ret[0].(*models.Post)
 	return ret0
 }
 
-// AggregateObject indicates an expected call of AggregateObject
-func (mr *MockPostAggregatorMockRecorder) AggregateObject(postEntity interface{}) *gomock.Call {
+// AggregatePost indicates an expected call of AggregatePost
+func (mr *MockPostAggregatorMockRecorder) AggregatePost(postEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateObject", reflect.TypeOf((*MockPostAggregator)(nil).AggregateObject), postEntity)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregatePost", reflect.TypeOf((*MockPostAggregator)(nil).AggregatePost), postEntity)
 }
 
-// AggregateCollection mocks base method
-func (m *MockPostAggregator) AggregateCollection(postEntities []*entities.PostEntity) []*models.Post {
+// AggregatePosts mocks base method
+func (m *MockPostAggregator) AggregatePosts(postEntities []*entities.PostEntity) []*models.Post {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AggregateCollection", postEntities)
+	ret := m.ctrl.Call(m, "AggregatePosts", postEntities)
 	ret0, _ := ret[0].([]*models.Post)
 	return ret0
 }
 
-// AggregateCollection indicates an expected call of AggregateCollection
-func (mr *MockPostAggregatorMockRecorder) AggregateCollection(postEntities interface{}) *gomock.Call {
+// AggregatePosts indicates an expected call of AggregatePosts
+func (mr *MockPostAggregatorMockRecorder) AggregatePosts(postEntities interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateCollection", reflect.TypeOf((*MockPostAggregator)(nil).AggregateCollection), postEntities)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregatePosts", reflect.TypeOf((*MockPostAggregator)(nil).AggregatePosts), postEntities)
 }

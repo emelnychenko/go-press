@@ -1,6 +1,8 @@
-package models
+package common
 
-import "github.com/emelnychenko/go-press/enums"
+import (
+	"github.com/emelnychenko/go-press/enums"
+)
 
 type (
 	Subject interface {

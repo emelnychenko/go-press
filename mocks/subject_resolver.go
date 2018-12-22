@@ -7,7 +7,6 @@ package mocks
 import (
 	common "github.com/emelnychenko/go-press/common"
 	enums "github.com/emelnychenko/go-press/enums"
-	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -36,7 +35,7 @@ func (m *MockSubjectResolver) EXPECT() *MockSubjectResolverMockRecorder {
 }
 
 // ResolveSubject mocks base method
-func (m *MockSubjectResolver) ResolveSubject(subjectId *models.ModelId, subjectType enums.SubjectType) (interface{}, common.Error) {
+func (m *MockSubjectResolver) ResolveSubject(subjectId *common.ModelId, subjectType enums.SubjectType) (interface{}, common.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ResolveSubject", subjectId, subjectType)
 	ret0, _ := ret[0].(interface{})
