@@ -26,38 +26,48 @@ func TestAwsS3StorageProvider(t *testing.T) {
 
 		awsS3WriterProxyFactory := mocks.NewMockAwsS3WriterProxyFactory(ctrl)
 
+		awsS3Factory := mocks.NewMockAwsS3Factory(ctrl)
+		awsSdkS3 := aws_mocks.NewMockS3API(ctrl)
+		awsS3Factory.EXPECT().Create(gomock.Any()).Return(awsSdkS3)
+
 		awsS3UploaderFactory := mocks.NewMockAwsS3UploaderFactory(ctrl)
-		uploaderAPI := aws_mocks.NewMockUploaderAPI(ctrl)
-		awsS3UploaderFactory.EXPECT().Create(gomock.Any()).Return(uploaderAPI)
+		awsSdkS3Uploader := aws_mocks.NewMockUploaderAPI(ctrl)
+		awsS3UploaderFactory.EXPECT().Create(gomock.Any()).Return(awsSdkS3Uploader)
 
 		awsS3DownloaderFactory := mocks.NewMockAwsS3DownloaderFactory(ctrl)
-		downloaderAPI := aws_mocks.NewMockDownloaderAPI(ctrl)
-		awsS3DownloaderFactory.EXPECT().Create(gomock.Any()).Return(downloaderAPI)
+		awsSdkS3Downloader := aws_mocks.NewMockDownloaderAPI(ctrl)
+		awsS3DownloaderFactory.EXPECT().Create(gomock.Any()).Return(awsSdkS3Downloader)
 
 		var awsS3StorageProvider *awsS3StorageProviderImpl
-		storageProvider := NewAwsS3StorageProvider(awsS3Parameters, awsS3WriterProxyFactory, awsS3UploaderFactory, awsS3DownloaderFactory)
-		awsS3StorageProvider, isAwsS3StorageProvider := storageProvider.(*awsS3StorageProviderImpl)
+		awsS3StorageProvider, isAwsS3StorageProvider := NewAwsS3StorageProvider(
+			awsS3Parameters,
+			awsS3WriterProxyFactory,
+			awsS3Factory,
+			awsS3UploaderFactory,
+			awsS3DownloaderFactory,
+		).(*awsS3StorageProviderImpl)
 
 		assert.True(t, isAwsS3StorageProvider)
 		assert.Equal(t, awsS3WriterProxyFactory, awsS3StorageProvider.awsS3WriterProxyFactory)
 		assert.Equal(t, awsS3Parameters, awsS3StorageProvider.awsS3Parameters)
-		assert.Equal(t, uploaderAPI, awsS3StorageProvider.uploaderAPI)
-		assert.Equal(t, downloaderAPI, awsS3StorageProvider.downloaderAPI)
+		assert.Equal(t, awsSdkS3, awsS3StorageProvider.awsSdkS3)
+		assert.Equal(t, awsSdkS3Uploader, awsS3StorageProvider.awsSdkS3Uploader)
+		assert.Equal(t, awsSdkS3Downloader, awsS3StorageProvider.awsSdkS3Downloader)
 	})
 
 	t.Run("UploadFile", func(t *testing.T) {
 		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
 		awsS3Parameters.EXPECT().Bucket().Return("")
 
-		uploaderAPI := aws_mocks.NewMockUploaderAPI(ctrl)
-		uploaderAPI.EXPECT().Upload(gomock.Any()).Return(nil, nil)
+		awsSdkS3Uploader := aws_mocks.NewMockUploaderAPI(ctrl)
+		awsSdkS3Uploader.EXPECT().Upload(gomock.Any()).Return(nil, nil)
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
-			awsS3Parameters: awsS3Parameters,
-			uploaderAPI:     uploaderAPI,
+			awsS3Parameters:  awsS3Parameters,
+			awsSdkS3Uploader: awsSdkS3Uploader,
 		}
 
-		fileEntity := entities.NewFileEntity()
+		fileEntity := new(entities.FileEntity)
 		assert.Nil(t, awsS3StorageProvider.UploadFile(fileEntity, nil))
 	})
 
@@ -65,15 +75,15 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
 		awsS3Parameters.EXPECT().Bucket().Return("")
 
-		uploaderAPI := aws_mocks.NewMockUploaderAPI(ctrl)
-		uploaderAPI.EXPECT().Upload(gomock.Any()).Return(nil, errors.New(""))
+		awsSdkS3Uploader := aws_mocks.NewMockUploaderAPI(ctrl)
+		awsSdkS3Uploader.EXPECT().Upload(gomock.Any()).Return(nil, errors.New(""))
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
-			awsS3Parameters: awsS3Parameters,
-			uploaderAPI:     uploaderAPI,
+			awsS3Parameters:  awsS3Parameters,
+			awsSdkS3Uploader: awsSdkS3Uploader,
 		}
 
-		fileEntity := entities.NewFileEntity()
+		fileEntity := new(entities.FileEntity)
 		assert.Error(t, awsS3StorageProvider.UploadFile(fileEntity, nil))
 	})
 
@@ -87,19 +97,17 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3WriterProxyFactory := mocks.NewMockAwsS3WriterProxyFactory(ctrl)
 		awsS3WriterProxyFactory.EXPECT().Create(fileDestination).Return(awsS3WriterProxy)
 
-		downloaderAPI := aws_mocks.NewMockDownloaderAPI(ctrl)
-		downloaderAPI.EXPECT().Download(awsS3WriterProxy, gomock.Any()).Return(int64(0), nil)
+		awsSdkS3Downloader := aws_mocks.NewMockDownloaderAPI(ctrl)
+		awsSdkS3Downloader.EXPECT().Download(awsS3WriterProxy, gomock.Any()).Return(int64(0), nil)
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
 			awsS3Parameters:         awsS3Parameters,
 			awsS3WriterProxyFactory: awsS3WriterProxyFactory,
-			downloaderAPI:           downloaderAPI,
+			awsSdkS3Downloader:      awsSdkS3Downloader,
 		}
 
-		fileEntity := entities.NewFileEntity()
-		err := awsS3StorageProvider.DownloadFile(fileEntity, fileDestination)
-
-		assert.Nil(t, err)
+		fileEntity := new(entities.FileEntity)
+		assert.Nil(t, awsS3StorageProvider.DownloadFile(fileEntity, fileDestination))
 	})
 
 	t.Run("DownloadFile:Error", func(t *testing.T) {
@@ -112,18 +120,48 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3WriterProxyFactory := mocks.NewMockAwsS3WriterProxyFactory(ctrl)
 		awsS3WriterProxyFactory.EXPECT().Create(fileDestination).Return(awsS3WriterProxy)
 
-		downloaderAPI := aws_mocks.NewMockDownloaderAPI(ctrl)
-		downloaderAPI.EXPECT().Download(awsS3WriterProxy, gomock.Any()).Return(int64(0), errors.New(""))
+		awsSdkS3Downloader := aws_mocks.NewMockDownloaderAPI(ctrl)
+		awsSdkS3Downloader.EXPECT().Download(awsS3WriterProxy, gomock.Any()).Return(int64(0), errors.New(""))
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
 			awsS3Parameters:         awsS3Parameters,
 			awsS3WriterProxyFactory: awsS3WriterProxyFactory,
-			downloaderAPI:           downloaderAPI,
+			awsSdkS3Downloader:      awsSdkS3Downloader,
 		}
 
-		fileEntity := entities.NewFileEntity()
-		err := awsS3StorageProvider.DownloadFile(fileEntity, fileDestination)
+		fileEntity := new(entities.FileEntity)
+		assert.Error(t, awsS3StorageProvider.DownloadFile(fileEntity, fileDestination))
+	})
 
-		assert.Error(t, err)
+	t.Run("DeleteFile", func(t *testing.T) {
+		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
+		awsS3Parameters.EXPECT().Bucket().Return("")
+
+		awsSdkS3 := aws_mocks.NewMockS3API(ctrl)
+		awsSdkS3.EXPECT().DeleteObject(gomock.Any()).Return(nil, nil)
+
+		awsS3StorageProvider := &awsS3StorageProviderImpl{
+			awsS3Parameters:         awsS3Parameters,
+			awsSdkS3:                awsSdkS3,
+		}
+
+		fileEntity := new(entities.FileEntity)
+		assert.Nil(t, awsS3StorageProvider.DeleteFile(fileEntity))
+	})
+
+	t.Run("DeleteFile:Error", func(t *testing.T) {
+		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
+		awsS3Parameters.EXPECT().Bucket().Return("")
+
+		awsSdkS3 := aws_mocks.NewMockS3API(ctrl)
+		awsSdkS3.EXPECT().DeleteObject(gomock.Any()).Return(nil, errors.New(""))
+
+		awsS3StorageProvider := &awsS3StorageProviderImpl{
+			awsS3Parameters:         awsS3Parameters,
+			awsSdkS3:                awsSdkS3,
+		}
+
+		fileEntity := new(entities.FileEntity)
+		assert.Error(t, awsS3StorageProvider.DeleteFile(fileEntity))
 	})
 }

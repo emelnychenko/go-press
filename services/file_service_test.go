@@ -143,6 +143,7 @@ func TestFileService(t *testing.T) {
 	t.Run("DownloadFile", func(t *testing.T) {
 		fileEntity := new(entities.FileEntity)
 		fileDestination := bytes.NewBuffer(nil)
+
 		storageProvider := mocks.NewMockStorageProvider(ctrl)
 		storageProvider.EXPECT().DownloadFile(fileEntity, fileDestination).Return(nil)
 
@@ -165,10 +166,23 @@ func TestFileService(t *testing.T) {
 
 	t.Run("DeleteFile", func(t *testing.T) {
 		fileEntity := new(entities.FileEntity)
+
 		fileRepository := mocks.NewMockFileRepository(ctrl)
 		fileRepository.EXPECT().RemoveFile(fileEntity).Return(nil)
 
-		fileService := &fileServiceImpl{fileRepository: fileRepository}
+		storageProvider := mocks.NewMockStorageProvider(ctrl)
+		storageProvider.EXPECT().DeleteFile(fileEntity).Return(nil)
+
+		fileService := &fileServiceImpl{fileRepository: fileRepository, storageProvider: storageProvider}
 		assert.Nil(t, fileService.DeleteFile(fileEntity))
+	})
+
+	t.Run("DeleteFile:RemoveError", func(t *testing.T) {
+		fileEntity := new(entities.FileEntity)
+		fileRepository := mocks.NewMockFileRepository(ctrl)
+		fileRepository.EXPECT().RemoveFile(fileEntity).Return(common.ServerError(""))
+
+		fileService := &fileServiceImpl{fileRepository: fileRepository}
+		assert.Error(t, fileService.DeleteFile(fileEntity))
 	})
 }

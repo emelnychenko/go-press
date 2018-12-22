@@ -48,6 +48,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewFileEchoHelper)
 	_ = container.Provide(parameters.NewAwsS3Parameters)
 	_ = container.Provide(factories.NewAwsS3WriterProxyFactory)
+	_ = container.Provide(factories.NewAwsS3Factory)
 	_ = container.Provide(factories.NewAwsS3UploaderFactory)
 	_ = container.Provide(factories.NewAwsS3DownloaderFactory)
 	_ = container.Provide(factories.NewUserModelFactory)

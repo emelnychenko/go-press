@@ -7,6 +7,6 @@ import (
 
 type (
 	AwsS3UploaderFactory interface {
-		Create(sess *session.Session) s3manageriface.UploaderAPI
+		Create(sess *session.Session) (awsSdkS3Uploader s3manageriface.UploaderAPI)
 	}
 )

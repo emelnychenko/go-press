@@ -62,3 +62,17 @@ func (mr *MockStorageProviderMockRecorder) DownloadFile(fileEntity, fileDestinat
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownloadFile", reflect.TypeOf((*MockStorageProvider)(nil).DownloadFile), fileEntity, fileDestination)
 }
+
+// DeleteFile mocks base method
+func (m *MockStorageProvider) DeleteFile(fileEntity *entities.FileEntity) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFile", fileEntity)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// DeleteFile indicates an expected call of DeleteFile
+func (mr *MockStorageProviderMockRecorder) DeleteFile(fileEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockStorageProvider)(nil).DeleteFile), fileEntity)
+}

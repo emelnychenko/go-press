@@ -72,6 +72,12 @@ func (s *fileServiceImpl) UpdateFile(fileEntity *entities.FileEntity, data *mode
 	return s.fileRepository.SaveFile(fileEntity)
 }
 
-func (s *fileServiceImpl) DeleteFile(fileEntity *entities.FileEntity) common.Error {
-	return s.fileRepository.RemoveFile(fileEntity)
+func (s *fileServiceImpl) DeleteFile(fileEntity *entities.FileEntity) (err common.Error) {
+	err = s.fileRepository.RemoveFile(fileEntity)
+
+	if nil != err {
+		return
+	}
+
+	return s.storageProvider.DeleteFile(fileEntity)
 }

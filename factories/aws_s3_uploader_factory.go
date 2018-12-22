@@ -8,13 +8,14 @@ import (
 )
 
 type (
-	awsS3UploaderFactoryImpl struct{}
+	awsS3UploaderFactoryImpl struct {
+	}
 )
 
 func NewAwsS3UploaderFactory() contracts.AwsS3UploaderFactory {
 	return &awsS3UploaderFactoryImpl{}
 }
 
-func (*awsS3UploaderFactoryImpl) Create(sess *session.Session) s3manageriface.UploaderAPI {
+func (*awsS3UploaderFactoryImpl) Create(sess *session.Session) (awsSdkS3Uploader s3manageriface.UploaderAPI) {
 	return s3manager.NewUploader(sess)
 }

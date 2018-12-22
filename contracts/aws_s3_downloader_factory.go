@@ -7,6 +7,6 @@ import (
 
 type (
 	AwsS3DownloaderFactory interface {
-		Create(sess *session.Session) s3manageriface.DownloaderAPI
+		Create(sess *session.Session) (awsSdkS3Downloader s3manageriface.DownloaderAPI)
 	}
 )

@@ -7,7 +7,8 @@ import (
 )
 
 type (
-	awsS3WriterProxyFactoryImpl struct{}
+	awsS3WriterProxyFactoryImpl struct {
+	}
 )
 
 func NewAwsS3WriterProxyFactory() contracts.AwsS3WriterProxyFactory {

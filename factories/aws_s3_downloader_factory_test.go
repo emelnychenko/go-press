@@ -18,10 +18,10 @@ func TestAwsS3DownloaderFactory(t *testing.T) {
 	})
 
 	t.Run("Create", func(t *testing.T) {
-		sess, _ := session.NewSession()
+		awsSdkSession, _ := session.NewSession()
 		awsS3DownloaderFactory := &awsS3DownloaderFactoryImpl{}
 
-		_, isDownloader := awsS3DownloaderFactory.Create(sess).(*s3manager.Downloader)
-		assert.True(t, isDownloader)
+		_, isAwsSdkS3Downloader := awsS3DownloaderFactory.Create(awsSdkSession).(*s3manager.Downloader)
+		assert.True(t, isAwsSdkS3Downloader)
 	})
 }

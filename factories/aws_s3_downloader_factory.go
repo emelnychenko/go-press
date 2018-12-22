@@ -8,13 +8,14 @@ import (
 )
 
 type (
-	awsS3DownloaderFactoryImpl struct{}
+	awsS3DownloaderFactoryImpl struct {
+	}
 )
 
 func NewAwsS3DownloaderFactory() contracts.AwsS3DownloaderFactory {
 	return &awsS3DownloaderFactoryImpl{}
 }
 
-func (*awsS3DownloaderFactoryImpl) Create(sess *session.Session) s3manageriface.DownloaderAPI {
+func (*awsS3DownloaderFactoryImpl) Create(sess *session.Session) (awsSdkS3Downloader s3manageriface.DownloaderAPI) {
 	return s3manager.NewDownloader(sess)
 }

@@ -18,10 +18,10 @@ func TestAwsS3UploaderFactory(t *testing.T) {
 	})
 
 	t.Run("Create", func(t *testing.T) {
-		sess, _ := session.NewSession()
+		awsSdkSession, _ := session.NewSession()
 		awsS3UploaderFactory := &awsS3UploaderFactoryImpl{}
 
-		_, isUploader := awsS3UploaderFactory.Create(sess).(*s3manager.Uploader)
-		assert.True(t, isUploader)
+		_, isAwsSdkS3Uploader := awsS3UploaderFactory.Create(awsSdkSession).(*s3manager.Uploader)
+		assert.True(t, isAwsSdkS3Uploader)
 	})
 }
