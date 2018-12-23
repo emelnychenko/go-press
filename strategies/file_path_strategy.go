@@ -18,20 +18,10 @@ func NewFilePathStrategy() contracts.FilePathStrategy {
 }
 
 func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePath string, err common.Error) {
-	if nil == fileEntity.Id {
-		err = common.ServerError("File.Id is empty")
-		return
-	}
+	fileExtensions, mimeErr := mime.ExtensionsByType(fileEntity.Type)
 
-	if nil == fileEntity.Created {
-		err = common.ServerError("File.Created is empty")
-		return
-	}
-
-	fileExtensions, err2 := mime.ExtensionsByType(fileEntity.Type)
-
-	if nil != err2 {
-		err = common.NewServerError(err2)
+	if nil != mimeErr {
+		err = common.NewSystemError(mimeErr)
 		return
 	}
 

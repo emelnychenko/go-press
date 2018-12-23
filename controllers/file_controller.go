@@ -1,60 +1,50 @@
 package controllers
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
-type FileController struct {
-	fileEchoHelper   contracts.FileEchoHelper
+type fileControllerImpl struct {
+	fileHttpHelper   contracts.FileHttpHelper
 	fileModelFactory contracts.FileModelFactory
 	fileApi          contracts.FileApi
 }
 
 func NewFileController(
-	fileEchoHelper contracts.FileEchoHelper,
+	fileHttpHelper contracts.FileHttpHelper,
 	fileModelFactory contracts.FileModelFactory,
 	fileApi contracts.FileApi,
-) *FileController {
-	return &FileController{
-		fileEchoHelper,
+) (fileController contracts.FileController) {
+	return &fileControllerImpl{
+		fileHttpHelper,
 		fileModelFactory,
 		fileApi,
 	}
 }
 
-func (c *FileController) ListFiles(context echo.Context) error {
-	files, err := c.fileApi.ListFiles()
-
-	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
-	}
-
-	return context.JSON(http.StatusOK, files)
+func (c *fileControllerImpl) ListFiles(httpContext contracts.HttpContext) (files interface{}, err common.Error) {
+	files, err = c.fileApi.ListFiles()
+	return
 }
 
-func (c *FileController) GetFile(context echo.Context) error {
-	fileId, err := c.fileEchoHelper.ParseId(context)
+func (c *fileControllerImpl) GetFile(httpContext contracts.HttpContext) (file interface{}, err common.Error) {
+	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
-	file, err2 := c.fileApi.GetFile(fileId)
-
-	if err2 != nil {
-		return context.JSON(err2.Code(), err2)
-	}
-
-	return context.JSON(http.StatusOK, file)
+	file, err = c.fileApi.GetFile(fileId)
+	return
 }
 
-func (c *FileController) UploadFile(context echo.Context) error {
-	fileHeader, err := c.fileEchoHelper.GetFileHeader(context)
+func (c *fileControllerImpl) UploadFile(httpContext contracts.HttpContext) (file interface{}, err common.Error) {
+	fileHeader, err := c.fileHttpHelper.GetFileHeader(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
 	data := c.fileModelFactory.CreateFileUpload()
@@ -62,69 +52,53 @@ func (c *FileController) UploadFile(context echo.Context) error {
 	data.Size = fileHeader.Size
 	data.Type = fileHeader.Header.Get(echo.HeaderContentType)
 
-	fileSource, err := c.fileEchoHelper.OpenFormFile(fileHeader)
+	fileSource, err := c.fileHttpHelper.OpenFormFile(fileHeader)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
 	defer fileSource.Close()
 
-	file, err2 := c.fileApi.UploadFile(fileSource, data)
-
-	if err2 != nil {
-		return context.JSON(err2.Code(), err2)
-	}
-
-	return context.JSON(http.StatusOK, file)
+	file, err = c.fileApi.UploadFile(fileSource, data)
+	return
 }
 
-func (c *FileController) DownloadFile(context echo.Context) error {
-	fileId, err := c.fileEchoHelper.ParseId(context)
+func (c *fileControllerImpl) DownloadFile(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
-	if err := c.fileApi.DownloadFile(
-		fileId, c.fileEchoHelper.PrepareFileDestination(context),
-	); err != nil {
-		return context.JSON(err.Code(), err)
-	}
-
-	return nil
+	err = c.fileApi.DownloadFile(fileId, c.fileHttpHelper.PrepareFileDestination(httpContext))
+	return
 }
 
-func (c *FileController) UpdateFile(context echo.Context) error {
-	fileId, err := c.fileEchoHelper.ParseId(context)
+func (c *fileControllerImpl) UpdateFile(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
 	data := c.fileModelFactory.CreateFileUpdate()
 
-	if err := context.Bind(data); err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+	if err = httpContext.BindModel(data); err != nil {
+		return
 	}
 
-	if err2 := c.fileApi.UpdateFile(fileId, data); err2 != nil {
-		return context.JSON(err2.Code(), err2)
-	}
-
-	return context.JSON(http.StatusOK, nil)
+	err = c.fileApi.UpdateFile(fileId, data)
+	return
 }
 
-func (c *FileController) DeleteFile(context echo.Context) error {
-	fileId, err := c.fileEchoHelper.ParseId(context)
+func (c *fileControllerImpl) DeleteFile(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
-	if err := c.fileApi.DeleteFile(fileId); err != nil {
-		return context.JSON(err.Code(), err)
-	}
-
-	return context.JSON(http.StatusOK, nil)
+	err = c.fileApi.DeleteFile(fileId)
+	return
 }

@@ -3,18 +3,15 @@ package errors
 import (
 	"fmt"
 	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/models"
 )
 
-type (
-	FileNotFoundError struct {
-		common.NotFoundError
-	}
-)
-
-func (e FileNotFoundError) Error() string {
-	return fmt.Sprintf("The file was not found on request: %s", string(e.NotFoundError))
+func NewFileNotFoundError(request string) common.Error {
+	message := fmt.Sprintf("The File was not found on request: %s", request)
+	return common.NewNotFoundError(message)
 }
 
-func NewFileNotFoundError(query string) FileNotFoundError {
-	return FileNotFoundError{common.NotFoundError(query)}
+func NewFileByIdNotFoundError(fileId *models.FileId) common.Error {
+	request := fmt.Sprintf("Id = %s", fileId)
+	return NewFileNotFoundError(request)
 }

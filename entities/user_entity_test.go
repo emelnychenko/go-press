@@ -33,4 +33,21 @@ func TestUserEntity(t *testing.T) {
 
 		assert.Equal(t, enums.UserSubjectType, userEntity.SubjectType())
 	})
+
+	t.Run("SetPicture", func(t *testing.T) {
+		modelId := new(common.ModelId)
+		postPicture := &FileEntity{Id: modelId}
+		userEntity := new(UserEntity)
+
+		userEntity.SetPicture(postPicture)
+		assert.Equal(t, modelId, userEntity.PictureId)
+	})
+
+	t.Run("RemovePicture", func(t *testing.T) {
+		modelId := new(common.ModelId)
+		postEntity := &UserEntity{PictureId: modelId}
+
+		postEntity.RemovePicture()
+		assert.Nil(t, postEntity.PictureId)
+	})
 }

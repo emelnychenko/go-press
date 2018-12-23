@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/emelnychenko/go-press/aggregator"
 	"github.com/emelnychenko/go-press/apis"
+	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/controllers"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/factories"
@@ -14,6 +15,7 @@ import (
 	"github.com/emelnychenko/go-press/resolvers"
 	"github.com/emelnychenko/go-press/services"
 	"github.com/emelnychenko/go-press/strategies"
+	app_echo "github.com/emelnychenko/go-press/echo"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
@@ -44,8 +46,11 @@ func BuildContainer() (container *dig.Container) {
 
 	_ = container.Provide(ConnectDatabase)
 	_ = container.Provide(NewServer)
+	_ = container.Provide(app_echo.NewRouter)
 	_ = container.Provide(hasher.NewBCryptHasher)
-	_ = container.Provide(helpers.NewFileEchoHelper)
+	_ = container.Provide(helpers.NewUserEchoHelper)
+	_ = container.Provide(helpers.NewPostHttpHelper)
+	_ = container.Provide(helpers.NewFileHttpHelper)
 	_ = container.Provide(parameters.NewAwsS3Parameters)
 	_ = container.Provide(factories.NewAwsS3WriterProxyFactory)
 	_ = container.Provide(factories.NewAwsS3Factory)
@@ -64,35 +69,50 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(repositories.NewPostRepository)
 	_ = container.Provide(repositories.NewFileRepository)
 	_ = container.Provide(services.NewUserService)
+	_ = container.Provide(services.NewUserPictureService)
 	_ = container.Provide(services.NewFileService)
 	_ = container.Provide(services.NewPostService)
+	_ = container.Provide(services.NewPostPictureService)
+	_ = container.Provide(services.NewPostVideoService)
 	_ = container.Provide(aggregator.NewUserAggregator)
 	_ = container.Provide(aggregator.NewPostAggregator)
 	_ = container.Provide(aggregator.NewFileAggregator)
 	_ = container.Provide(apis.NewUserApi)
+	_ = container.Provide(apis.NewUserPictureApi)
 	_ = container.Provide(apis.NewPostApi)
+	_ = container.Provide(apis.NewPostPictureApi)
+	_ = container.Provide(apis.NewPostVideoApi)
 	_ = container.Provide(apis.NewFileApi)
 	_ = container.Provide(controllers.NewUserController)
+	_ = container.Provide(controllers.NewUserPictureController)
 	_ = container.Provide(controllers.NewPostController)
+	_ = container.Provide(controllers.NewPostPictureController)
+	_ = container.Provide(controllers.NewPostVideoController)
 	_ = container.Provide(controllers.NewFileController)
 	return
 }
 
-func BindControllers(
-	echo *echo.Echo,
-	userController *controllers.UserController,
-	postController *controllers.PostController,
-	fileController *controllers.FileController,
+func BindRoutes(
+	router contracts.Router,
+	userController contracts.UserController,
+	userPictureController contracts.UserPictureController,
+	postController contracts.PostController,
+	postPictureController contracts.PostPictureController,
+	PostVideoController contracts.PostVideoController,
+	fileController contracts.FileController,
 ) {
-	controllers.BindUserController(echo, userController)
-	controllers.BindPostController(echo, postController)
-	controllers.BindFileController(echo, fileController)
+	controllers.BindUserRoutes(router, userController)
+	controllers.BindUserPictureRoutes(router, userPictureController)
+	controllers.BindPostRoutes(router, postController)
+	controllers.BindPostPictureRoutes(router, postPictureController)
+	controllers.BindPostVideoRoutes(router, PostVideoController)
+	controllers.BindFileRoutes(router, fileController)
 }
 
 func main() {
 	container := BuildContainer()
 
-	if err := container.Invoke(BindControllers); err != nil {
+	if err := container.Invoke(BindRoutes); err != nil {
 		panic(err)
 	}
 

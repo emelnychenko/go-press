@@ -14,6 +14,8 @@ type (
 		Content     string            `json:"content" xml:"content"`
 		Status      enums.PostStatus  `json:"status" xml:"status"`
 		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy"`
+		Picture     *File             `json:"picture" xml:"picture"`
+		Video       *File             `json:"video" xml:"video"`
 		Views       int               `json:"views" xml:"views"`
 		Published   *time.Time        `json:"published" xml:"published"`
 		Created     *time.Time        `json:"created" xml:"created"`

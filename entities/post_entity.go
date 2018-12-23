@@ -21,6 +21,8 @@ type (
 		Content     string
 		Status      enums.PostStatus
 		Privacy     enums.PostPrivacy
+		PictureId   *models.FileId `gorm:"type:char(36)"`
+		VideoId     *models.FileId `gorm:"type:char(36)"`
 		Views       int
 		Published   *time.Time
 		Created     *time.Time
@@ -42,7 +44,23 @@ func (*PostEntity) TableName() string {
 	return PostTable
 }
 
-func (c *PostEntity) SetAuthor(postAuthor common.Subject) {
-	c.AuthorId = postAuthor.SubjectId()
-	c.AuthorType = postAuthor.SubjectType()
+func (e *PostEntity) SetPicture(postPicture *FileEntity) {
+	e.PictureId = postPicture.Id
+}
+
+func (e *PostEntity) RemovePicture() {
+	e.PictureId = nil
+}
+
+func (e *PostEntity) SetVideo(postVideo *FileEntity) {
+	e.VideoId = postVideo.Id
+}
+
+func (e *PostEntity) RemoveVideo() {
+	e.VideoId = nil
+}
+
+func (e *PostEntity) SetAuthor(postAuthor common.Subject) {
+	e.AuthorId = postAuthor.SubjectId()
+	e.AuthorType = postAuthor.SubjectType()
 }

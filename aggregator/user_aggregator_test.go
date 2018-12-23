@@ -15,21 +15,30 @@ func TestUserAggregator(t *testing.T) {
 
 	t.Run("NewUserAggregator", func(t *testing.T) {
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
-		userAggregator, isUserAggregator := NewUserAggregator(userModelFactory).(*userAggregatorImpl)
+		fileApi := mocks.NewMockFileApi(ctrl)
+		userAggregator, isUserAggregator := NewUserAggregator(userModelFactory, fileApi).(*userAggregatorImpl)
 
 		assert.True(t, isUserAggregator)
 		assert.Equal(t, userModelFactory, userAggregator.userModelFactory)
+		assert.Equal(t, fileApi, userAggregator.fileApi)
 	})
 
 	t.Run("AggregateUser", func(t *testing.T) {
+		fileApi := mocks.NewMockFileApi(ctrl)
+		userPictureId := new(models.FileId)
+		userPicture := new(models.File)
+		fileApi.EXPECT().GetFile(userPictureId).Return(userPicture, nil)
+		
 		user := new(models.User)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
 		userModelFactory.EXPECT().CreateUser().Return(user)
 
-		userAggregator := &userAggregatorImpl{userModelFactory: userModelFactory}
-		response := userAggregator.AggregateUser(new(entities.UserEntity))
+		userEntity := &entities.UserEntity{PictureId: userPictureId}
+		userAggregator := &userAggregatorImpl{userModelFactory: userModelFactory, fileApi: fileApi}
+		response := userAggregator.AggregateUser(userEntity)
 
 		assert.Equal(t, user, response)
+		assert.Equal(t, userPicture, response.Picture)
 	})
 
 	t.Run("AggregateUsers", func(t *testing.T) {

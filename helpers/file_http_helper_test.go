@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/echo_mocks"
+	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
@@ -13,43 +13,43 @@ import (
 	"testing"
 )
 
-func TestFileEchoHelper(t *testing.T) {
+func TestFileHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	var fileId = common.NewModelId()
 
-	t.Run("NewFileEchoHelper", func(t *testing.T) {
-		_, isFileParamParser := NewFileEchoHelper().(*fileEchoHelperImpl)
+	t.Run("NewFileHttpHelper", func(t *testing.T) {
+		_, isFileParamParser := NewFileHttpHelper().(*fileHttpHelperImpl)
 		assert.True(t, isFileParamParser)
 	})
 
-	t.Run("ParseId", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().Param(FileIdParam).Return(fileId.String())
+	t.Run("ParseFileId", func(t *testing.T) {
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().Parameter(FileIdParameterName).Return(fileId.String())
 
-		fileEchoHelper := &fileEchoHelperImpl{}
-		parsedFileId, err := fileEchoHelper.ParseId(context)
+		fileHttpHelper := &fileHttpHelperImpl{}
+		parsedFileId, err := fileHttpHelper.ParseFileId(httpContext)
 		assert.Equal(t, fileId.String(), parsedFileId.String())
 		assert.Nil(t, err)
 	})
 
 	t.Run("GetFileHeader", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		httpContext := mocks.NewMockHttpContext(ctrl)
 		fileHeader := &multipart.FileHeader{}
-		context.EXPECT().FormFile(FileFormFile).Return(fileHeader, nil)
+		httpContext.EXPECT().FormFile(FileFormFileName).Return(fileHeader, nil)
 
-		fileEchoHelper := &fileEchoHelperImpl{}
-		fileHeaderResult, err := fileEchoHelper.GetFileHeader(context)
-		assert.Equal(t, fileHeader, fileHeaderResult)
+		fileHttpHelper := &fileHttpHelperImpl{}
+		response, err := fileHttpHelper.GetFileHeader(httpContext)
+		assert.Equal(t, fileHeader, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("OpenFormFile", func(t *testing.T) {
 		fileHeader := &multipart.FileHeader{}
 
-		fileEchoHelper := &fileEchoHelperImpl{}
-		formFile, err := fileEchoHelper.OpenFormFile(fileHeader)
+		fileHttpHelper := &fileHttpHelperImpl{}
+		formFile, err := fileHttpHelper.OpenFormFile(fileHeader)
 		assert.Nil(t, formFile)
 		assert.Error(t, err)
 	})
@@ -58,8 +58,8 @@ func TestFileEchoHelper(t *testing.T) {
 		responseWriter := httptest.NewRecorder()
 
 		response := &echo.Response{Writer: responseWriter}
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().Response().Return(response)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().Response().Return(response)
 
 		fileType := "application/test"
 		var fileSize int64 = 99
@@ -68,8 +68,8 @@ func TestFileEchoHelper(t *testing.T) {
 			Type: fileType,
 		}
 
-		fileEchoHelper := &fileEchoHelperImpl{}
-		prepareFileDestination := fileEchoHelper.PrepareFileDestination(context)
+		fileHttpHelper := &fileHttpHelperImpl{}
+		prepareFileDestination := fileHttpHelper.PrepareFileDestination(httpContext)
 		writer := prepareFileDestination(file)
 
 		assert.Equal(t, response, writer)

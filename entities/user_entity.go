@@ -18,6 +18,7 @@ type (
 		LastName  string
 		Email     string `gorm:"type:varchar(100);unique_index"`
 		Password  string
+		PictureId *models.FileId `gorm:"type:char(36)"`
 		Verified  bool
 		Created   *time.Time
 		Updated   *time.Time
@@ -39,4 +40,12 @@ func (c *UserEntity) SubjectId() *common.ModelId {
 
 func (*UserEntity) SubjectType() enums.SubjectType {
 	return enums.UserSubjectType
+}
+
+func (e *UserEntity) SetPicture(postPicture *FileEntity) {
+	e.PictureId = postPicture.Id
+}
+
+func (e *UserEntity) RemovePicture() {
+	e.PictureId = nil
 }

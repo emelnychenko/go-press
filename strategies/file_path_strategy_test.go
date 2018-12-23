@@ -17,27 +17,6 @@ func TestFilePathStrategy(t *testing.T) {
 		assert.True(t, isFilePathStrategy)
 	})
 
-	t.Run("BuildPath:NoIdError", func(t *testing.T) {
-		fileEntity := new(entities.FileEntity)
-		filePathStrategy := &filePathStrategyImpl{}
-
-		response, err := filePathStrategy.BuildPath(fileEntity)
-
-		assert.Empty(t, response)
-		assert.Error(t, err)
-	})
-
-	t.Run("BuildPath:CreatedError", func(t *testing.T) {
-		fileId := new(models.FileId)
-		fileEntity := &entities.FileEntity{Id: fileId}
-		filePathStrategy := &filePathStrategyImpl{}
-
-		response, err := filePathStrategy.BuildPath(fileEntity)
-
-		assert.Empty(t, response)
-		assert.Error(t, err)
-	})
-
 	t.Run("BuildPath:MimeError", func(t *testing.T) {
 		fileId := new(models.FileId)
 		fileCreated := time.Now()

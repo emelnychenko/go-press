@@ -20,8 +20,8 @@ func NewPostRepository(db *gorm.DB) (postRepository contracts.PostRepository) {
 }
 
 func (c *postRepositoryImpl) ListPosts() (postEntities []*entities.PostEntity, err common.Error) {
-	if err := c.db.Find(&postEntities).Error; nil != err {
-		return nil, common.NewServerError(err)
+	if gormErr := c.db.Find(&postEntities).Error; nil != gormErr {
+		err = common.NewSystemError(gormErr)
 	}
 
 	return
@@ -30,27 +30,28 @@ func (c *postRepositoryImpl) ListPosts() (postEntities []*entities.PostEntity, e
 func (c *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entities.PostEntity, err common.Error) {
 	postEntity = new(entities.PostEntity)
 
-	if err := c.db.First(postEntity, "id = ?", postId).Error; err != nil {
-		if gorm.IsRecordNotFoundError(err) {
-			return nil, errors.NewPostNotFoundError(postId.String())
+	if gormErr := c.db.First(postEntity, "id = ?", postId).Error; gormErr != nil {
+		if gorm.IsRecordNotFoundError(gormErr) {
+			err = errors.NewPostByIdNotFoundError(postId)
+		} else {
+			err = common.NewSystemError(gormErr)
 		}
-		return nil, common.NewServerError(err)
 	}
 
 	return
 }
 
 func (c *postRepositoryImpl) SavePost(postEntity *entities.PostEntity) (err common.Error) {
-	if err := c.db.Save(postEntity).Error; err != nil {
-		return common.NewServerError(err)
+	if gormErr := c.db.Save(postEntity).Error; gormErr != nil {
+		err = common.NewSystemError(gormErr)
 	}
 
 	return
 }
 
 func (c *postRepositoryImpl) RemovePost(postEntity *entities.PostEntity) (err common.Error) {
-	if err := c.db.Delete(postEntity).Error; err != nil {
-		return common.NewServerError(err)
+	if gormErr := c.db.Delete(postEntity).Error; gormErr != nil {
+		err = common.NewSystemError(gormErr)
 	}
 
 	return

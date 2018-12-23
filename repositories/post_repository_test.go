@@ -5,7 +5,6 @@ import (
 	mocket "github.com/Selvatico/go-mocket"
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
-	errors2 "github.com/emelnychenko/go-press/errors"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -35,7 +34,7 @@ func TestPostRepository(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = errors.New("")
 
 		postEntities, err := postRepository.ListPosts()
-		assert.Nil(t, postEntities)
+		assert.NotNil(t, postEntities)
 		assert.Error(t, err)
 	})
 
@@ -51,16 +50,16 @@ func TestPostRepository(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = gorm.ErrRecordNotFound
 
 		postEntity, err := postRepository.GetPost(postId)
-		assert.Nil(t, postEntity)
-		assert.Error(t, err, errors2.PostNotFoundError{})
+		assert.NotNil(t, postEntity)
+		assert.Error(t, err)
 	})
 
 	t.Run("GetPost:Error", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		postEntity, err := postRepository.GetPost(postId)
-		assert.Nil(t, postEntity)
-		assert.Error(t, err, common.NewServerError(gorm.ErrInvalidSQL))
+		assert.NotNil(t, postEntity)
+		assert.Error(t, err)
 	})
 
 	t.Run("SavePost", func(t *testing.T) {

@@ -19,38 +19,39 @@ func NewFileRepository(db *gorm.DB) (fileRepository contracts.FileRepository) {
 	return &fileRepositoryImpl{db}
 }
 
-func (c *fileRepositoryImpl) ListFiles() (fileEntities []*entities.FileEntity, err common.Error) {
-	if err := c.db.Find(&fileEntities).Error; nil != err {
-		return nil, common.NewServerError(err)
+func (r *fileRepositoryImpl) ListFiles() (fileEntities []*entities.FileEntity, err common.Error) {
+	if gormErr := r.db.Find(&fileEntities).Error; nil != gormErr {
+		err = common.NewSystemError(gormErr)
 	}
 
 	return
 }
 
-func (c *fileRepositoryImpl) GetFile(fileId *models.FileId) (fileEntity *entities.FileEntity, err common.Error) {
+func (r *fileRepositoryImpl) GetFile(fileId *models.FileId) (fileEntity *entities.FileEntity, err common.Error) {
 	fileEntity = new(entities.FileEntity)
 
-	if err := c.db.First(fileEntity, "id = ?", fileId).Error; err != nil {
-		if gorm.IsRecordNotFoundError(err) {
-			return nil, errors.NewFileNotFoundError(fileId.String())
+	if gormErr := r.db.First(fileEntity, "id = ?", fileId).Error; gormErr != nil {
+		if gorm.IsRecordNotFoundError(gormErr) {
+			err = errors.NewFileByIdNotFoundError(fileId)
+		} else {
+			err = common.NewSystemError(gormErr)
 		}
-		return nil, common.NewServerError(err)
 	}
 
 	return
 }
 
-func (c *fileRepositoryImpl) SaveFile(fileEntity *entities.FileEntity) (err common.Error) {
-	if err := c.db.Save(fileEntity).Error; err != nil {
-		return common.NewServerError(err)
+func (r *fileRepositoryImpl) SaveFile(fileEntity *entities.FileEntity) (err common.Error) {
+	if gormErr := r.db.Save(fileEntity).Error; gormErr != nil {
+		err = common.NewSystemError(gormErr)
 	}
 
 	return
 }
 
-func (c *fileRepositoryImpl) RemoveFile(fileEntity *entities.FileEntity) (err common.Error) {
-	if err := c.db.Delete(fileEntity).Error; err != nil {
-		return common.NewServerError(err)
+func (r *fileRepositoryImpl) RemoveFile(fileEntity *entities.FileEntity) (err common.Error) {
+	if gormErr := r.db.Delete(fileEntity).Error; gormErr != nil {
+		err = common.NewSystemError(gormErr)
 	}
 
 	return

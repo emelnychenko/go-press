@@ -93,10 +93,11 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("UploadFile:BuildPathError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		fileEntity := new(entities.FileEntity)
 
 		filePathStrategy := mocks.NewMockFilePathStrategy(ctrl)
-		filePathStrategy.EXPECT().BuildPath(fileEntity).Return("", common.ServerError(""))
+		filePathStrategy.EXPECT().BuildPath(fileEntity).Return("", systemErr)
 
 		fileEntityFactory := mocks.NewMockFileEntityFactory(ctrl)
 		fileEntityFactory.EXPECT().CreateFileEntity().Return(fileEntity)
@@ -111,10 +112,11 @@ func TestFileService(t *testing.T) {
 
 		response, err := fileService.UploadFile(fileSource, data)
 		assert.Equal(t, fileEntity, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UploadFile:StorageError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		filePath := "path/to/file"
 		fileEntity := new(entities.FileEntity)
 
@@ -126,7 +128,7 @@ func TestFileService(t *testing.T) {
 
 		fileSource := bytes.NewBufferString("test")
 		storageProvider := mocks.NewMockStorageProvider(ctrl)
-		storageProvider.EXPECT().UploadFile(fileEntity, fileSource).Return(common.ServerError(""))
+		storageProvider.EXPECT().UploadFile(fileEntity, fileSource).Return(systemErr)
 
 		data := new(models.FileUpload)
 		fileService := &fileServiceImpl{
@@ -137,7 +139,7 @@ func TestFileService(t *testing.T) {
 		response, err := fileService.UploadFile(fileSource, data)
 
 		assert.Equal(t, fileEntity, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DownloadFile", func(t *testing.T) {
@@ -178,11 +180,12 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:RemoveError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		fileEntity := new(entities.FileEntity)
 		fileRepository := mocks.NewMockFileRepository(ctrl)
-		fileRepository.EXPECT().RemoveFile(fileEntity).Return(common.ServerError(""))
+		fileRepository.EXPECT().RemoveFile(fileEntity).Return(systemErr)
 
 		fileService := &fileServiceImpl{fileRepository: fileRepository}
-		assert.Error(t, fileService.DeleteFile(fileEntity))
+		assert.Equal(t, systemErr, fileService.DeleteFile(fileEntity))
 	})
 }

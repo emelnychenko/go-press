@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -64,8 +65,11 @@ func (a *awsS3StorageProviderImpl) UploadFile(fileEntity *entities.FileEntity, f
 	})
 
 	if err2 != nil {
-		err = common.ServerError(fmt.Sprintf("Unable to upload %q to %q, %v", fileEntity.Path, awsS3Bucket, err2))
+		errorMessage := fmt.Sprintf("Unable to upload %q to %q, %v", fileEntity.Path, awsS3Bucket, err2)
+		stringErr := errors.New(errorMessage)
+		err = common.NewSystemError(stringErr)
 	}
+
 	return
 }
 
@@ -79,7 +83,9 @@ func (a *awsS3StorageProviderImpl) DownloadFile(fileEntity *entities.FileEntity,
 		})
 
 	if err2 != nil {
-		err = common.ServerError(fmt.Sprintf("Unable to download item %q, %v", fileEntity.Path, err2))
+		errorMessage := fmt.Sprintf("Unable to download item %q, %v", fileEntity.Path, err2)
+		stringErr := errors.New(errorMessage)
+		err = common.NewSystemError(stringErr)
 	}
 
 	return
@@ -94,7 +100,9 @@ func (a *awsS3StorageProviderImpl) DeleteFile(fileEntity *entities.FileEntity) (
 	})
 
 	if err2 != nil {
-		err = common.ServerError(fmt.Sprintf("Unable to delete object %q from awsS3Bucket %q, %v", fileEntity.Path, awsS3Bucket, err2))
+		errorMessage := fmt.Sprintf("Unable to delete object %q from awsS3Bucket %q, %v", fileEntity.Path, awsS3Bucket, err2)
+		stringErr := errors.New(errorMessage)
+		err = common.NewSystemError(stringErr)
 	}
 
 	return

@@ -11,35 +11,41 @@ import (
 )
 
 const (
-	FileIdParam  = "fileId"
-	FileFormFile = "file"
+	FileIdParameterName = "fileId"
+	FileFormFileName    = "file"
 )
 
 type (
-	fileEchoHelperImpl struct {
+	fileHttpHelperImpl struct {
 	}
 )
 
-func NewFileEchoHelper() contracts.FileEchoHelper {
-	return new(fileEchoHelperImpl)
+func NewFileHttpHelper() contracts.FileHttpHelper {
+	return new(fileHttpHelperImpl)
 }
 
-func (*fileEchoHelperImpl) ParseId(context echo.Context) (*models.FileId, error) {
-	return common.ParseModelId(context.Param(FileIdParam))
+func (*fileHttpHelperImpl) ParseFileId(httpContext contracts.HttpContext) (*models.FileId, common.Error) {
+	return common.ParseModelId(httpContext.Parameter(FileIdParameterName))
 }
 
-func (*fileEchoHelperImpl) GetFileHeader(context echo.Context) (*multipart.FileHeader, error) {
-	return context.FormFile(FileFormFile)
+func (*fileHttpHelperImpl) GetFileHeader(httpContext contracts.HttpContext) (*multipart.FileHeader, common.Error) {
+	return httpContext.FormFile(FileFormFileName)
 }
 
-func (*fileEchoHelperImpl) OpenFormFile(formHeader *multipart.FileHeader) (multipart.File, error) {
-	return formHeader.Open()
+func (*fileHttpHelperImpl) OpenFormFile(formHeader *multipart.FileHeader) (file multipart.File, err common.Error) {
+	file, formHeaderErr := formHeader.Open()
+
+	if nil != formHeaderErr {
+		err = common.NewSystemError(formHeaderErr)
+	}
+
+	return
 }
 
-func (*fileEchoHelperImpl) PrepareFileDestination(context echo.Context) contracts.PrepareFileDestination {
+func (*fileHttpHelperImpl) PrepareFileDestination(httpContext contracts.HttpContext) contracts.PrepareFileDestination {
 	// TODO: Caching
 	return func(file *models.File) (destination io.Writer) {
-		response := context.Response()
+		response := httpContext.Response()
 		//request := context.Request()
 		//
 		//var lastModified *time.Time

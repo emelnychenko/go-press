@@ -23,6 +23,40 @@ func TestPostEntity(t *testing.T) {
 		assert.Equal(t, PostTable, postEntity.TableName())
 	})
 
+	t.Run("SetPicture", func(t *testing.T) {
+		modelId := new(common.ModelId)
+		postPicture := &FileEntity{Id: modelId}
+		postEntity := new(PostEntity)
+
+		postEntity.SetPicture(postPicture)
+		assert.Equal(t, modelId, postEntity.PictureId)
+	})
+
+	t.Run("RemovePicture", func(t *testing.T) {
+		modelId := new(common.ModelId)
+		postEntity := &PostEntity{PictureId: modelId}
+
+		postEntity.RemovePicture()
+		assert.Nil(t, postEntity.PictureId)
+	})
+
+	t.Run("SetVideo", func(t *testing.T) {
+		modelId := new(common.ModelId)
+		postVideo := &FileEntity{Id: modelId}
+		postEntity := new(PostEntity)
+
+		postEntity.SetVideo(postVideo)
+		assert.Equal(t, modelId, postEntity.VideoId)
+	})
+
+	t.Run("RemoveVideo", func(t *testing.T) {
+		modelId := new(common.ModelId)
+		postEntity := &PostEntity{VideoId: modelId}
+
+		postEntity.RemoveVideo()
+		assert.Nil(t, postEntity.VideoId)
+	})
+
 	t.Run("SetAuthor", func(t *testing.T) {
 		modelId := new(common.ModelId)
 		postEntity := new(PostEntity)

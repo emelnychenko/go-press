@@ -17,7 +17,6 @@ func TestFileApi(t *testing.T) {
 	defer ctrl.Finish()
 
 	fileId := common.NewModelId()
-	testErr := common.ServerError("err0")
 
 	t.Run("NewFileApi", func(t *testing.T) {
 		fileService := mocks.NewMockFileService(ctrl)
@@ -45,14 +44,16 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("ListFiles:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
 
-		fileService.EXPECT().ListFiles().Return(nil, testErr)
+		fileService.EXPECT().ListFiles().Return(nil, systemErr)
 		files, err := fileApi.ListFiles()
 
 		assert.Nil(t, files)
-		assert.Equal(t, testErr, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetFile", func(t *testing.T) {
@@ -71,14 +72,16 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("GetFile:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
 
-		fileService.EXPECT().GetFile(fileId).Return(nil, testErr)
+		fileService.EXPECT().GetFile(fileId).Return(nil, systemErr)
 		file, err := fileApi.GetFile(fileId)
 
 		assert.Nil(t, file)
-		assert.Equal(t, testErr, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UploadFile", func(t *testing.T) {
@@ -99,16 +102,18 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UploadFile:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
 		data := new(models.FileUpload)
 		fileSource := bytes.NewBufferString("src")
 
-		fileService.EXPECT().UploadFile(fileSource, data).Return(nil, testErr)
+		fileService.EXPECT().UploadFile(fileSource, data).Return(nil, systemErr)
 		file, err := fileApi.UploadFile(fileSource, data)
 
 		assert.Nil(t, file)
-		assert.Equal(t, testErr, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DownloadFile", func(t *testing.T) {
@@ -131,16 +136,18 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("DownloadFile:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
 		fileDestination := bytes.NewBufferString("test")
 
-		fileService.EXPECT().GetFile(fileId).Return(nil, testErr)
+		fileService.EXPECT().GetFile(fileId).Return(nil, systemErr)
 		err := fileApi.DownloadFile(fileId, func(file *models.File) io.Writer {
 			return fileDestination
 		})
 
-		assert.Equal(t, testErr, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DownloadFile:NoDestination", func(t *testing.T) {
@@ -173,14 +180,14 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UpdateFile:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileService := mocks.NewMockFileService(ctrl)
-		fileApi := &fileApiImpl{fileService: fileService}
+		fileService.EXPECT().GetFile(fileId).Return(nil, systemErr)
+
 		data := new(models.FileUpdate)
-
-		fileService.EXPECT().GetFile(fileId).Return(nil, testErr)
-		err := fileApi.UpdateFile(fileId, data)
-
-		assert.Equal(t, testErr, err)
+		fileApi := &fileApiImpl{fileService: fileService}
+		assert.Equal(t, systemErr, fileApi.UpdateFile(fileId, data))
 	})
 
 	t.Run("DeleteFile", func(t *testing.T) {
@@ -196,12 +203,12 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().GetFile(fileId).Return(nil, systemErr)
+
 		fileApi := &fileApiImpl{fileService: fileService}
-
-		fileService.EXPECT().GetFile(fileId).Return(nil, testErr)
-		err := fileApi.DeleteFile(fileId)
-
-		assert.Equal(t, testErr, err)
+		assert.Equal(t, systemErr, fileApi.DeleteFile(fileId))
 	})
 }

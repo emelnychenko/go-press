@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
@@ -60,8 +61,9 @@ func (s *userServiceImpl) LookupUser(entityIdentity string) (*entities.UserEntit
 }
 
 func (s *userServiceImpl) ChallengeUser(userEntity *entities.UserEntity, password string) common.Error {
-	if userEntity.Password == "" {
-		return common.ServerError("password is not registered")
+	if "" == userEntity.Password {
+		stringErr := errors.New("User.Password is empty")
+		return common.NewSystemError(stringErr)
 	}
 
 	return s.hasher.Check(userEntity.Password, password)

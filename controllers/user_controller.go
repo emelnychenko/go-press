@@ -3,137 +3,108 @@ package controllers
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
-	"github.com/emelnychenko/go-press/models"
-	"github.com/labstack/echo"
-	"net/http"
 )
 
-const UserId = "userId"
-
-type UserController struct {
-	api contracts.UserApi
+type userControllerImpl struct {
+	userHttpHelper   contracts.UserHttpHelper
+	userModelFactory contracts.UserModelFactory
+	userApi          contracts.UserApi
 }
 
-func NewUserController(api contracts.UserApi) (c *UserController) {
-	return &UserController{api}
+func NewUserController(
+	userHttpHelper contracts.UserHttpHelper,
+	userModelFactory contracts.UserModelFactory,
+	userApi contracts.UserApi,
+) (userController contracts.UserController) {
+	return &userControllerImpl{userHttpHelper, userModelFactory, userApi}
 }
 
-func parseUserId(context echo.Context) (*models.UserId, error) {
-	return common.ParseModelId(context.Param(UserId))
+func (c *userControllerImpl) ListUsers(httpContext contracts.HttpContext) (users interface{}, err common.Error) {
+	users, err = c.userApi.ListUsers()
+	return
 }
 
-func (c *UserController) ListUsers(context echo.Context) error {
-	users, err := c.api.ListUsers()
+func (c *userControllerImpl) GetUser(httpContext contracts.HttpContext) (user interface{}, err common.Error) {
+	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
-	return context.JSON(http.StatusOK, users)
+	user, err = c.userApi.GetUser(userId)
+	return
 }
 
-func (c *UserController) CreateUser(context echo.Context) error {
-	data := new(models.UserCreate)
+func (c *userControllerImpl) CreateUser(httpContext contracts.HttpContext) (user interface{}, err common.Error) {
+	data := c.userModelFactory.CreateUserCreate()
 
-	if err := context.Bind(data); err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+	if err = httpContext.BindModel(data); err != nil {
+		return
 	}
 
-	user, err := c.api.CreateUser(data)
+	user, err = c.userApi.CreateUser(data)
+	return
+}
+
+func (c *userControllerImpl) UpdateUser(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
-		return context.JSON(err.Code(), err)
+		return
 	}
 
-	return context.JSON(http.StatusOK, user)
+	data := c.userModelFactory.CreateUserUpdate()
+
+	if err = httpContext.BindModel(data); err != nil {
+		return
+	}
+
+	err = c.userApi.UpdateUser(userId, data)
+	return
 }
 
-func (c *UserController) GetUser(context echo.Context) error {
-	userId, err := parseUserId(context)
+func (c *userControllerImpl) ChangeUserIdentity(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
-	user, err2 := c.api.GetUser(userId)
+	data := c.userModelFactory.CreateUserChangeIdentity()
 
-	if err2 != nil {
-		return context.JSON(err2.Code(), err2)
+	if err = httpContext.BindModel(data); err != nil {
+		return
 	}
 
-	return context.JSON(http.StatusOK, user)
+	err = c.userApi.ChangeUserIdentity(userId, data)
+	return
 }
 
-func (c *UserController) UpdateUser(context echo.Context) error {
-	userId, err := parseUserId(context)
+func (c *userControllerImpl) ChangeUserPassword(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
-	data := new(models.UserUpdate)
+	data := c.userModelFactory.CreateUserChangePassword()
 
-	if err := context.Bind(data); err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+	if err = httpContext.BindModel(data); err != nil {
+		return
 	}
 
-	if err2 := c.api.UpdateUser(userId, data); err2 != nil {
-		return context.JSON(err2.Code(), err2)
-	}
-
-	return context.JSON(http.StatusOK, nil)
+	err = c.userApi.ChangeUserPassword(userId, data)
+	return
 }
 
-func (c *UserController) ChangeUserIdentity(context echo.Context) error {
-	userId, err := parseUserId(context)
+func (c *userControllerImpl) DeleteUser(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
+		return
 	}
 
-	data := new(models.UserChangeIdentity)
-
-	if err := context.Bind(data); err != nil {
-		return context.JSON(http.StatusBadRequest, err)
-	}
-
-	if err := c.api.ChangeUserIdentity(userId, data); err != nil {
-		return context.JSON(err.Code(), err)
-	}
-
-	return context.JSON(http.StatusOK, nil)
+	err = c.userApi.DeleteUser(userId)
+	return
 }
 
-func (c *UserController) ChangeUserPassword(context echo.Context) error {
-	userId, err := parseUserId(context)
-
-	if err != nil {
-		return context.JSON(http.StatusBadRequest, err)
-	}
-
-	data := new(models.UserChangePassword)
-
-	if err := context.Bind(data); err != nil {
-		return context.JSON(http.StatusBadRequest, err)
-	}
-
-	if err := c.api.ChangeUserPassword(userId, data); err != nil {
-		return context.JSON(err.Code(), err)
-	}
-
-	return context.JSON(http.StatusOK, nil)
-}
-
-func (c *UserController) DeleteUser(context echo.Context) error {
-	userId, err := parseUserId(context)
-
-	if err != nil {
-		return context.JSON(http.StatusBadRequest, err.Error())
-	}
-
-	if err := c.api.DeleteUser(userId); err != nil {
-		return context.JSON(err.Code(), err.Error())
-	}
-
-	return context.JSON(http.StatusOK, nil)
-}

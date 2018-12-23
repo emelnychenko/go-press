@@ -16,14 +16,25 @@ func TestPostAggregator(t *testing.T) {
 	t.Run("NewPostAggregator", func(t *testing.T) {
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
-		postAggregator, isPostAggregator := NewPostAggregator(postModelFactory, subjectResolver).(*postAggregatorImpl)
+		fileApi := mocks.NewMockFileApi(ctrl)
+		postAggregator, isPostAggregator := NewPostAggregator(postModelFactory, subjectResolver, fileApi).(*postAggregatorImpl)
 
 		assert.True(t, isPostAggregator)
 		assert.Equal(t, postModelFactory, postAggregator.postModelFactory)
 		assert.Equal(t, subjectResolver, postAggregator.subjectResolver)
+		assert.Equal(t, fileApi, postAggregator.fileApi)
 	})
 
 	t.Run("AggregatePost", func(t *testing.T) {
+		fileApi := mocks.NewMockFileApi(ctrl)
+		postPictureId := new(models.FileId)
+		postPicture := new(models.File)
+		fileApi.EXPECT().GetFile(postPictureId).Return(postPicture, nil)
+
+		postVideoId := new(models.FileId)
+		postVideo := new(models.File)
+		fileApi.EXPECT().GetFile(postVideoId).Return(postVideo, nil)
+
 		post := new(models.Post)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePost().Return(post)
@@ -32,10 +43,16 @@ func TestPostAggregator(t *testing.T) {
 		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
 		subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
 
-		postAggregator := &postAggregatorImpl{postModelFactory: postModelFactory, subjectResolver: subjectResolver}
-		response := postAggregator.AggregatePost(new(entities.PostEntity))
-
+		postEntity := &entities.PostEntity{PictureId: postPictureId, VideoId: postVideoId}
+		postAggregator := &postAggregatorImpl{
+			postModelFactory: postModelFactory,
+			subjectResolver: subjectResolver,
+			fileApi: fileApi,
+		}
+		response := postAggregator.AggregatePost(postEntity)
 		assert.Equal(t, post, response)
+		assert.Equal(t, postPicture, response.Picture)
+		assert.Equal(t, postVideo, response.Video)
 	})
 
 	t.Run("AggregatePosts", func(t *testing.T) {

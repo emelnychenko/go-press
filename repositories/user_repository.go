@@ -19,48 +19,54 @@ func NewUserRepository(db *gorm.DB) contracts.UserRepository {
 	return &userRepositoryImpl{db}
 }
 
-func (c *userRepositoryImpl) ListUsers() ([]*entities.UserEntity, common.Error) {
-	var userEntities []*entities.UserEntity
-
-	if err := c.db.Find(&userEntities).Error; nil != err {
-		return nil, common.NewServerError(err)
+func (c *userRepositoryImpl) ListUsers() (userEntities []*entities.UserEntity, err common.Error) {
+	if gormErr := c.db.Find(&userEntities).Error; nil != gormErr {
+		err = common.NewSystemError(gormErr)
 	}
 
-	return userEntities, nil
+	return
 }
 
-func (c *userRepositoryImpl) GetUser(userId *models.UserId) (*entities.UserEntity, common.Error) {
-	var userEntity entities.UserEntity
+func (c *userRepositoryImpl) GetUser(userId *models.UserId) (userEntity *entities.UserEntity, err common.Error) {
+	userEntity = new(entities.UserEntity)
 
-	if err := c.db.First(&userEntity, "id = ?", userId).Error; err != nil {
-		return nil, errors.NewUserNotFoundError(userId.String())
+	if gormErr := c.db.First(userEntity, "id = ?", userId).Error; gormErr != nil {
+		if gorm.IsRecordNotFoundError(gormErr) {
+			err = errors.NewUserByIdNotFoundError(userId)
+		} else {
+			err = common.NewSystemError(gormErr)
+		}
 	}
 
-	return &userEntity, nil
+	return
 }
 
-func (c *userRepositoryImpl) LookupUser(userIdentity string) (*entities.UserEntity, common.Error) {
-	var userEntity entities.UserEntity
+func (c *userRepositoryImpl) LookupUser(userIdentity string) (userEntity *entities.UserEntity, err common.Error) {
+	userEntity = new(entities.UserEntity)
 
-	if err := c.db.First(&userEntity, "email = ?", userIdentity).Error; err != nil {
-		return nil, errors.NewUserNotFoundError(userIdentity)
+	if gormErr := c.db.First(userEntity, "email = ?", userIdentity).Error; gormErr != nil {
+		if gorm.IsRecordNotFoundError(gormErr) {
+			err = errors.NewUserNotFoundError(userIdentity)
+		} else {
+			err = common.NewSystemError(gormErr)
+		}
 	}
 
-	return &userEntity, nil
+	return
 }
 
-func (c *userRepositoryImpl) SaveUser(userEntity *entities.UserEntity) common.Error {
-	if err := c.db.Save(userEntity).Error; err != nil {
-		return common.NewServerError(err)
+func (c *userRepositoryImpl) SaveUser(userEntity *entities.UserEntity) (err common.Error) {
+	if gormErr := c.db.Save(userEntity).Error; gormErr != nil {
+		err = common.NewSystemError(gormErr)
 	}
 
-	return nil
+	return
 }
 
-func (c *userRepositoryImpl) RemoveUser(userEntity *entities.UserEntity) common.Error {
-	if err := c.db.Delete(userEntity).Error; err != nil {
-		return common.NewServerError(err)
+func (c *userRepositoryImpl) RemoveUser(userEntity *entities.UserEntity) (err common.Error) {
+	if gormErr := c.db.Delete(userEntity).Error; gormErr != nil {
+		err = common.NewSystemError(gormErr)
 	}
 
-	return nil
+	return
 }

@@ -5,7 +5,6 @@ import (
 	mocket "github.com/Selvatico/go-mocket"
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
-	errors2 "github.com/emelnychenko/go-press/errors"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -35,7 +34,7 @@ func TestFileRepository(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = errors.New("")
 
 		fileEntities, err := fileRepository.ListFiles()
-		assert.Nil(t, fileEntities)
+		assert.NotNil(t, fileEntities)
 		assert.Error(t, err)
 	})
 
@@ -47,20 +46,20 @@ func TestFileRepository(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("GetFile:FileNotFoundError", func(t *testing.T) {
+	t.Run("GetFile:NotFoundError", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = gorm.ErrRecordNotFound
 
 		fileEntity, err := fileRepository.GetFile(fileId)
-		assert.Nil(t, fileEntity)
-		assert.Error(t, err, errors2.FileNotFoundError{})
+		assert.NotNil(t, fileEntity)
+		assert.Error(t, err)
 	})
 
 	t.Run("GetFile:Error", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		fileEntity, err := fileRepository.GetFile(fileId)
-		assert.Nil(t, fileEntity)
-		assert.Error(t, err, common.NewServerError(gorm.ErrInvalidSQL))
+		assert.NotNil(t, fileEntity)
+		assert.Error(t, err, common.NewSystemError(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveFile", func(t *testing.T) {

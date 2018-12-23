@@ -14,8 +14,6 @@ func TestPostApi(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	testErr := common.ServerError("err0")
-
 	t.Run("NewPostApi", func(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postAggregator := mocks.NewMockPostAggregator(ctrl)
@@ -44,14 +42,15 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("ListPosts:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().ListPosts().Return(nil, testErr)
+		postService.EXPECT().ListPosts().Return(nil, systemErr)
 
 		postApi := &postApiImpl{postService: postService}
 		response, err := postApi.ListPosts()
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetPost", func(t *testing.T) {
@@ -73,15 +72,17 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("GetPost:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().GetPost(postId).Return(nil, testErr)
+		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
 
 		postApi := &postApiImpl{postService: postService}
 		response, err := postApi.GetPost(postId)
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("CreatePost", func(t *testing.T) {
@@ -104,16 +105,18 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("CreatePost:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		postAuthor := new(models.SystemUser)
 		data := new(models.PostCreate)
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().CreatePost(postAuthor, data).Return(nil, testErr)
+		postService.EXPECT().CreatePost(postAuthor, data).Return(nil, systemErr)
 
 		postApi := &postApiImpl{postService: postService}
 		response, err := postApi.CreatePost(postAuthor, data)
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UpdatePost", func(t *testing.T) {
@@ -130,13 +133,15 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("UpdatePost:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().GetPost(postId).Return(nil, testErr)
+		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
 
 		data := new(models.PostUpdate)
 		postApi := &postApiImpl{postService: postService}
-		assert.Error(t, postApi.UpdatePost(postId, data))
+		assert.Equal(t, systemErr, postApi.UpdatePost(postId, data))
 	})
 
 	t.Run("ChangePostAuthor", func(t *testing.T) {
@@ -153,13 +158,15 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostAuthor:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().GetPost(postId).Return(nil, testErr)
+		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
 
 		postAuthor := new(models.SystemUser)
 		postApi := &postApiImpl{postService: postService}
-		assert.Error(t, postApi.ChangePostAuthor(postId, postAuthor))
+		assert.Equal(t, systemErr, postApi.ChangePostAuthor(postId, postAuthor))
 	})
 
 	t.Run("DeletePost", func(t *testing.T) {
@@ -175,11 +182,13 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("DeletePost:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().GetPost(postId).Return(nil, testErr)
+		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
 
 		postApi := &postApiImpl{postService: postService}
-		assert.Error(t, postApi.DeletePost(postId))
+		assert.Equal(t, systemErr, postApi.DeletePost(postId))
 	})
 }

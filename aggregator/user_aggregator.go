@@ -8,28 +8,34 @@ import (
 
 type userAggregatorImpl struct {
 	userModelFactory contracts.UserModelFactory
+	fileApi          contracts.FileApi
 }
 
-func NewUserAggregator(userModelFactory contracts.UserModelFactory) contracts.UserAggregator {
-	return &userAggregatorImpl{userModelFactory}
+func NewUserAggregator(userModelFactory contracts.UserModelFactory, fileApi contracts.FileApi) contracts.UserAggregator {
+	return &userAggregatorImpl{userModelFactory, fileApi}
 }
 
-func (a *userAggregatorImpl) AggregateUser(e *entities.UserEntity) *models.User {
-	m := a.userModelFactory.CreateUser()
-	m.Id = e.Id
-	m.FirstName = e.FirstName
-	m.LastName = e.LastName
-	m.Email = e.Email
-	m.Verified = e.Verified
-	return m
-}
+func (a *userAggregatorImpl) AggregateUser(userEntity *entities.UserEntity) *models.User {
+	user := a.userModelFactory.CreateUser()
+	user.Id = userEntity.Id
+	user.FirstName = userEntity.FirstName
+	user.LastName = userEntity.LastName
+	user.Email = userEntity.Email
+	user.Verified = userEntity.Verified
 
-func (a *userAggregatorImpl) AggregateUsers(e []*entities.UserEntity) []*models.User {
-	m := make([]*models.User, len(e))
-
-	for k, v := range e {
-		m[k] = a.AggregateUser(v)
+	if nil != userEntity.PictureId {
+		user.Picture, _ = a.fileApi.GetFile(userEntity.PictureId)
 	}
 
-	return m
+	return user
+}
+
+func (a *userAggregatorImpl) AggregateUsers(userEntities []*entities.UserEntity) []*models.User {
+	users := make([]*models.User, len(userEntities))
+
+	for k, v := range userEntities {
+		users[k] = a.AggregateUser(v)
+	}
+
+	return users
 }

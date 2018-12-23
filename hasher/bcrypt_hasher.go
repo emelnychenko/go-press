@@ -20,22 +20,23 @@ func NewBCryptHasher() contracts.Hasher {
 	return &bCryptHasherImpl{cost: BCryptPasswordCost}
 }
 
-func (h *bCryptHasherImpl) Make(password string) (string, common.Error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), h.cost)
+func (h *bCryptHasherImpl) Make(password string) (hashedPassword string, err common.Error) {
+	hash, bCryptErr := bcrypt.GenerateFromPassword([]byte(password), h.cost)
 
-	if nil != err {
-		return "", common.NewServerError(err)
+	if bCryptErr != err {
+		err = common.NewSystemError(bCryptErr)
 	}
 
-	return string(hash), nil
+	hashedPassword = string(hash)
+	return
 }
 
-func (*bCryptHasherImpl) Check(hashedPassword, password string) common.Error {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+func (*bCryptHasherImpl) Check(hashedPassword, password string) (err common.Error) {
+	bCryptErr := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 
-	if nil != err {
-		return common.NewServerError(err)
+	if nil != bCryptErr {
+		err = common.NewSystemError(bCryptErr)
 	}
 
-	return nil
+	return
 }

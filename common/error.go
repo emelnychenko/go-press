@@ -11,26 +11,37 @@ type (
 		Code() int
 	}
 
-	ServerError   string
-	NotFoundError string
+	errorImpl struct {
+		message string
+		code int
+	}
 )
 
-func (e ServerError) Error() string {
-	return string(e)
+func NewError(message string, code int) Error {
+	return &errorImpl{message, code}
 }
 
-func (ServerError) Code() int {
-	return http.StatusInternalServerError
+func NewUnknownError() Error {
+	return &errorImpl{"An error occurred", http.StatusInternalServerError}
 }
 
-func (e NotFoundError) Error() string {
-	return fmt.Sprintf("The object was not found on request: %s", string(e))
+func (e *errorImpl) Error() string {
+	return e.message
 }
 
-func (NotFoundError) Code() int {
-	return http.StatusNotFound
+func (e *errorImpl) Code() int {
+	return e.code
 }
 
-func NewServerError(err error) ServerError {
-	return ServerError(err.Error())
+func NewSystemError(err error) Error {
+	return &errorImpl{err.Error(), http.StatusInternalServerError}
+}
+
+func NewNotFoundError(message string) Error {
+	return &errorImpl{message, http.StatusNotFound}
+}
+
+func NewObjectNotFoundError(request string) Error {
+	message := fmt.Sprintf("The object was not found on request: %s", request)
+	return &errorImpl{message, http.StatusNotFound}
 }

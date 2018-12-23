@@ -9,13 +9,15 @@ import (
 type postAggregatorImpl struct {
 	postModelFactory contracts.PostModelFactory
 	subjectResolver  contracts.SubjectResolver
+	fileApi          contracts.FileApi
 }
 
 func NewPostAggregator(
 	postModelFactory contracts.PostModelFactory,
 	subjectResolver contracts.SubjectResolver,
+	fileApi contracts.FileApi,
 ) contracts.PostAggregator {
-	return &postAggregatorImpl{postModelFactory, subjectResolver}
+	return &postAggregatorImpl{postModelFactory, subjectResolver, fileApi}
 }
 
 func (a *postAggregatorImpl) AggregatePost(postEntity *entities.PostEntity) (post *models.Post) {
@@ -31,6 +33,14 @@ func (a *postAggregatorImpl) AggregatePost(postEntity *entities.PostEntity) (pos
 	post.Created = postEntity.Created
 	post.Updated = postEntity.Updated
 	post.Author, _ = a.subjectResolver.ResolveSubject(postEntity.AuthorId, postEntity.AuthorType)
+
+	if nil != postEntity.PictureId {
+		post.Picture, _ = a.fileApi.GetFile(postEntity.PictureId)
+	}
+
+	if nil != postEntity.VideoId {
+		post.Video, _ = a.fileApi.GetFile(postEntity.VideoId)
+	}
 
 	return
 }

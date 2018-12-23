@@ -14,8 +14,6 @@ func TestUserService(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	testErr := common.ServerError("err0")
-
 	t.Run("NewUserService", func(t *testing.T) {
 		hasher := mocks.NewMockHasher(ctrl)
 		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
@@ -62,19 +60,20 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("CreateUser:SaveError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userEntity := new(entities.UserEntity)
 		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
 		userEntityFactory.EXPECT().CreateUserEntity().Return(userEntity)
 
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userRepository.EXPECT().SaveUser(userEntity).Return(testErr)
+		userRepository.EXPECT().SaveUser(userEntity).Return(systemErr)
 
 		data := new(models.UserCreate)
 		userService := &userServiceImpl{userEntityFactory: userEntityFactory, userRepository: userRepository}
 		response, err := userService.CreateUser(data)
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("CreateUser:WithPassword", func(t *testing.T) {
@@ -102,9 +101,10 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("CreateUser:HasherError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		password := "pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		hasher.EXPECT().Make(password).Return("", testErr)
+		hasher.EXPECT().Make(password).Return("", systemErr)
 
 		userEntity := new(entities.UserEntity)
 		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
@@ -114,7 +114,7 @@ func TestUserService(t *testing.T) {
 		data := &models.UserCreate{Password: password}
 		_, err := userService.CreateUser(data)
 
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetUser", func(t *testing.T) {
@@ -222,14 +222,16 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		password := "pass0"
 		hasher := mocks.NewMockHasher(ctrl)
-		hasher.EXPECT().Make(password).Return("", testErr)
+		hasher.EXPECT().Make(password).Return("", systemErr)
 
 		userEntity := new(entities.UserEntity)
 		data := &models.UserChangePassword{NewPassword: password}
 		userService := &userServiceImpl{hasher: hasher}
-		assert.Error(t, userService.ChangeUserPassword(userEntity, data))
+		assert.Equal(t, systemErr, userService.ChangeUserPassword(userEntity, data))
 	})
 
 	t.Run("DeleteUser", func(t *testing.T) {

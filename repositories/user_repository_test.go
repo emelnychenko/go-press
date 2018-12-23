@@ -31,15 +31,7 @@ func TestUserRepository(t *testing.T) {
 		"lastName":  userIdString,
 	}}
 
-	t.Run("ListUsers() thrown ServerError", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
-
-		results, err := repository.ListUsers()
-		assert.Nil(t, results)
-		assert.Error(t, err)
-	})
-
-	t.Run("ListUsers()", func(t *testing.T) {
+	t.Run("ListUsers", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
 
 		results, err := repository.ListUsers()
@@ -47,15 +39,15 @@ func TestUserRepository(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("GetUser(UUID) thrown UserNotFoundError", func(t *testing.T) {
-		mocket.Catcher.Reset()
+	t.Run("ListUsers:Error", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = errors.New("")
 
-		result, err := repository.GetUser(userId)
-		assert.Nil(t, result)
+		results, err := repository.ListUsers()
+		assert.NotNil(t, results)
 		assert.Error(t, err)
 	})
 
-	t.Run("GetUser(UUID)", func(t *testing.T) {
+	t.Run("GetUser", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
 
 		result, err := repository.GetUser(userId)
@@ -63,15 +55,23 @@ func TestUserRepository(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("LookupUser(UUID) thrown UserNotFoundError", func(t *testing.T) {
-		mocket.Catcher.Reset()
+	t.Run("GetUser:NotFoundError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrRecordNotFound
 
-		result, err := repository.LookupUser("")
-		assert.Nil(t, result)
+		userEntity, err := repository.GetUser(userId)
+		assert.NotNil(t, userEntity)
 		assert.Error(t, err)
 	})
 
-	t.Run("LookupUser(UUID)", func(t *testing.T) {
+	t.Run("GetUser:Error", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+
+		userEntity, err := repository.GetUser(userId)
+		assert.NotNil(t, userEntity)
+		assert.Error(t, err, common.NewSystemError(gorm.ErrInvalidSQL))
+	})
+
+	t.Run("LookupUser", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
 
 		result, err := repository.LookupUser("")
@@ -79,31 +79,47 @@ func TestUserRepository(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("SaveUser(UUID,UserUpdate) thrown Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+	t.Run("LookupUser:NotFoundError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrRecordNotFound
 
-		err := repository.SaveUser(entities.NewUserEntity())
+		userEntity, err := repository.LookupUser("")
+		assert.NotNil(t, userEntity)
 		assert.Error(t, err)
 	})
 
-	t.Run("SaveUser(UUID, UserUpdate)", func(t *testing.T) {
+	t.Run("LookupUser:Error", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+
+		userEntity, err := repository.LookupUser("")
+		assert.NotNil(t, userEntity)
+		assert.Error(t, err, common.NewSystemError(gorm.ErrInvalidSQL))
+	})
+
+	t.Run("SaveUser", func(t *testing.T) {
 		mocket.Catcher.Reset()
 
 		err := repository.SaveUser(entities.NewUserEntity())
 		assert.Nil(t, err)
 	})
 
-	t.Run("RemoveUser(UUID) thrown Error", func(t *testing.T) {
+	t.Run("SaveUser:Error", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().Error = errors.New("")
 
-		err := repository.RemoveUser(entities.NewUserEntity())
+		err := repository.SaveUser(entities.NewUserEntity())
 		assert.Error(t, err)
 	})
 
-	t.Run("RemoveUser(UUID)", func(t *testing.T) {
+	t.Run("RemoveUser", func(t *testing.T) {
 		mocket.Catcher.Reset()
 
 		err := repository.RemoveUser(entities.NewUserEntity())
 		assert.Nil(t, err)
+	})
+
+	t.Run("RemoveUser:Error", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+
+		err := repository.RemoveUser(entities.NewUserEntity())
+		assert.Error(t, err)
 	})
 }

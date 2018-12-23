@@ -14,8 +14,6 @@ func TestUserApi(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	testErr := common.ServerError("err0")
-
 	t.Run("NewUserApi", func(t *testing.T) {
 		userService := mocks.NewMockUserService(ctrl)
 		userAggregator := mocks.NewMockUserAggregator(ctrl)
@@ -44,14 +42,16 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ListUsers:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().ListUsers().Return(nil, testErr)
+		userService.EXPECT().ListUsers().Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
 		response, err := userApi.ListUsers()
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("CreateUser", func(t *testing.T) {
@@ -73,16 +73,17 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("CreateUser:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		data := new(models.UserCreate)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().CreateUser(data).Return(nil, testErr)
+		userService.EXPECT().CreateUser(data).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
 		response, err := userApi.CreateUser(data)
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetUser", func(t *testing.T) {
@@ -104,16 +105,17 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("GetUser:GetUserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+		userService.EXPECT().GetUser(userId).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
 		response, err := userApi.GetUser(userId)
 
 		assert.Nil(t, response)
-		assert.Error(t, err)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UpdateUser", func(t *testing.T) {
@@ -130,13 +132,15 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("UpdateUser:GetUserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+		userService.EXPECT().GetUser(userId).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		assert.Error(t, userApi.UpdateUser(userId, nil))
+		err := userApi.UpdateUser(userId, nil)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("ChangeUserIdentity", func(t *testing.T) {
@@ -153,13 +157,15 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserIdentity:GetUserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+		userService.EXPECT().GetUser(userId).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		assert.Error(t, userApi.ChangeUserIdentity(userId, nil))
+		err := userApi.ChangeUserIdentity(userId, nil)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("ChangeUserPassword", func(t *testing.T) {
@@ -178,13 +184,15 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:GetUserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+		userService.EXPECT().GetUser(userId).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		assert.Error(t, userApi.ChangeUserPassword(userId, nil))
+		err := userApi.ChangeUserPassword(userId, nil)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("ChangeUserPassword:NoPassword", func(t *testing.T) {
@@ -201,6 +209,8 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:CheckError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		userId := new(models.UserId)
 		password := "pass0"
 		userEntity := &entities.UserEntity{Password: password}
@@ -208,10 +218,11 @@ func TestUserApi(t *testing.T) {
 
 		userService := mocks.NewMockUserService(ctrl)
 		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
-		userService.EXPECT().ChallengeUser(userEntity, data.OldPassword).Return(testErr)
+		userService.EXPECT().ChallengeUser(userEntity, data.OldPassword).Return(systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		assert.Error(t, userApi.ChangeUserPassword(userId, data))
+		err := userApi.ChangeUserPassword(userId, data)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("VerifyUser", func(t *testing.T) {
@@ -227,13 +238,15 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("VerifyUser:GetUserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+		userService.EXPECT().GetUser(userId).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		assert.Error(t, userApi.VerifyUser(userId))
+		err := userApi.VerifyUser(userId)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DeleteUser", func(t *testing.T) {
@@ -249,12 +262,14 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("DeleteUser:GetUserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().GetUser(userId).Return(nil, testErr)
+		userService.EXPECT().GetUser(userId).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		assert.Error(t, userApi.DeleteUser(userId))
+		err := userApi.DeleteUser(userId)
+		assert.Equal(t, systemErr, err)
 	})
 }

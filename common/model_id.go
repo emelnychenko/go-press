@@ -14,11 +14,11 @@ func NewModelId() *ModelId {
 	return &ModelId{uuid.New()}
 }
 
-func ParseModelId(value string) (*ModelId, error) {
+func ParseModelId(value string) (*ModelId, Error) {
 	id, err := uuid.Parse(value)
 
 	if nil != err {
-		return nil, err
+		return nil, NewSystemError(err)
 	}
 
 	return &ModelId{id}, nil

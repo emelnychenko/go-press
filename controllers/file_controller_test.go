@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
-	"github.com/emelnychenko/go-press/echo_mocks"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -12,95 +11,103 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 	"testing"
 )
 
-// TODO: Assert failed status codes
 func TestFileController(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	fileId := common.NewModelId()
-	testErr := common.ServerError("err0")
-
 	t.Run("NewFileController", func(t *testing.T) {
-		fileParamHelper := mocks.NewMockFileEchoHelper(ctrl)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileController := NewFileController(fileParamHelper, fileModelFactory, fileApi)
+		fileController, isFileController := NewFileController(fileHttpHelper, fileModelFactory, fileApi).(*fileControllerImpl)
 
-		assert.Equal(t, fileParamHelper, fileController.fileEchoHelper)
+		assert.True(t, isFileController)
+		assert.Equal(t, fileHttpHelper, fileController.fileHttpHelper)
 		assert.Equal(t, fileModelFactory, fileController.fileModelFactory)
 		assert.Equal(t, fileApi, fileController.fileApi)
 	})
 
 	t.Run("ListFiles", func(t *testing.T) {
-		var replies []*models.File
+		var files []*models.File
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().ListFiles().Return(replies, nil)
+		fileApi.EXPECT().ListFiles().Return(files, nil)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(http.StatusOK, replies).Return(nil)
+		fileController := &fileControllerImpl{fileApi: fileApi}
+		response, err := fileController.ListFiles(nil)
 
-		fileController := &FileController{fileApi: fileApi}
-		assert.Nil(t, fileController.ListFiles(context))
+		assert.Equal(t, files, response)
+		assert.Nil(t, err)
 	})
 
 	t.Run("ListFiles:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().ListFiles().Return(nil, testErr)
+		fileApi.EXPECT().ListFiles().Return(nil, systemErr)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		fileController := &fileControllerImpl{fileApi: fileApi}
+		response, err := fileController.ListFiles(nil)
 
-		fileController := &FileController{fileApi: fileApi}
-		assert.Nil(t, fileController.ListFiles(context))
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetFile", func(t *testing.T) {
-		var reply *models.File
+		fileId := new(models.FileId)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		var file *models.File
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().GetFile(fileId).Return(reply, nil)
+		fileApi.EXPECT().GetFile(fileId).Return(file, nil)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(http.StatusOK, reply).Return(nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper, fileApi: fileApi}
+		response, err := fileController.GetFile(httpContext)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper, fileApi: fileApi}
-		assert.Nil(t, fileController.GetFile(context))
+		assert.Equal(t, file, response)
+		assert.Nil(t, err)
 	})
 
 	t.Run("GetFile:ParserError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(nil, testErr)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(nil, systemErr)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper}
-		assert.Nil(t, fileController.GetFile(context))
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper}
+		response, err := fileController.GetFile(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetFile:ApiError", func(t *testing.T) {
+		fileId := new(models.FileId)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().GetFile(fileId).Return(nil, testErr)
+		fileApi.EXPECT().GetFile(fileId).Return(nil, systemErr)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper, fileApi: fileApi}
+		response, err := fileController.GetFile(httpContext)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper, fileApi: fileApi}
-		assert.Nil(t, fileController.GetFile(context))
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UploadFile", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		var fileSize int64 = 99
 		fileName := "foo"
@@ -108,155 +115,175 @@ func TestFileController(t *testing.T) {
 		fileHeader := &multipart.FileHeader{
 			Size: fileSize,
 			Header: map[string][]string{
-				echo.HeaderContentType: []string{fileContentType},
+				echo.HeaderContentType: {fileContentType},
 			},
 			Filename: fileName,
 		}
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().GetFileHeader(context).Return(fileHeader, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().GetFileHeader(httpContext).Return(fileHeader, nil)
 
 		data := new(models.FileUpload)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpload().Return(data)
 
 		fileSource := new(os.File)
-		fileEchoHelper.EXPECT().OpenFormFile(fileHeader).Return(fileSource, nil)
+		fileHttpHelper.EXPECT().OpenFormFile(fileHeader).Return(fileSource, nil)
 
 		file := new(models.File)
 		fileApi := mocks.NewMockFileApi(ctrl)
 		fileApi.EXPECT().UploadFile(fileSource, data).Return(file, nil)
 
-		context.EXPECT().JSON(http.StatusOK, file).Return(nil)
-		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper:   fileHttpHelper,
 			fileModelFactory: fileModelFactory,
 			fileApi:          fileApi,
 		}
-		assert.Nil(t, fileController.UploadFile(context))
+		response, err := fileController.UploadFile(httpContext)
+
+		assert.Nil(t, err)
+		assert.Equal(t, file, response)
 		assert.Equal(t, fileSize, data.Size)
 		assert.Equal(t, fileName, data.Name)
 		assert.Equal(t, fileContentType, data.Type)
 	})
 
 	t.Run("UploadFile:FileHeaderError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().GetFileHeader(context).Return(nil, testErr)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().GetFileHeader(httpContext).Return(nil, systemErr)
 
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
-		fileController := &FileController{
-			fileEchoHelper: fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper: fileHttpHelper,
 		}
-		assert.Nil(t, fileController.UploadFile(context))
+		response, err := fileController.UploadFile(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UploadFile:FormFileError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHeader := &multipart.FileHeader{
 			Header: map[string][]string{},
 		}
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().GetFileHeader(context).Return(fileHeader, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().GetFileHeader(httpContext).Return(fileHeader, nil)
 
 		data := new(models.FileUpload)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpload().Return(data)
 
-		fileEchoHelper.EXPECT().OpenFormFile(fileHeader).Return(nil, testErr)
+		fileHttpHelper.EXPECT().OpenFormFile(fileHeader).Return(nil, systemErr)
 
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
-		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper:   fileHttpHelper,
 			fileModelFactory: fileModelFactory,
 		}
-		assert.Nil(t, fileController.UploadFile(context))
+		response, err := fileController.UploadFile(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UploadFile:ApiError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHeader := &multipart.FileHeader{
 			Header: map[string][]string{},
 		}
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().GetFileHeader(context).Return(fileHeader, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().GetFileHeader(httpContext).Return(fileHeader, nil)
 
 		data := new(models.FileUpload)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpload().Return(data)
 
 		fileSource := new(os.File)
-		fileEchoHelper.EXPECT().OpenFormFile(fileHeader).Return(fileSource, nil)
+		fileHttpHelper.EXPECT().OpenFormFile(fileHeader).Return(fileSource, nil)
 
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().UploadFile(fileSource, data).Return(nil, testErr)
+		fileApi.EXPECT().UploadFile(fileSource, data).Return(nil, systemErr)
 
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
-		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper:   fileHttpHelper,
 			fileModelFactory: fileModelFactory,
 			fileApi:          fileApi,
 		}
-		assert.Nil(t, fileController.UploadFile(context))
+		response, err := fileController.UploadFile(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DownloadFile", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		fileId := new(models.FileId)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
 		var prepareFileDestination contracts.PrepareFileDestination = func(file *models.File) (fileDestination io.Writer) {
 			return bytes.NewBufferString("")
 		}
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
-		fileEchoHelper.EXPECT().PrepareFileDestination(context).Return(prepareFileDestination)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
+		fileHttpHelper.EXPECT().PrepareFileDestination(httpContext).Return(prepareFileDestination)
 
 		fileApi := mocks.NewMockFileApi(ctrl)
 		fileApi.EXPECT().DownloadFile(fileId, gomock.AssignableToTypeOf(prepareFileDestination)).Return(nil)
 
-		fileController := &FileController{
-			fileEchoHelper: fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper: fileHttpHelper,
 			fileApi:        fileApi,
 		}
-		assert.Nil(t, fileController.DownloadFile(context))
+		_, err := fileController.DownloadFile(httpContext)
+
+		assert.Nil(t, err)
 	})
 
-	t.Run("DownloadFile:ParseIdError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+	t.Run("DownloadFile:ParseFileIdError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(nil, testErr)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(nil, systemErr)
 
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
-
-		fileController := &FileController{
-			fileEchoHelper: fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper: fileHttpHelper,
 		}
-		assert.Nil(t, fileController.DownloadFile(context))
+		_, err := fileController.DownloadFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DownloadFile:ApiError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		systemErr := common.NewUnknownError()
+		fileId := new(models.FileId)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
 		var prepareFileDestination contracts.PrepareFileDestination
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
-		fileEchoHelper.EXPECT().PrepareFileDestination(context).Return(prepareFileDestination)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
+		fileHttpHelper.EXPECT().PrepareFileDestination(httpContext).Return(prepareFileDestination)
 
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().DownloadFile(fileId, prepareFileDestination).Return(testErr)
+		fileApi.EXPECT().DownloadFile(fileId, prepareFileDestination).Return(systemErr)
 
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
-
-		fileController := &FileController{
-			fileEchoHelper: fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper: fileHttpHelper,
 			fileApi:        fileApi,
 		}
-		assert.Nil(t, fileController.DownloadFile(context))
+		_, err := fileController.DownloadFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UpdateFile", func(t *testing.T) {
+		fileId := new(models.FileId)
 		data := new(models.FileUpdate)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpdate().Return(data)
@@ -264,110 +291,130 @@ func TestFileController(t *testing.T) {
 		fileApi := mocks.NewMockFileApi(ctrl)
 		fileApi.EXPECT().UpdateFile(fileId, data).Return(nil)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().Bind(data).Return(nil)
-		context.EXPECT().JSON(http.StatusOK, nil).Return(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(data).Return(nil)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper:   fileHttpHelper,
 			fileModelFactory: fileModelFactory,
 			fileApi:          fileApi,
 		}
-		assert.Nil(t, fileController.UpdateFile(context))
+		_, err := fileController.UpdateFile(httpContext)
+
+		assert.Nil(t, err)
 	})
 
 	t.Run("UpdateFile:ParseError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(nil, testErr)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(nil, systemErr)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper}
-		assert.Nil(t, fileController.UpdateFile(context))
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper}
+		_, err := fileController.UpdateFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 
-	t.Run("UpdateFile:BindError", func(t *testing.T) {
+	t.Run("UpdateFile:BindFileUpdateError", func(t *testing.T) {
+		fileId := new(models.FileId)
+		systemErr := common.NewUnknownError()
 		data := new(models.FileUpdate)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpdate().Return(data)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().Bind(data).Return(testErr)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(data).Return(systemErr)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper:   fileHttpHelper,
 			fileModelFactory: fileModelFactory,
 		}
-		assert.Nil(t, fileController.UpdateFile(context))
+		_, err := fileController.UpdateFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("UpdateFile:ApiError", func(t *testing.T) {
+		fileId := new(models.FileId)
+		systemErr := common.NewUnknownError()
+
 		data := new(models.FileUpdate)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpdate().Return(data)
 
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().UpdateFile(fileId, data).Return(testErr)
+		fileApi.EXPECT().UpdateFile(fileId, data).Return(systemErr)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().Bind(data).Return(nil)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(data).Return(nil)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileController := &FileController{
-			fileEchoHelper:   fileEchoHelper,
+		fileController := &fileControllerImpl{
+			fileHttpHelper:   fileHttpHelper,
 			fileModelFactory: fileModelFactory,
 			fileApi:          fileApi,
 		}
-		assert.Nil(t, fileController.UpdateFile(context))
+		_, err := fileController.UpdateFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DeleteFile", func(t *testing.T) {
+		fileId := new(models.FileId)
+
 		fileApi := mocks.NewMockFileApi(ctrl)
 		fileApi.EXPECT().DeleteFile(fileId).Return(nil)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(http.StatusOK, nil).Return(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper, fileApi: fileApi}
-		assert.Nil(t, fileController.DeleteFile(context))
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper, fileApi: fileApi}
+		_, err := fileController.DeleteFile(httpContext)
+
+		assert.Nil(t, err)
 	})
 
 	t.Run("DeleteFile:ParseError", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		systemErr := common.NewUnknownError()
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(nil, testErr)
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper}
-		assert.Nil(t, fileController.DeleteFile(context))
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(nil, systemErr)
+
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper}
+		_, err := fileController.DeleteFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DeleteFile:ApiError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		fileId := new(models.FileId)
+
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().DeleteFile(fileId).Return(testErr)
+		fileApi.EXPECT().DeleteFile(fileId).Return(systemErr)
 
-		context := echo_mocks.NewMockContext(ctrl)
-		context.EXPECT().JSON(gomock.Not(http.StatusOK), testErr).Return(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
 
-		fileEchoHelper := mocks.NewMockFileEchoHelper(ctrl)
-		fileEchoHelper.EXPECT().ParseId(context).Return(fileId, nil)
+		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
+		fileHttpHelper.EXPECT().ParseFileId(httpContext).Return(fileId, nil)
 
-		fileController := &FileController{fileEchoHelper: fileEchoHelper, fileApi: fileApi}
-		assert.Nil(t, fileController.DeleteFile(context))
+		fileController := &fileControllerImpl{fileHttpHelper: fileHttpHelper, fileApi: fileApi}
+		_, err := fileController.DeleteFile(httpContext)
+
+		assert.Equal(t, systemErr, err)
 	})
 }

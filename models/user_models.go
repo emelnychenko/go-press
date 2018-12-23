@@ -12,6 +12,7 @@ type (
 		FirstName string     `json:"firstName" xml:"firstName"`
 		LastName  string     `json:"lastName" xml:"lastName"`
 		Email     string     `json:"email" xml:"email"`
+		Picture   *File      `json:"picture" xml:"picture"`
 		Verified  bool       `json:"verified" xml:"verified"`
 		Created   *time.Time `json:"created" xml:"created"`
 		Updated   *time.Time `json:"updated" xml:"updated"`
