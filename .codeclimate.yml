@@ -1,0 +1,4 @@
+exclude_patterns:
+  - "mocks/"
+  - "aws_mocks/"
+  - "echo_mocks/"
