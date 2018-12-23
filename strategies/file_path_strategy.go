@@ -28,7 +28,7 @@ func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePat
 		return
 	}
 
-	fileExtension, err2 := mime.ExtensionsByType(fileEntity.Type)
+	fileExtensions, err2 := mime.ExtensionsByType(fileEntity.Type)
 
 	if nil != err2 {
 		err = common.NewServerError(err2)
@@ -40,7 +40,7 @@ func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePat
 		fileEntity.Created.Year(),
 		int(fileEntity.Created.Month()),
 		fileEntity.Id,
-		fileExtension[0],
+		fileExtensions[0],
 	)
 	return
 }

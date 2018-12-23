@@ -9,3 +9,4 @@ stub.db
 .DS_Store
 .env
 coverage.txt
+profile.out

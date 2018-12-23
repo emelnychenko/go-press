@@ -5,6 +5,7 @@ import (
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
+	"mime"
 	"testing"
 	"time"
 )
@@ -54,7 +55,8 @@ func TestFilePathStrategy(t *testing.T) {
 		fileCreated := time.Now()
 		fileType := "text/plain"
 		fileEntity := &entities.FileEntity{Id: fileId, Type: fileType, Created: &fileCreated}
-		filePath := fmt.Sprintf("uploads/%d/%d/%s.txt", fileCreated.Year(), int(fileCreated.Month()), fileId)
+		fileExtensions, _ := mime.ExtensionsByType(fileType)
+		filePath := fmt.Sprintf("uploads/%d/%d/%s%s", fileCreated.Year(), int(fileCreated.Month()), fileId, fileExtensions[0])
 		filePathStrategy := &filePathStrategyImpl{}
 
 		response, err := filePathStrategy.BuildPath(fileEntity)
