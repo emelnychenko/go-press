@@ -8,3 +8,4 @@ go_build_main_go
 stub.db
 .DS_Store
 .env
+coverage.txt
