@@ -175,6 +175,25 @@ func TestPostApi(t *testing.T) {
 		assert.Equal(t, systemErr, postApi.UpdatePost(postId, data))
 	})
 
+	t.Run("UpdatePost:UpdatePostError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		data := new(models.PostUpdate)
+
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+		postService.EXPECT().UpdatePost(postEntity, data).Return(systemErr)
+
+		postApi := &postApiImpl{
+			postService: postService,
+		}
+
+		err := postApi.UpdatePost(postId, data)
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("DeletePost", func(t *testing.T) {
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -207,5 +226,22 @@ func TestPostApi(t *testing.T) {
 
 		postApi := &postApiImpl{postService: postService}
 		assert.Equal(t, systemErr, postApi.DeletePost(postId))
+	})
+
+	t.Run("DeletePost:DeletePostError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+		postService.EXPECT().DeletePost(postEntity).Return(systemErr)
+
+		postApi := &postApiImpl{
+			postService: postService,
+		}
+
+		err := postApi.DeletePost(postId)
+		assert.Equal(t, systemErr, err)
 	})
 }

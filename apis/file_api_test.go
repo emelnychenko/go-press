@@ -212,7 +212,7 @@ func TestFileApi(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("UpdateFile:Error", func(t *testing.T) {
+	t.Run("UpdateFile:GetFileError", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
@@ -221,6 +221,24 @@ func TestFileApi(t *testing.T) {
 		data := new(models.FileUpdate)
 		fileApi := &fileApiImpl{fileService: fileService}
 		assert.Equal(t, systemErr, fileApi.UpdateFile(fileId, data))
+	})
+
+	t.Run("UpdateFile:UpdateFileError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		fileEntity := new(entities.FileEntity)
+		data := new(models.FileUpdate)
+
+		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().GetFile(fileId).Return(fileEntity, nil)
+		fileService.EXPECT().UpdateFile(fileEntity, data).Return(systemErr)
+
+		fileApi := &fileApiImpl{
+			fileService: fileService,
+		}
+		err := fileApi.UpdateFile(fileId, data)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DeleteFile", func(t *testing.T) {
@@ -247,7 +265,7 @@ func TestFileApi(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("DeleteFile:Error", func(t *testing.T) {
+	t.Run("DeleteFile:GetFileError", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
@@ -255,5 +273,21 @@ func TestFileApi(t *testing.T) {
 
 		fileApi := &fileApiImpl{fileService: fileService}
 		assert.Equal(t, systemErr, fileApi.DeleteFile(fileId))
+	})
+
+	t.Run("DeleteFile:DeleteFileError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		fileEntity := new(entities.FileEntity)
+
+		fileService := mocks.NewMockFileService(ctrl)
+		fileApi := &fileApiImpl{
+			fileService: fileService,
+		}
+
+		fileService.EXPECT().GetFile(fileId).Return(fileEntity, nil)
+		fileService.EXPECT().DeleteFile(fileEntity).Return(systemErr)
+		err := fileApi.DeleteFile(fileId)
+
+		assert.Equal(t, systemErr, err)
 	})
 }

@@ -75,6 +75,10 @@ func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate)
 
 	err = postService.UpdatePost(postEntity, data)
 
+	if nil != err {
+		return
+	}
+
 	postEvent := a.postEventFactory.CreatePostUpdatedEvent(postEntity)
 	a.eventDispatcher.Dispatch(postEvent)
 
@@ -90,6 +94,10 @@ func (a *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
 	}
 
 	err = postService.DeletePost(postEntity)
+
+	if nil != err {
+		return
+	}
 
 	postEvent := a.postEventFactory.CreatePostDeletedEvent(postEntity)
 	a.eventDispatcher.Dispatch(postEvent)

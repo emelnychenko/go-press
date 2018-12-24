@@ -18,17 +18,19 @@ func TestNewPostPictureApi(t *testing.T) {
 	t.Run("NewPostPictureApi", func(t *testing.T) {
 		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
 		postPictureEventFactory := mocks.NewMockPostPictureEventFactory(ctrl)
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
 		postService := mocks.NewMockPostService(ctrl)
 		fileService := mocks.NewMockFileService(ctrl)
 		postPictureService := mocks.NewMockPostPictureService(ctrl)
 
 		postPictureApi, isPostPictureApi := NewPostPictureApi(
-			eventDispatcher, postPictureEventFactory, postService, fileService, postPictureService,
+			eventDispatcher, postPictureEventFactory, contentTypeValidator, postService, fileService, postPictureService,
 		).(*postPictureApiImpl)
 
 		assert.True(t, isPostPictureApi)
 		assert.Equal(t, eventDispatcher, postPictureApi.eventDispatcher)
 		assert.Equal(t, postPictureEventFactory, postPictureApi.postPictureEventFactory)
+		assert.Equal(t, contentTypeValidator, postPictureApi.contentTypeValidator)
 		assert.Equal(t, postService, postPictureApi.postService)
 		assert.Equal(t, fileService, postPictureApi.fileService)
 		assert.Equal(t, postPictureService, postPictureApi.postPictureService)
@@ -40,8 +42,12 @@ func TestNewPostPictureApi(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 
+		contentType := "image/png"
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
+		contentTypeValidator.EXPECT().ValidateImage(contentType).Return(nil)
+
 		postPictureId := new(models.FileId)
-		postPictureEntity := new(entities.FileEntity)
+		postPictureEntity := &entities.FileEntity{Type: contentType}
 		fileService := mocks.NewMockFileService(ctrl)
 		fileService.EXPECT().GetFile(postPictureId).Return(postPictureEntity, nil)
 
@@ -58,6 +64,7 @@ func TestNewPostPictureApi(t *testing.T) {
 		postPictureApi := &postPictureApiImpl{
 			eventDispatcher:         eventDispatcher,
 			postPictureEventFactory: postPictureEventFactory,
+			contentTypeValidator:    contentTypeValidator,
 			postService:             postService,
 			fileService:             fileService,
 			postPictureService:      postPictureService,
@@ -98,6 +105,64 @@ func TestNewPostPictureApi(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("ChangePostPicture:ValidateImageError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		contentType := "audio/mp3"
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
+		contentTypeValidator.EXPECT().ValidateImage(contentType).Return(systemErr)
+
+		postPictureId := new(models.FileId)
+		postPictureEntity := &entities.FileEntity{Type: contentType}
+		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().GetFile(postPictureId).Return(postPictureEntity, nil)
+
+		postPictureApi := &postPictureApiImpl{
+			contentTypeValidator: contentTypeValidator,
+			postService:          postService,
+			fileService:          fileService,
+		}
+
+		err := postPictureApi.ChangePostPicture(postId, postPictureId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangePostPicture:ChangePostPictureError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		contentType := "image/png"
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
+		contentTypeValidator.EXPECT().ValidateImage(contentType).Return(nil)
+
+		postPictureId := new(models.FileId)
+		postPictureEntity := &entities.FileEntity{Type: contentType}
+		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().GetFile(postPictureId).Return(postPictureEntity, nil)
+
+		postPictureService := mocks.NewMockPostPictureService(ctrl)
+		postPictureService.EXPECT().ChangePostPicture(postEntity, postPictureEntity).Return(systemErr)
+
+		postPictureApi := &postPictureApiImpl{
+			contentTypeValidator: contentTypeValidator,
+			postService:          postService,
+			fileService:          fileService,
+			postPictureService:   postPictureService,
+		}
+
+		err := postPictureApi.ChangePostPicture(postId, postPictureId)
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("RemovePostPicture", func(t *testing.T) {
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -131,6 +196,26 @@ func TestNewPostPictureApi(t *testing.T) {
 		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
 
 		postPictureApi := &postPictureApiImpl{postService: postService}
+		err := postPictureApi.RemovePostPicture(postId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemovePostPicture:RemovePostPictureError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		postPictureService := mocks.NewMockPostPictureService(ctrl)
+		postPictureService.EXPECT().RemovePostPicture(postEntity).Return(systemErr)
+
+		postPictureApi := &postPictureApiImpl{
+			postService:        postService,
+			postPictureService: postPictureService,
+		}
+
 		err := postPictureApi.RemovePostPicture(postId)
 		assert.Equal(t, systemErr, err)
 	})

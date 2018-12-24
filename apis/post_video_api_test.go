@@ -18,15 +18,19 @@ func TestNewPostVideoApi(t *testing.T) {
 	t.Run("NewPostVideoApi", func(t *testing.T) {
 		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
 		postVideoEventFactory := mocks.NewMockPostVideoEventFactory(ctrl)
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
 		postService := mocks.NewMockPostService(ctrl)
 		fileService := mocks.NewMockFileService(ctrl)
 		postVideoService := mocks.NewMockPostVideoService(ctrl)
 
 		postVideoApi, isPostVideoApi := NewPostVideoApi(
-			eventDispatcher, postVideoEventFactory, postService, fileService, postVideoService,
+			eventDispatcher, postVideoEventFactory, contentTypeValidator, postService, fileService, postVideoService,
 		).(*postVideoApiImpl)
 
 		assert.True(t, isPostVideoApi)
+		assert.Equal(t, eventDispatcher, postVideoApi.eventDispatcher)
+		assert.Equal(t, postVideoEventFactory, postVideoApi.postVideoEventFactory)
+		assert.Equal(t, contentTypeValidator, postVideoApi.contentTypeValidator)
 		assert.Equal(t, postService, postVideoApi.postService)
 		assert.Equal(t, fileService, postVideoApi.fileService)
 		assert.Equal(t, postVideoService, postVideoApi.postVideoService)
@@ -38,8 +42,12 @@ func TestNewPostVideoApi(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 
+		contentType := "video/mp4"
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
+		contentTypeValidator.EXPECT().ValidateVideo(contentType).Return(nil)
+
 		postVideoId := new(models.FileId)
-		postVideoEntity := new(entities.FileEntity)
+		postVideoEntity := &entities.FileEntity{Type: contentType}
 		fileService := mocks.NewMockFileService(ctrl)
 		fileService.EXPECT().GetFile(postVideoId).Return(postVideoEntity, nil)
 
@@ -56,6 +64,7 @@ func TestNewPostVideoApi(t *testing.T) {
 		postVideoApi := &postVideoApiImpl{
 			eventDispatcher:       eventDispatcher,
 			postVideoEventFactory: postVideoEventFactory,
+			contentTypeValidator:  contentTypeValidator,
 			postService:           postService,
 			fileService:           fileService,
 			postVideoService:      postVideoService,
@@ -98,6 +107,64 @@ func TestNewPostVideoApi(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("ChangePostVideo:ValidateVideoError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		contentType := "audio/mp3"
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
+		contentTypeValidator.EXPECT().ValidateVideo(contentType).Return(systemErr)
+
+		postVideoId := new(models.FileId)
+		postVideoEntity := &entities.FileEntity{Type: contentType}
+		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().GetFile(postVideoId).Return(postVideoEntity, nil)
+
+		postVideoApi := &postVideoApiImpl{
+			contentTypeValidator:  contentTypeValidator,
+			postService:           postService,
+			fileService:           fileService,
+		}
+
+		err := postVideoApi.ChangePostVideo(postId, postVideoId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangePostVideo:ChangePostVideoError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		contentType := "video/mp4"
+		contentTypeValidator := mocks.NewMockContentTypeValidator(ctrl)
+		contentTypeValidator.EXPECT().ValidateVideo(contentType).Return(nil)
+
+		postVideoId := new(models.FileId)
+		postVideoEntity := &entities.FileEntity{Type: contentType}
+		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().GetFile(postVideoId).Return(postVideoEntity, nil)
+
+		postVideoService := mocks.NewMockPostVideoService(ctrl)
+		postVideoService.EXPECT().ChangePostVideo(postEntity, postVideoEntity).Return(systemErr)
+
+		postVideoApi := &postVideoApiImpl{
+			contentTypeValidator: contentTypeValidator,
+			postService:          postService,
+			fileService:          fileService,
+			postVideoService:     postVideoService,
+		}
+
+		err := postVideoApi.ChangePostVideo(postId, postVideoId)
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("RemovePostVideo", func(t *testing.T) {
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -131,6 +198,26 @@ func TestNewPostVideoApi(t *testing.T) {
 		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
 
 		postVideoApi := &postVideoApiImpl{postService: postService}
+		err := postVideoApi.RemovePostVideo(postId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemovePostVideo:RemovePostVideoError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		postVideoService := mocks.NewMockPostVideoService(ctrl)
+		postVideoService.EXPECT().RemovePostVideo(postEntity).Return(systemErr)
+
+		postVideoApi := &postVideoApiImpl{
+			postService:      postService,
+			postVideoService: postVideoService,
+		}
+
 		err := postVideoApi.RemovePostVideo(postId)
 		assert.Equal(t, systemErr, err)
 	})

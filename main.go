@@ -17,6 +17,7 @@ import (
 	"github.com/emelnychenko/go-press/resolvers"
 	"github.com/emelnychenko/go-press/services"
 	"github.com/emelnychenko/go-press/strategies"
+	"github.com/emelnychenko/go-press/validators"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
@@ -54,6 +55,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewUserEchoHelper)
 	_ = container.Provide(helpers.NewPostHttpHelper)
 	_ = container.Provide(helpers.NewFileHttpHelper)
+	_ = container.Provide(validators.NewContentTypeValidator)
 	_ = container.Provide(parameters.NewAwsS3Parameters)
 	_ = container.Provide(factories.NewAwsS3WriterProxyFactory)
 	_ = container.Provide(factories.NewAwsS3Factory)

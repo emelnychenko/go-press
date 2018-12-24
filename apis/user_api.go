@@ -75,6 +75,10 @@ func (a *userApiImpl) UpdateUser(userId *models.UserId, data *models.UserUpdate)
 
 	err = userService.UpdateUser(userEntity, data)
 
+	if nil != err {
+		return
+	}
+
 	userEvent := a.userEventFactory.CreateUserUpdatedEvent(userEntity)
 	a.eventDispatcher.Dispatch(userEvent)
 
@@ -91,6 +95,10 @@ func (a *userApiImpl) VerifyUser(userId *models.UserId) (err common.Error) {
 
 	err = userService.VerifyUser(userEntity)
 
+	if nil != err {
+		return
+	}
+
 	userEvent := a.userEventFactory.CreateUserVerifiedEvent(userEntity)
 	a.eventDispatcher.Dispatch(userEvent)
 
@@ -106,6 +114,10 @@ func (a *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.Use
 	}
 
 	err = userService.ChangeUserIdentity(userEntity, data)
+
+	if nil != err {
+		return
+	}
 
 	userEvent := a.userEventFactory.CreateUserIdentityChangedEvent(userEntity)
 	a.eventDispatcher.Dispatch(userEvent)
@@ -129,6 +141,10 @@ func (a *userApiImpl) ChangeUserPassword(userId *models.UserId, input *models.Us
 
 	err = userService.ChangeUserPassword(userEntity, input)
 
+	if nil != err {
+		return
+	}
+
 	userEvent := a.userEventFactory.CreateUserPasswordChangedEvent(userEntity)
 	a.eventDispatcher.Dispatch(userEvent)
 
@@ -144,6 +160,10 @@ func (a *userApiImpl) DeleteUser(userId *models.UserId) (err common.Error) {
 	}
 
 	err = userService.DeleteUser(userEntity)
+
+	if nil != err {
+		return
+	}
 
 	userEvent := a.userEventFactory.CreateUserDeletedEvent(userEntity)
 	a.eventDispatcher.Dispatch(userEvent)

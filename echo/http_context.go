@@ -34,7 +34,8 @@ func (c *httpContextImpl) BindModel(data interface{}) (err common.Error) {
 	echoErr := c.context.Bind(data)
 
 	if nil != echoErr {
-		err = common.NewSystemError(echoErr)
+		echoErrString := echoErr.Error()
+		err = common.NewBadRequestError(echoErrString)
 	}
 
 	return
@@ -44,7 +45,8 @@ func (c *httpContextImpl) FormFile(formFileName string) (fileHeader *multipart.F
 	fileHeader, echoErr := c.context.FormFile(formFileName)
 
 	if nil != echoErr {
-		err = common.NewSystemError(echoErr)
+		echoErrString := echoErr.Error()
+		err = common.NewBadRequestError(echoErrString)
 	}
 
 	return

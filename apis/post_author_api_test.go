@@ -97,4 +97,30 @@ func TestNewPostAuthorApi(t *testing.T) {
 		err := postAuthorApi.ChangePostAuthor(postId, postAuthorId)
 		assert.Equal(t, systemErr, err)
 	})
+
+	t.Run("ChangePostAuthor:ChangePostAuthorError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+
+		postAuthorId := new(models.UserId)
+		postAuthorEntity := new(entities.UserEntity)
+		userService := mocks.NewMockUserService(ctrl)
+		userService.EXPECT().GetUser(postAuthorId).Return(postAuthorEntity, nil)
+
+		postAuthorService := mocks.NewMockPostAuthorService(ctrl)
+		postAuthorService.EXPECT().ChangePostAuthor(postEntity, postAuthorEntity).Return(systemErr)
+
+		postAuthorApi := &postAuthorApiImpl{
+			postService:            postService,
+			userService:            userService,
+			postAuthorService:      postAuthorService,
+		}
+
+		err := postAuthorApi.ChangePostAuthor(postId, postAuthorId)
+		assert.Equal(t, systemErr, err)
+	})
 }

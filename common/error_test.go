@@ -48,6 +48,15 @@ func TestError(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, err.code)
 	})
 
+	t.Run("NewBadRequestError", func(t *testing.T) {
+		errorMessage := "test"
+
+		err, isError := NewBadRequestError(errorMessage).(*errorImpl)
+		assert.True(t, isError)
+		assert.Equal(t, errorMessage, err.message)
+		assert.Equal(t, http.StatusBadRequest, err.code)
+	})
+
 	t.Run("NewNotFoundError", func(t *testing.T) {
 		errorMessage := "test"
 

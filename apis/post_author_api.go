@@ -47,6 +47,10 @@ func (a *postAuthorApiImpl) ChangePostAuthor(postId *models.PostId, postAuthorId
 
 	err = a.postAuthorService.ChangePostAuthor(postEntity, postAuthorEntity)
 
+	if nil != err {
+		return
+	}
+
 	postAuthorEvent := a.postAuthorEventFactory.CreatePostAuthorChangedEvent(postEntity, postAuthorEntity)
 	a.eventDispatcher.Dispatch(postAuthorEvent)
 

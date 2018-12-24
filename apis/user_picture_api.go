@@ -10,6 +10,7 @@ type (
 	userPictureApiImpl struct {
 		eventDispatcher         contracts.EventDispatcher
 		userPictureEventFactory contracts.UserPictureEventFactory
+		contentTypeValidator    contracts.ContentTypeValidator
 		userService             contracts.UserService
 		fileService             contracts.FileService
 		userPictureService      contracts.UserPictureService
@@ -19,6 +20,7 @@ type (
 func NewUserPictureApi(
 	eventDispatcher contracts.EventDispatcher,
 	userPictureEventFactory contracts.UserPictureEventFactory,
+	contentTypeValidator contracts.ContentTypeValidator,
 	userService contracts.UserService,
 	fileService contracts.FileService,
 	userPictureService contracts.UserPictureService,
@@ -26,6 +28,7 @@ func NewUserPictureApi(
 	return &userPictureApiImpl{
 		eventDispatcher:         eventDispatcher,
 		userPictureEventFactory: userPictureEventFactory,
+		contentTypeValidator:    contentTypeValidator,
 		userService:             userService,
 		fileService:             fileService,
 		userPictureService:      userPictureService,
@@ -45,7 +48,17 @@ func (a *userPictureApiImpl) ChangeUserPicture(userId *models.UserId, userPictur
 		return
 	}
 
+	err = a.contentTypeValidator.ValidateImage(userPictureEntity.Type)
+
+	if nil != err {
+		return
+	}
+
 	err = a.userPictureService.ChangeUserPicture(userEntity, userPictureEntity)
+
+	if nil != err {
+		return
+	}
 
 	userPictureEvent := a.userPictureEventFactory.CreateUserPictureChangedEvent(userEntity, userPictureEntity)
 	a.eventDispatcher.Dispatch(userPictureEvent)
@@ -61,6 +74,10 @@ func (a *userPictureApiImpl) RemoveUserPicture(userId *models.UserId) (err commo
 	}
 
 	err = a.userPictureService.RemoveUserPicture(userEntity)
+
+	if nil != err {
+		return
+	}
 
 	userPictureEvent := a.userPictureEventFactory.CreateUserPictureRemovedEvent(userEntity)
 	a.eventDispatcher.Dispatch(userPictureEvent)

@@ -37,6 +37,10 @@ func NewSystemError(err error) Error {
 	return &errorImpl{err.Error(), http.StatusInternalServerError}
 }
 
+func NewBadRequestError(message string) Error {
+	return &errorImpl{message, http.StatusBadRequest}
+}
+
 func NewNotFoundError(message string) Error {
 	return &errorImpl{message, http.StatusNotFound}
 }

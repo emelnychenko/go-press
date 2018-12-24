@@ -10,6 +10,7 @@ type (
 	postVideoApiImpl struct {
 		eventDispatcher       contracts.EventDispatcher
 		postVideoEventFactory contracts.PostVideoEventFactory
+		contentTypeValidator  contracts.ContentTypeValidator
 		postService           contracts.PostService
 		fileService           contracts.FileService
 		postVideoService      contracts.PostVideoService
@@ -19,6 +20,7 @@ type (
 func NewPostVideoApi(
 	eventDispatcher contracts.EventDispatcher,
 	postVideoEventFactory contracts.PostVideoEventFactory,
+	contentTypeValidator contracts.ContentTypeValidator,
 	postService contracts.PostService,
 	fileService contracts.FileService,
 	postVideoService contracts.PostVideoService,
@@ -26,6 +28,7 @@ func NewPostVideoApi(
 	return &postVideoApiImpl{
 		eventDispatcher:       eventDispatcher,
 		postVideoEventFactory: postVideoEventFactory,
+		contentTypeValidator:  contentTypeValidator,
 		postService:           postService,
 		fileService:           fileService,
 		postVideoService:      postVideoService,
@@ -45,7 +48,17 @@ func (a *postVideoApiImpl) ChangePostVideo(postId *models.PostId, postVideoId *m
 		return
 	}
 
+	err = a.contentTypeValidator.ValidateVideo(postVideoEntity.Type)
+
+	if nil != err {
+		return
+	}
+
 	err = a.postVideoService.ChangePostVideo(postEntity, postVideoEntity)
+
+	if nil != err {
+		return
+	}
 
 	postVideoEvent := a.postVideoEventFactory.CreatePostVideoChangedEvent(postEntity, postVideoEntity)
 	a.eventDispatcher.Dispatch(postVideoEvent)
@@ -61,6 +74,10 @@ func (a *postVideoApiImpl) RemovePostVideo(postId *models.PostId) (err common.Er
 	}
 
 	err = a.postVideoService.RemovePostVideo(postEntity)
+
+	if nil != err {
+		return
+	}
 
 	postVideoEvent := a.postVideoEventFactory.CreatePostVideoRemovedEvent(postEntity)
 	a.eventDispatcher.Dispatch(postVideoEvent)

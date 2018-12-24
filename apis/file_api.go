@@ -95,6 +95,10 @@ func (a *fileApiImpl) UpdateFile(fileId *models.FileId, data *models.FileUpdate)
 
 	err = fileService.UpdateFile(fileEntity, data)
 
+	if nil != err {
+		return
+	}
+
 	fileEvent := a.fileEventFactory.CreateFileUpdatedEvent(fileEntity)
 	a.eventDispatcher.Dispatch(fileEvent)
 
@@ -110,6 +114,10 @@ func (a *fileApiImpl) DeleteFile(fileId *models.FileId) (err common.Error) {
 	}
 
 	err = fileService.DeleteFile(fileEntity)
+
+	if nil != err {
+		return
+	}
 
 	fileEvent := a.fileEventFactory.CreateFileDeletedEvent(fileEntity)
 	a.eventDispatcher.Dispatch(fileEvent)

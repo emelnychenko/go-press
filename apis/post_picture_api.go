@@ -10,6 +10,7 @@ type (
 	postPictureApiImpl struct {
 		eventDispatcher         contracts.EventDispatcher
 		postPictureEventFactory contracts.PostPictureEventFactory
+		contentTypeValidator    contracts.ContentTypeValidator
 		postService             contracts.PostService
 		fileService             contracts.FileService
 		postPictureService      contracts.PostPictureService
@@ -19,6 +20,7 @@ type (
 func NewPostPictureApi(
 	eventDispatcher contracts.EventDispatcher,
 	postPictureEventFactory contracts.PostPictureEventFactory,
+	contentTypeValidator contracts.ContentTypeValidator,
 	postService contracts.PostService,
 	fileService contracts.FileService,
 	postPictureService contracts.PostPictureService,
@@ -26,6 +28,7 @@ func NewPostPictureApi(
 	return &postPictureApiImpl{
 		eventDispatcher:         eventDispatcher,
 		postPictureEventFactory: postPictureEventFactory,
+		contentTypeValidator:    contentTypeValidator,
 		postService:             postService,
 		fileService:             fileService,
 		postPictureService:      postPictureService,
@@ -45,11 +48,21 @@ func (a *postPictureApiImpl) ChangePostPicture(postId *models.PostId, postPictur
 		return
 	}
 
+	err = a.contentTypeValidator.ValidateImage(postPictureEntity.Type)
+
+	if nil != err {
+		return
+	}
+
 	err = a.postPictureService.ChangePostPicture(postEntity, postPictureEntity)
+
+	if nil != err {
+		return
+	}
 
 	postPictureEvent := a.postPictureEventFactory.CreatePostPictureChangedEvent(postEntity, postPictureEntity)
 	a.eventDispatcher.Dispatch(postPictureEvent)
-	
+
 	return
 }
 
@@ -61,6 +74,10 @@ func (a *postPictureApiImpl) RemovePostPicture(postId *models.PostId) (err commo
 	}
 
 	err = a.postPictureService.RemovePostPicture(postEntity)
+
+	if nil != err {
+		return
+	}
 
 	postPictureEvent := a.postPictureEventFactory.CreatePostPictureRemovedEvent(postEntity)
 	a.eventDispatcher.Dispatch(postPictureEvent)

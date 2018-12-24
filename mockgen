@@ -12,6 +12,7 @@ MOCKS=(
     "contracts/hasher.go|mocks/hasher.go"
     "contracts/router.go|mocks/router.go"
     "contracts/event_dispatcher.go|mocks/event_dispatcher.go"
+    "contracts/content_type_validator.go|mocks/content_type_validator.go"
     "contracts/http_context.go|mocks/http_context.go"
     "contracts/aws_s3_parameters.go|mocks/aws_s3_parameters.go"
     "contracts/aws_s3_writer_proxy.go|mocks/aws_s3_writer_proxy.go"
