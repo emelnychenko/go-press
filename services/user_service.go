@@ -62,7 +62,7 @@ func (s *userServiceImpl) LookupUser(entityIdentity string) (*entities.UserEntit
 
 func (s *userServiceImpl) ChallengeUser(userEntity *entities.UserEntity, password string) common.Error {
 	if "" == userEntity.Password {
-		stringErr := errors.New("User.Password is empty")
+		stringErr := errors.New("UserEntity.Password is empty")
 		return common.NewSystemError(stringErr)
 	}
 

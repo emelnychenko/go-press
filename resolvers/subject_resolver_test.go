@@ -30,7 +30,7 @@ func TestSubjectResolver(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("ResolveSubject:User", func(t *testing.T) {
+	t.Run("ResolveSubject:UserEntity", func(t *testing.T) {
 		userId := common.NewModelId()
 		user := new(models.User)
 		userApi := mocks.NewMockUserApi(ctrl)

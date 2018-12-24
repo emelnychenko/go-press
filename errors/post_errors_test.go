@@ -12,14 +12,14 @@ func TestPostErrors(t *testing.T) {
 	t.Run("PostNotFoundError", func(t *testing.T) {
 		requestString := "request"
 		err := NewPostNotFoundError(requestString)
-		assert.Equal(t, fmt.Sprintf("The Post was not found on request: %s", requestString), err.Error())
+		assert.Equal(t, fmt.Sprintf("The PostEntity was not found on request: %s", requestString), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())
 	})
 
 	t.Run("PostNotFoundByIdError", func(t *testing.T) {
 		fileId := new(models.PostId)
 		err := NewPostByIdNotFoundError(fileId)
-		assert.Equal(t, fmt.Sprintf("The Post was not found on request: Id = %s", fileId), err.Error())
+		assert.Equal(t, fmt.Sprintf("The PostEntity was not found on request: Id = %s", fileId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())
 	})
 }

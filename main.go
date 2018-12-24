@@ -5,6 +5,8 @@ import (
 	"github.com/emelnychenko/go-press/apis"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/controllers"
+	"github.com/emelnychenko/go-press/dispatchers"
+	echoImpl "github.com/emelnychenko/go-press/echo"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/factories"
 	"github.com/emelnychenko/go-press/hasher"
@@ -15,7 +17,6 @@ import (
 	"github.com/emelnychenko/go-press/resolvers"
 	"github.com/emelnychenko/go-press/services"
 	"github.com/emelnychenko/go-press/strategies"
-	app_echo "github.com/emelnychenko/go-press/echo"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
@@ -41,12 +42,14 @@ func ConnectDatabase() (db *gorm.DB, err error) {
 	return
 }
 
+
 func BuildContainer() (container *dig.Container) {
 	container = dig.New()
 
+	_ = container.Provide(dispatchers.NewEventDispatcher)
 	_ = container.Provide(ConnectDatabase)
 	_ = container.Provide(NewServer)
-	_ = container.Provide(app_echo.NewRouter)
+	_ = container.Provide(echoImpl.NewRouter)
 	_ = container.Provide(hasher.NewBCryptHasher)
 	_ = container.Provide(helpers.NewUserEchoHelper)
 	_ = container.Provide(helpers.NewPostHttpHelper)
@@ -56,12 +59,15 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(factories.NewAwsS3Factory)
 	_ = container.Provide(factories.NewAwsS3UploaderFactory)
 	_ = container.Provide(factories.NewAwsS3DownloaderFactory)
-	_ = container.Provide(factories.NewUserModelFactory)
 	_ = container.Provide(factories.NewUserEntityFactory)
-	_ = container.Provide(factories.NewPostModelFactory)
+	_ = container.Provide(factories.NewUserEventFactory)
+	_ = container.Provide(factories.NewUserModelFactory)
 	_ = container.Provide(factories.NewPostEntityFactory)
-	_ = container.Provide(factories.NewFileModelFactory)
+	_ = container.Provide(factories.NewPostEventFactory)
+	_ = container.Provide(factories.NewPostModelFactory)
 	_ = container.Provide(factories.NewFileEntityFactory)
+	_ = container.Provide(factories.NewFileEventFactory)
+	_ = container.Provide(factories.NewFileModelFactory)
 	_ = container.Provide(providers.NewAwsS3StorageProvider)
 	_ = container.Provide(strategies.NewFilePathStrategy)
 	_ = container.Provide(resolvers.NewSubjectResolver)

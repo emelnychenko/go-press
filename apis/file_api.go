@@ -9,13 +9,25 @@ import (
 
 type (
 	fileApiImpl struct {
-		fileService    contracts.FileService
-		fileAggregator contracts.FileAggregator
+		eventDispatcher  contracts.EventDispatcher
+		fileEventFactory contracts.FileEventFactory
+		fileService      contracts.FileService
+		fileAggregator   contracts.FileAggregator
 	}
 )
 
-func NewFileApi(fileService contracts.FileService, fileAggregator contracts.FileAggregator) (fileApi contracts.FileApi) {
-	return &fileApiImpl{fileService, fileAggregator}
+func NewFileApi(
+	eventDispatcher contracts.EventDispatcher,
+	fileEventFactory contracts.FileEventFactory,
+	fileService contracts.FileService,
+	fileAggregator contracts.FileAggregator,
+) (fileApi contracts.FileApi) {
+	return &fileApiImpl{
+		eventDispatcher,
+		fileEventFactory,
+		fileService,
+		fileAggregator,
+	}
 }
 
 func (a *fileApiImpl) ListFiles() (files []*models.File, err common.Error) {
@@ -46,6 +58,9 @@ func (a *fileApiImpl) UploadFile(fileSource io.Reader, data *models.FileUpload) 
 	if nil != err {
 		return
 	}
+
+	fileEvent := a.fileEventFactory.CreateFileUploadedEvent(fileEntity)
+	a.eventDispatcher.Dispatch(fileEvent)
 
 	file = a.fileAggregator.AggregateFile(fileEntity)
 	return
@@ -78,7 +93,12 @@ func (a *fileApiImpl) UpdateFile(fileId *models.FileId, data *models.FileUpdate)
 		return
 	}
 
-	return fileService.UpdateFile(fileEntity, data)
+	err = fileService.UpdateFile(fileEntity, data)
+
+	fileEvent := a.fileEventFactory.CreateFileUpdatedEvent(fileEntity)
+	a.eventDispatcher.Dispatch(fileEvent)
+
+	return
 }
 
 func (a *fileApiImpl) DeleteFile(fileId *models.FileId) (err common.Error) {
@@ -89,5 +109,10 @@ func (a *fileApiImpl) DeleteFile(fileId *models.FileId) (err common.Error) {
 		return
 	}
 
-	return fileService.DeleteFile(fileEntity)
+	err = fileService.DeleteFile(fileEntity)
+
+	fileEvent := a.fileEventFactory.CreateFileDeletedEvent(fileEntity)
+	a.eventDispatcher.Dispatch(fileEvent)
+
+	return
 }

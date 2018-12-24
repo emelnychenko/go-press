@@ -7,7 +7,7 @@ import (
 )
 
 func NewUserNotFoundError(request string) common.Error {
-	message := fmt.Sprintf("The User was not found on request: %s", request)
+	message := fmt.Sprintf("The UserEntity was not found on request: %s", request)
 	return common.NewNotFoundError(message)
 }
 

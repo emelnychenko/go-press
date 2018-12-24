@@ -3,6 +3,7 @@ package apis
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -15,11 +16,18 @@ func TestPostApi(t *testing.T) {
 	defer ctrl.Finish()
 
 	t.Run("NewPostApi", func(t *testing.T) {
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
 		postService := mocks.NewMockPostService(ctrl)
 		postAggregator := mocks.NewMockPostAggregator(ctrl)
-		postApi, isPostApi := NewPostApi(postService, postAggregator).(*postApiImpl)
+
+		postApi, isPostApi := NewPostApi(
+			eventDispatcher, postEventFactory, postService, postAggregator,
+		).(*postApiImpl)
 
 		assert.True(t, isPostApi)
+		assert.Equal(t, eventDispatcher, postApi.eventDispatcher)
+		assert.Equal(t, postEventFactory, postApi.postEventFactory)
 		assert.Equal(t, postService, postApi.postService)
 		assert.Equal(t, postAggregator, postApi.postAggregator)
 	})
@@ -86,10 +94,17 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("CreatePost", func(t *testing.T) {
-		postAuthor := models.NewSystemUser()
 		postEntity := new(entities.PostEntity)
+		postAuthor := models.NewSystemUser()
 		post := new(models.Post)
 		data := new(models.PostCreate)
+
+		postEvent := new(events.PostEvent)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+		postEventFactory.EXPECT().CreatePostCreatedEvent(postEntity).Return(postEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postEvent)
 
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().CreatePost(postAuthor, data).Return(postEntity, nil)
@@ -97,7 +112,12 @@ func TestPostApi(t *testing.T) {
 		postAggregator := mocks.NewMockPostAggregator(ctrl)
 		postAggregator.EXPECT().AggregatePost(postEntity).Return(post)
 
-		postApi := &postApiImpl{postService: postService, postAggregator: postAggregator}
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+			postAggregator: postAggregator,
+		}
 		response, err := postApi.CreatePost(postAuthor, data)
 
 		assert.Equal(t, post, response)
@@ -124,11 +144,22 @@ func TestPostApi(t *testing.T) {
 		postEntity := new(entities.PostEntity)
 		data := new(models.PostUpdate)
 
+		postEvent := new(events.PostEvent)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+		postEventFactory.EXPECT().CreatePostUpdatedEvent(postEntity).Return(postEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postEvent)
+
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 		postService.EXPECT().UpdatePost(postEntity, data).Return(nil)
 
-		postApi := &postApiImpl{postService: postService}
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+		}
 		assert.Nil(t, postApi.UpdatePost(postId, data))
 	})
 
@@ -149,11 +180,22 @@ func TestPostApi(t *testing.T) {
 		postEntity := new(entities.PostEntity)
 		postAuthor := new(models.SystemUser)
 
+		postEvent := new(events.PostEvent)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+		postEventFactory.EXPECT().CreatePostAuthorChangedEvent(postEntity).Return(postEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postEvent)
+
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 		postService.EXPECT().ChangePostAuthor(postEntity, postAuthor).Return(nil)
 
-		postApi := &postApiImpl{postService: postService}
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+		}
 		assert.Nil(t, postApi.ChangePostAuthor(postId, postAuthor))
 	})
 
@@ -173,11 +215,22 @@ func TestPostApi(t *testing.T) {
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
 
+		postEvent := new(events.PostEvent)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+		postEventFactory.EXPECT().CreatePostDeletedEvent(postEntity).Return(postEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postEvent)
+
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 		postService.EXPECT().DeletePost(postEntity).Return(nil)
 
-		postApi := &postApiImpl{postService: postService}
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+		}
 		assert.Nil(t, postApi.DeletePost(postId))
 	})
 

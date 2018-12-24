@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestFileModelsFactory(t *testing.T) {
+func TestFileModelFactory(t *testing.T) {
 	t.Run("NewFileModelFactory", func(t *testing.T) {
 		_, isFileModelFactory := NewFileModelFactory().(*fileModelFactoryImpl)
 

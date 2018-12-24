@@ -7,7 +7,7 @@ import (
 )
 
 func NewFileNotFoundError(request string) common.Error {
-	message := fmt.Sprintf("The File was not found on request: %s", request)
+	message := fmt.Sprintf("The FileEntity was not found on request: %s", request)
 	return common.NewNotFoundError(message)
 }
 

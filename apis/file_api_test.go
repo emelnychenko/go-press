@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -19,11 +20,18 @@ func TestFileApi(t *testing.T) {
 	fileId := common.NewModelId()
 
 	t.Run("NewFileApi", func(t *testing.T) {
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		fileEventFactory := mocks.NewMockFileEventFactory(ctrl)
 		fileService := mocks.NewMockFileService(ctrl)
 		fileAggregator := mocks.NewMockFileAggregator(ctrl)
-		fileApi, isFileApi := NewFileApi(fileService, fileAggregator).(*fileApiImpl)
+
+		fileApi, isFileApi := NewFileApi(
+			eventDispatcher, fileEventFactory, fileService, fileAggregator,
+		).(*fileApiImpl)
 
 		assert.True(t, isFileApi)
+		assert.Equal(t, eventDispatcher, fileApi.eventDispatcher)
+		assert.Equal(t, fileEventFactory, fileApi.fileEventFactory)
 		assert.Equal(t, fileService, fileApi.fileService)
 		assert.Equal(t, fileAggregator, fileApi.fileAggregator)
 	})
@@ -85,14 +93,27 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UploadFile", func(t *testing.T) {
+		fileEntity := new(entities.FileEntity)
+
+		fileEvent := new(events.FileEvent)
+		fileEventFactory := mocks.NewMockFileEventFactory(ctrl)
+		fileEventFactory.EXPECT().CreateFileUploadedEvent(fileEntity).Return(fileEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(fileEvent)
+
 		fileService := mocks.NewMockFileService(ctrl)
 		fileAggregator := mocks.NewMockFileAggregator(ctrl)
-		fileApi := &fileApiImpl{fileService: fileService, fileAggregator: fileAggregator}
+		fileApi := &fileApiImpl{
+			eventDispatcher: eventDispatcher,
+			fileEventFactory: fileEventFactory,
+			fileService: fileService,
+			fileAggregator: fileAggregator,
+		}
+
 		fileSource := bytes.NewBufferString("src")
 		data := new(models.FileUpload)
-		var fileEntity *entities.FileEntity
 		var reply *models.File
-
 		fileService.EXPECT().UploadFile(fileSource, data).Return(fileEntity, nil)
 		fileAggregator.EXPECT().AggregateFile(fileEntity).Return(reply)
 		file, err := fileApi.UploadFile(fileSource, data)
@@ -167,10 +188,22 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UpdateFile", func(t *testing.T) {
+		fileEntity := new(entities.FileEntity)
+
+		fileEvent := new(events.FileEvent)
+		fileEventFactory := mocks.NewMockFileEventFactory(ctrl)
+		fileEventFactory.EXPECT().CreateFileUpdatedEvent(fileEntity).Return(fileEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(fileEvent)
+
 		fileService := mocks.NewMockFileService(ctrl)
-		fileApi := &fileApiImpl{fileService: fileService}
+		fileApi := &fileApiImpl{
+			eventDispatcher: eventDispatcher,
+			fileEventFactory: fileEventFactory,
+			fileService: fileService,
+		}
 		data := new(models.FileUpdate)
-		var fileEntity *entities.FileEntity
 
 		fileService.EXPECT().GetFile(fileId).Return(fileEntity, nil)
 		fileService.EXPECT().UpdateFile(fileEntity, data).Return(nil)
@@ -191,9 +224,21 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("DeleteFile", func(t *testing.T) {
+		fileEntity := new(entities.FileEntity)
+
+		fileEvent := new(events.FileEvent)
+		fileEventFactory := mocks.NewMockFileEventFactory(ctrl)
+		fileEventFactory.EXPECT().CreateFileDeletedEvent(fileEntity).Return(fileEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(fileEvent)
+
 		fileService := mocks.NewMockFileService(ctrl)
-		fileApi := &fileApiImpl{fileService: fileService}
-		var fileEntity *entities.FileEntity
+		fileApi := &fileApiImpl{
+			eventDispatcher: eventDispatcher,
+			fileEventFactory: fileEventFactory,
+			fileService: fileService,
+		}
 
 		fileService.EXPECT().GetFile(fileId).Return(fileEntity, nil)
 		fileService.EXPECT().DeleteFile(fileEntity).Return(nil)

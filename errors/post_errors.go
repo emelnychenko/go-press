@@ -7,7 +7,7 @@ import (
 )
 
 func NewPostNotFoundError(request string) common.Error {
-	message := fmt.Sprintf("The Post was not found on request: %s", request)
+	message := fmt.Sprintf("The PostEntity was not found on request: %s", request)
 	return common.NewNotFoundError(message)
 }
 

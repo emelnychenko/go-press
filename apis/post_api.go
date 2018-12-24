@@ -8,77 +8,105 @@ import (
 
 type (
 	postApiImpl struct {
-		postService    contracts.PostService
-		postAggregator contracts.PostAggregator
+		eventDispatcher  contracts.EventDispatcher
+		postEventFactory contracts.PostEventFactory
+		postService      contracts.PostService
+		postAggregator   contracts.PostAggregator
 	}
 )
 
-func NewPostApi(postService contracts.PostService, postAggregator contracts.PostAggregator) (postApi contracts.PostApi) {
-	return &postApiImpl{postService, postAggregator}
+func NewPostApi(
+	eventDispatcher contracts.EventDispatcher,
+	postEventFactory contracts.PostEventFactory,
+	postService contracts.PostService,
+	postAggregator contracts.PostAggregator,
+) (postApi contracts.PostApi) {
+	return &postApiImpl{
+		eventDispatcher,
+		postEventFactory,
+		postService,
+		postAggregator,
+	}
 }
 
-func (c *postApiImpl) ListPosts() (posts []*models.Post, err common.Error) {
-	postEntities, err := c.postService.ListPosts()
+func (a *postApiImpl) ListPosts() (posts []*models.Post, err common.Error) {
+	postEntities, err := a.postService.ListPosts()
 
 	if nil != err {
 		return
 	}
 
-	posts = c.postAggregator.AggregatePosts(postEntities)
+	posts = a.postAggregator.AggregatePosts(postEntities)
 	return
 }
 
-func (c *postApiImpl) GetPost(postId *models.PostId) (post *models.Post, err common.Error) {
-	postEntity, err := c.postService.GetPost(postId)
+func (a *postApiImpl) GetPost(postId *models.PostId) (post *models.Post, err common.Error) {
+	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {
 		return
 	}
 
-	post = c.postAggregator.AggregatePost(postEntity)
+	post = a.postAggregator.AggregatePost(postEntity)
 	return
 }
 
-func (c *postApiImpl) CreatePost(postAuthor common.Subject, data *models.PostCreate) (post *models.Post, err common.Error) {
-	postEntity, err := c.postService.CreatePost(postAuthor, data)
+func (a *postApiImpl) CreatePost(postAuthor common.Subject, data *models.PostCreate) (post *models.Post, err common.Error) {
+	postEntity, err := a.postService.CreatePost(postAuthor, data)
 
 	if nil != err {
 		return
 	}
 
-	post = c.postAggregator.AggregatePost(postEntity)
+	postEvent := a.postEventFactory.CreatePostCreatedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postEvent)
+
+	post = a.postAggregator.AggregatePost(postEntity)
 	return
 }
 
-func (c *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate) (err common.Error) {
-	postService := c.postService
+func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate) (err common.Error) {
+	postService := a.postService
 	postEntity, err := postService.GetPost(postId)
 
 	if nil != err {
 		return
 	}
 
-	return postService.UpdatePost(postEntity, data)
+	err = postService.UpdatePost(postEntity, data)
+
+	postEvent := a.postEventFactory.CreatePostUpdatedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postEvent)
+
+	return
 }
 
-func (c *postApiImpl) ChangePostAuthor(postId *models.PostId, postAuthor common.Subject) (err common.Error) {
-	postService := c.postService
+func (a *postApiImpl) ChangePostAuthor(postId *models.PostId, postAuthor common.Subject) (err common.Error) {
+	postService := a.postService
 	postEntity, err := postService.GetPost(postId)
 
 	if nil != err {
 		return
 	}
+
+	postEvent := a.postEventFactory.CreatePostAuthorChangedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postEvent)
 
 	return postService.ChangePostAuthor(postEntity, postAuthor)
 }
 
-func (c *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
-	postService := c.postService
+func (a *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
+	postService := a.postService
 	postEntity, err := postService.GetPost(postId)
 
 	if nil != err {
 		return
 	}
 
-	return postService.DeletePost(postEntity)
+	err = postService.DeletePost(postEntity)
+
+	postEvent := a.postEventFactory.CreatePostDeletedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postEvent)
+
+	return
 }
