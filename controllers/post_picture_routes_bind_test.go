@@ -16,8 +16,8 @@ func TestPostPictureRoutesBind(t *testing.T) {
 		var postPictureController contracts.PostPictureController = new(postPictureControllerImpl)
 		router := mocks.NewMockRouter(ctrl)
 
-		router.EXPECT().AddRoute(http.MethodPut, "/v0/post/:postId/picture/:fileId", gomock.AssignableToTypeOf(postPictureController.ChangePostPicture))
-		router.EXPECT().AddRoute(http.MethodDelete, "/v0/post/:postId/picture", gomock.AssignableToTypeOf(postPictureController.RemovePostPicture))
+		router.EXPECT().AddRoute(http.MethodPut, "/post/:postId/picture/:fileId", gomock.AssignableToTypeOf(postPictureController.ChangePostPicture))
+		router.EXPECT().AddRoute(http.MethodDelete, "/post/:postId/picture", gomock.AssignableToTypeOf(postPictureController.RemovePostPicture))
 
 		BindPostPictureRoutes(router, postPictureController)
 	})

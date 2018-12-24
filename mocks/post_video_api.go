@@ -35,29 +35,29 @@ func (m *MockPostVideoApi) EXPECT() *MockPostVideoApiMockRecorder {
 }
 
 // ChangePostVideo mocks base method
-func (m *MockPostVideoApi) ChangePostVideo(userId *models.PostId, userVideoId *models.FileId) common.Error {
+func (m *MockPostVideoApi) ChangePostVideo(postId *models.PostId, postVideoId *models.FileId) common.Error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ChangePostVideo", userId, userVideoId)
+	ret := m.ctrl.Call(m, "ChangePostVideo", postId, postVideoId)
 	ret0, _ := ret[0].(common.Error)
 	return ret0
 }
 
 // ChangePostVideo indicates an expected call of ChangePostVideo
-func (mr *MockPostVideoApiMockRecorder) ChangePostVideo(userId, userVideoId interface{}) *gomock.Call {
+func (mr *MockPostVideoApiMockRecorder) ChangePostVideo(postId, postVideoId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostVideo", reflect.TypeOf((*MockPostVideoApi)(nil).ChangePostVideo), userId, userVideoId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostVideo", reflect.TypeOf((*MockPostVideoApi)(nil).ChangePostVideo), postId, postVideoId)
 }
 
 // RemovePostVideo mocks base method
-func (m *MockPostVideoApi) RemovePostVideo(userId *models.PostId) common.Error {
+func (m *MockPostVideoApi) RemovePostVideo(postId *models.PostId) common.Error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemovePostVideo", userId)
+	ret := m.ctrl.Call(m, "RemovePostVideo", postId)
 	ret0, _ := ret[0].(common.Error)
 	return ret0
 }
 
 // RemovePostVideo indicates an expected call of RemovePostVideo
-func (mr *MockPostVideoApiMockRecorder) RemovePostVideo(userId interface{}) *gomock.Call {
+func (mr *MockPostVideoApiMockRecorder) RemovePostVideo(postId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemovePostVideo", reflect.TypeOf((*MockPostVideoApi)(nil).RemovePostVideo), userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemovePostVideo", reflect.TypeOf((*MockPostVideoApi)(nil).RemovePostVideo), postId)
 }

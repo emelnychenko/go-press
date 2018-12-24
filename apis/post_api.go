@@ -81,20 +81,6 @@ func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate)
 	return
 }
 
-func (a *postApiImpl) ChangePostAuthor(postId *models.PostId, postAuthor common.Subject) (err common.Error) {
-	postService := a.postService
-	postEntity, err := postService.GetPost(postId)
-
-	if nil != err {
-		return
-	}
-
-	postEvent := a.postEventFactory.CreatePostAuthorChangedEvent(postEntity)
-	a.eventDispatcher.Dispatch(postEvent)
-
-	return postService.ChangePostAuthor(postEntity, postAuthor)
-}
-
 func (a *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
 	postService := a.postService
 	postEntity, err := postService.GetPost(postId)

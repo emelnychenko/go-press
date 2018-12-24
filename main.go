@@ -61,9 +61,13 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(factories.NewAwsS3DownloaderFactory)
 	_ = container.Provide(factories.NewUserEntityFactory)
 	_ = container.Provide(factories.NewUserEventFactory)
+	_ = container.Provide(factories.NewUserPictureEventFactory)
 	_ = container.Provide(factories.NewUserModelFactory)
 	_ = container.Provide(factories.NewPostEntityFactory)
 	_ = container.Provide(factories.NewPostEventFactory)
+	_ = container.Provide(factories.NewPostPictureEventFactory)
+	_ = container.Provide(factories.NewPostVideoEventFactory)
+	_ = container.Provide(factories.NewPostAuthorEventFactory)
 	_ = container.Provide(factories.NewPostModelFactory)
 	_ = container.Provide(factories.NewFileEntityFactory)
 	_ = container.Provide(factories.NewFileEventFactory)
@@ -78,6 +82,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(services.NewUserPictureService)
 	_ = container.Provide(services.NewFileService)
 	_ = container.Provide(services.NewPostService)
+	_ = container.Provide(services.NewPostAuthorService)
 	_ = container.Provide(services.NewPostPictureService)
 	_ = container.Provide(services.NewPostVideoService)
 	_ = container.Provide(aggregator.NewUserAggregator)
@@ -86,12 +91,14 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(apis.NewUserApi)
 	_ = container.Provide(apis.NewUserPictureApi)
 	_ = container.Provide(apis.NewPostApi)
+	_ = container.Provide(apis.NewPostAuthorApi)
 	_ = container.Provide(apis.NewPostPictureApi)
 	_ = container.Provide(apis.NewPostVideoApi)
 	_ = container.Provide(apis.NewFileApi)
 	_ = container.Provide(controllers.NewUserController)
 	_ = container.Provide(controllers.NewUserPictureController)
 	_ = container.Provide(controllers.NewPostController)
+	_ = container.Provide(controllers.NewPostAuthorController)
 	_ = container.Provide(controllers.NewPostPictureController)
 	_ = container.Provide(controllers.NewPostVideoController)
 	_ = container.Provide(controllers.NewFileController)
@@ -103,6 +110,7 @@ func BindRoutes(
 	userController contracts.UserController,
 	userPictureController contracts.UserPictureController,
 	postController contracts.PostController,
+	postAuthorController contracts.PostAuthorController,
 	postPictureController contracts.PostPictureController,
 	PostVideoController contracts.PostVideoController,
 	fileController contracts.FileController,
@@ -110,6 +118,7 @@ func BindRoutes(
 	controllers.BindUserRoutes(router, userController)
 	controllers.BindUserPictureRoutes(router, userPictureController)
 	controllers.BindPostRoutes(router, postController)
+	controllers.BindPostAuthorRoutes(router, postAuthorController)
 	controllers.BindPostPictureRoutes(router, postPictureController)
 	controllers.BindPostVideoRoutes(router, PostVideoController)
 	controllers.BindFileRoutes(router, fileController)

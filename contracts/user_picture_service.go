@@ -7,7 +7,7 @@ import (
 
 type (
 	UserPictureService interface {
-		ChangeUserPicture(userEntity *entities.UserEntity, userPicture *entities.FileEntity) common.Error
+		ChangeUserPicture(userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity) common.Error
 		RemoveUserPicture(userEntity *entities.UserEntity) common.Error
 	}
 )

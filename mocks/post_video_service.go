@@ -35,17 +35,17 @@ func (m *MockPostVideoService) EXPECT() *MockPostVideoServiceMockRecorder {
 }
 
 // ChangePostVideo mocks base method
-func (m *MockPostVideoService) ChangePostVideo(postEntity *entities.PostEntity, postVideo *entities.FileEntity) common.Error {
+func (m *MockPostVideoService) ChangePostVideo(postEntity *entities.PostEntity, postVideoEntity *entities.FileEntity) common.Error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ChangePostVideo", postEntity, postVideo)
+	ret := m.ctrl.Call(m, "ChangePostVideo", postEntity, postVideoEntity)
 	ret0, _ := ret[0].(common.Error)
 	return ret0
 }
 
 // ChangePostVideo indicates an expected call of ChangePostVideo
-func (mr *MockPostVideoServiceMockRecorder) ChangePostVideo(postEntity, postVideo interface{}) *gomock.Call {
+func (mr *MockPostVideoServiceMockRecorder) ChangePostVideo(postEntity, postVideoEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostVideo", reflect.TypeOf((*MockPostVideoService)(nil).ChangePostVideo), postEntity, postVideo)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostVideo", reflect.TypeOf((*MockPostVideoService)(nil).ChangePostVideo), postEntity, postVideoEntity)
 }
 
 // RemovePostVideo mocks base method

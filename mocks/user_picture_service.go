@@ -35,17 +35,17 @@ func (m *MockUserPictureService) EXPECT() *MockUserPictureServiceMockRecorder {
 }
 
 // ChangeUserPicture mocks base method
-func (m *MockUserPictureService) ChangeUserPicture(userEntity *entities.UserEntity, userPicture *entities.FileEntity) common.Error {
+func (m *MockUserPictureService) ChangeUserPicture(userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity) common.Error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ChangeUserPicture", userEntity, userPicture)
+	ret := m.ctrl.Call(m, "ChangeUserPicture", userEntity, userPictureEntity)
 	ret0, _ := ret[0].(common.Error)
 	return ret0
 }
 
 // ChangeUserPicture indicates an expected call of ChangeUserPicture
-func (mr *MockUserPictureServiceMockRecorder) ChangeUserPicture(userEntity, userPicture interface{}) *gomock.Call {
+func (mr *MockUserPictureServiceMockRecorder) ChangeUserPicture(userEntity, userPictureEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeUserPicture", reflect.TypeOf((*MockUserPictureService)(nil).ChangeUserPicture), userEntity, userPicture)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeUserPicture", reflect.TypeOf((*MockUserPictureService)(nil).ChangeUserPicture), userEntity, userPictureEntity)
 }
 
 // RemoveUserPicture mocks base method

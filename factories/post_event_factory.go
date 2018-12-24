@@ -23,10 +23,6 @@ func (*postEventFactoryImpl) CreatePostUpdatedEvent(postEntity *entities.PostEnt
 	return events.NewPostUpdatedEvent(postEntity)
 }
 
-func (*postEventFactoryImpl) CreatePostAuthorChangedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
-	return events.NewPostAuthorChangedEvent(postEntity)
-}
-
 func (*postEventFactoryImpl) CreatePostDeletedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
 	return events.NewPostDeletedEvent(postEntity)
 }

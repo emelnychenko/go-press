@@ -93,20 +93,6 @@ func (mr *MockPostApiMockRecorder) UpdatePost(postId, data interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePost", reflect.TypeOf((*MockPostApi)(nil).UpdatePost), postId, data)
 }
 
-// ChangePostAuthor mocks base method
-func (m *MockPostApi) ChangePostAuthor(postId *models.PostId, postAuthor common.Subject) common.Error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ChangePostAuthor", postId, postAuthor)
-	ret0, _ := ret[0].(common.Error)
-	return ret0
-}
-
-// ChangePostAuthor indicates an expected call of ChangePostAuthor
-func (mr *MockPostApiMockRecorder) ChangePostAuthor(postId, postAuthor interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostAuthor", reflect.TypeOf((*MockPostApi)(nil).ChangePostAuthor), postId, postAuthor)
-}
-
 // DeletePost mocks base method
 func (m *MockPostApi) DeletePost(postId *models.PostId) common.Error {
 	m.ctrl.T.Helper()

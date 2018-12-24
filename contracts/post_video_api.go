@@ -7,7 +7,7 @@ import (
 
 type (
 	PostVideoApi interface {
-		ChangePostVideo(userId *models.PostId, userVideoId *models.FileId) common.Error
-		RemovePostVideo(userId *models.PostId) common.Error
+		ChangePostVideo(postId *models.PostId, postVideoId *models.FileId) common.Error
+		RemovePostVideo(postId *models.PostId) common.Error
 	}
 )

@@ -16,8 +16,10 @@ func NewUserPictureService(userRepository contracts.UserRepository) contracts.Us
 	return &userPictureServiceImpl{userRepository: userRepository}
 }
 
-func (s *userPictureServiceImpl) ChangeUserPicture(userEntity *entities.UserEntity, userPicture *entities.FileEntity) common.Error {
-	userEntity.SetPicture(userPicture)
+func (s *userPictureServiceImpl) ChangeUserPicture(
+	userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity,
+) common.Error {
+	userEntity.SetPicture(userPictureEntity)
 
 	return s.userRepository.SaveUser(userEntity)
 }

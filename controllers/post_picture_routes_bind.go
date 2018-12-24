@@ -8,6 +8,6 @@ import (
 )
 
 func BindPostPictureRoutes(r contracts.Router, c contracts.PostPictureController) {
-	r.AddRoute(http.MethodPut, fmt.Sprintf("/v0/post/:%s/picture/:%s", helpers.PostIdParameterName, helpers.FileIdParameterName), c.ChangePostPicture)
-	r.AddRoute(http.MethodDelete, fmt.Sprintf("/v0/post/:%s/picture", helpers.PostIdParameterName), c.RemovePostPicture)
+	r.AddRoute(http.MethodPut, fmt.Sprintf("/post/:%s/picture/:%s", helpers.PostIdParameterName, helpers.FileIdParameterName), c.ChangePostPicture)
+	r.AddRoute(http.MethodDelete, fmt.Sprintf("/post/:%s/picture", helpers.PostIdParameterName), c.RemovePostPicture)
 }

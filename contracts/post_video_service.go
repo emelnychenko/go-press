@@ -7,7 +7,7 @@ import (
 
 type (
 	PostVideoService interface {
-		ChangePostVideo(postEntity *entities.PostEntity, postVideo *entities.FileEntity) common.Error
+		ChangePostVideo(postEntity *entities.PostEntity, postVideoEntity *entities.FileEntity) common.Error
 		RemovePostVideo(postEntity *entities.PostEntity) common.Error
 	}
 )

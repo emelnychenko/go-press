@@ -23,7 +23,7 @@ func TestPostVideoService(t *testing.T) {
 
 	t.Run("ChangePostVideo", func(t *testing.T) {
 		postVideoId := new(models.FileId)
-		postVideo := &entities.FileEntity{Id: postVideoId}
+		postVideoEntity := &entities.FileEntity{Id: postVideoId}
 		postEntity := new(entities.PostEntity)
 
 		postRepository := mocks.NewMockPostRepository(ctrl)
@@ -31,7 +31,7 @@ func TestPostVideoService(t *testing.T) {
 
 		postVideoService := &postVideoServiceImpl{postRepository: postRepository}
 
-		assert.Nil(t, postVideoService.ChangePostVideo(postEntity, postVideo))
+		assert.Nil(t, postVideoService.ChangePostVideo(postEntity, postVideoEntity))
 		assert.Equal(t, postVideoId, postEntity.VideoId)
 	})
 

@@ -8,7 +8,6 @@ import (
 const (
 	PostCreatedEventName = "PostCreatedEvent"
 	PostUpdatedEventName = "PostUpdatedEvent"
-	PostAuthorChangedEventName = "PostAuthorChangedEvent"
 	PostDeletedEventName = "PostDeletedEvent"
 )
 
@@ -35,10 +34,5 @@ func NewPostUpdatedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
 
 func NewPostDeletedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
 	event := &Event{name: PostDeletedEventName}
-	return &PostEvent{postEntity: postEntity, Event: event}
-}
-
-func NewPostAuthorChangedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
-	event := &Event{name: PostAuthorChangedEventName}
 	return &PostEvent{postEntity: postEntity, Event: event}
 }

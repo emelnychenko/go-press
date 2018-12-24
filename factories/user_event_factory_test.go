@@ -20,6 +20,7 @@ func TestUserEventFactory(t *testing.T) {
 		userEvent := userEventFactory.CreateUserCreatedEvent(userEntity)
 
 		assert.Equal(t, events.UserCreatedEventName, userEvent.Name())
+		assert.Equal(t, userEntity, userEvent.UserEntity())
 	})
 
 	t.Run("CreateUserUpdatedEvent", func(t *testing.T) {
@@ -28,6 +29,7 @@ func TestUserEventFactory(t *testing.T) {
 		userEvent := userEventFactory.CreateUserUpdatedEvent(userEntity)
 
 		assert.Equal(t, events.UserUpdatedEventName, userEvent.Name())
+		assert.Equal(t, userEntity, userEvent.UserEntity())
 	})
 
 	t.Run("CreateUserVerifiedEvent", func(t *testing.T) {
@@ -36,6 +38,7 @@ func TestUserEventFactory(t *testing.T) {
 		userEvent := userEventFactory.CreateUserVerifiedEvent(userEntity)
 
 		assert.Equal(t, events.UserVerifiedEventName, userEvent.Name())
+		assert.Equal(t, userEntity, userEvent.UserEntity())
 	})
 
 	t.Run("CreateUserIdentityChangedEvent", func(t *testing.T) {
@@ -44,6 +47,7 @@ func TestUserEventFactory(t *testing.T) {
 		userEvent := userEventFactory.CreateUserIdentityChangedEvent(userEntity)
 
 		assert.Equal(t, events.UserIdentityChangedEventName, userEvent.Name())
+		assert.Equal(t, userEntity, userEvent.UserEntity())
 	})
 
 	t.Run("CreateUserPasswordChangedEvent", func(t *testing.T) {
@@ -52,6 +56,7 @@ func TestUserEventFactory(t *testing.T) {
 		userEvent := userEventFactory.CreateUserPasswordChangedEvent(userEntity)
 
 		assert.Equal(t, events.UserPasswordChangedEventName, userEvent.Name())
+		assert.Equal(t, userEntity, userEvent.UserEntity())
 	})
 
 	t.Run("CreateUserDeletedEvent", func(t *testing.T) {
@@ -60,5 +65,6 @@ func TestUserEventFactory(t *testing.T) {
 		userEvent := userEventFactory.CreateUserDeletedEvent(userEntity)
 
 		assert.Equal(t, events.UserDeletedEventName, userEvent.Name())
+		assert.Equal(t, userEntity, userEvent.UserEntity())
 	})
 }

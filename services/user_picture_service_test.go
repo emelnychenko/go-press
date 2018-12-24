@@ -23,7 +23,7 @@ func TestUserPictureService(t *testing.T) {
 
 	t.Run("ChangeUserPicture", func(t *testing.T) {
 		userPictureId := new(models.FileId)
-		userPicture := &entities.FileEntity{Id: userPictureId}
+		userPictureEntity := &entities.FileEntity{Id: userPictureId}
 		userEntity := new(entities.UserEntity)
 
 		userRepository := mocks.NewMockUserRepository(ctrl)
@@ -31,7 +31,7 @@ func TestUserPictureService(t *testing.T) {
 
 		userPictureService := &userPictureServiceImpl{userRepository: userRepository}
 
-		assert.Nil(t, userPictureService.ChangeUserPicture(userEntity, userPicture))
+		assert.Nil(t, userPictureService.ChangeUserPicture(userEntity, userPictureEntity))
 		assert.Equal(t, userPictureId, userEntity.PictureId)
 	})
 

@@ -175,42 +175,6 @@ func TestPostApi(t *testing.T) {
 		assert.Equal(t, systemErr, postApi.UpdatePost(postId, data))
 	})
 
-	t.Run("ChangePostAuthor", func(t *testing.T) {
-		postId := new(models.PostId)
-		postEntity := new(entities.PostEntity)
-		postAuthor := new(models.SystemUser)
-
-		postEvent := new(events.PostEvent)
-		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
-		postEventFactory.EXPECT().CreatePostAuthorChangedEvent(postEntity).Return(postEvent)
-
-		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
-		eventDispatcher.EXPECT().Dispatch(postEvent)
-
-		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
-		postService.EXPECT().ChangePostAuthor(postEntity, postAuthor).Return(nil)
-
-		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
-			postEventFactory: postEventFactory,
-			postService: postService,
-		}
-		assert.Nil(t, postApi.ChangePostAuthor(postId, postAuthor))
-	})
-
-	t.Run("ChangePostAuthor:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
-
-		postId := new(models.PostId)
-		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().GetPost(postId).Return(nil, systemErr)
-
-		postAuthor := new(models.SystemUser)
-		postApi := &postApiImpl{postService: postService}
-		assert.Equal(t, systemErr, postApi.ChangePostAuthor(postId, postAuthor))
-	})
-
 	t.Run("DeletePost", func(t *testing.T) {
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)

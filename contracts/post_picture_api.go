@@ -7,7 +7,7 @@ import (
 
 type (
 	PostPictureApi interface {
-		ChangePostPicture(userId *models.PostId, userPictureId *models.FileId) common.Error
-		RemovePostPicture(userId *models.PostId) common.Error
+		ChangePostPicture(postId *models.PostId, postPictureId *models.FileId) common.Error
+		RemovePostPicture(postId *models.PostId) common.Error
 	}
 )

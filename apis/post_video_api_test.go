@@ -3,6 +3,7 @@ package apis
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -15,12 +16,14 @@ func TestNewPostVideoApi(t *testing.T) {
 	defer ctrl.Finish()
 
 	t.Run("NewPostVideoApi", func(t *testing.T) {
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postVideoEventFactory := mocks.NewMockPostVideoEventFactory(ctrl)
 		postService := mocks.NewMockPostService(ctrl)
 		fileService := mocks.NewMockFileService(ctrl)
 		postVideoService := mocks.NewMockPostVideoService(ctrl)
 
 		postVideoApi, isPostVideoApi := NewPostVideoApi(
-			postService, fileService, postVideoService,
+			eventDispatcher, postVideoEventFactory, postService, fileService, postVideoService,
 		).(*postVideoApiImpl)
 
 		assert.True(t, isPostVideoApi)
@@ -36,17 +39,26 @@ func TestNewPostVideoApi(t *testing.T) {
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 
 		postVideoId := new(models.FileId)
-		postVideo := new(entities.FileEntity)
+		postVideoEntity := new(entities.FileEntity)
 		fileService := mocks.NewMockFileService(ctrl)
-		fileService.EXPECT().GetFile(postVideoId).Return(postVideo, nil)
+		fileService.EXPECT().GetFile(postVideoId).Return(postVideoEntity, nil)
+
+		postVideoEvent := new(events.PostVideoEvent)
+		postVideoEventFactory := mocks.NewMockPostVideoEventFactory(ctrl)
+		postVideoEventFactory.EXPECT().CreatePostVideoChangedEvent(postEntity, postVideoEntity).Return(postVideoEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postVideoEvent)
 
 		postVideoService := mocks.NewMockPostVideoService(ctrl)
-		postVideoService.EXPECT().ChangePostVideo(postEntity, postVideo).Return(nil)
+		postVideoService.EXPECT().ChangePostVideo(postEntity, postVideoEntity).Return(nil)
 
 		postVideoApi := &postVideoApiImpl{
-			postService: postService,
-			fileService: fileService,
-			postVideoService: postVideoService,
+			eventDispatcher:       eventDispatcher,
+			postVideoEventFactory: postVideoEventFactory,
+			postService:           postService,
+			fileService:           fileService,
+			postVideoService:      postVideoService,
 		}
 		assert.Nil(t, postVideoApi.ChangePostVideo(postId, postVideoId))
 	})
@@ -92,12 +104,21 @@ func TestNewPostVideoApi(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 
+		postVideoEvent := new(events.PostVideoEvent)
+		postVideoEventFactory := mocks.NewMockPostVideoEventFactory(ctrl)
+		postVideoEventFactory.EXPECT().CreatePostVideoRemovedEvent(postEntity).Return(postVideoEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postVideoEvent)
+
 		postVideoService := mocks.NewMockPostVideoService(ctrl)
 		postVideoService.EXPECT().RemovePostVideo(postEntity).Return(nil)
 
 		postVideoApi := &postVideoApiImpl{
-			postService: postService,
-			postVideoService: postVideoService,
+			eventDispatcher:       eventDispatcher,
+			postVideoEventFactory: postVideoEventFactory,
+			postService:           postService,
+			postVideoService:      postVideoService,
 		}
 		assert.Nil(t, postVideoApi.RemovePostVideo(postId))
 	})

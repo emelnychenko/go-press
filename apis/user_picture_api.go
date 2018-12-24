@@ -8,21 +8,27 @@ import (
 
 type (
 	userPictureApiImpl struct {
-		userService        contracts.UserService
-		fileService        contracts.FileService
-		userPictureService contracts.UserPictureService
+		eventDispatcher         contracts.EventDispatcher
+		userPictureEventFactory contracts.UserPictureEventFactory
+		userService             contracts.UserService
+		fileService             contracts.FileService
+		userPictureService      contracts.UserPictureService
 	}
 )
 
 func NewUserPictureApi(
+	eventDispatcher contracts.EventDispatcher,
+	userPictureEventFactory contracts.UserPictureEventFactory,
 	userService contracts.UserService,
 	fileService contracts.FileService,
 	userPictureService contracts.UserPictureService,
 ) (userPictureApi contracts.UserPictureApi) {
 	return &userPictureApiImpl{
-		userService:        userService,
-		fileService:        fileService,
-		userPictureService: userPictureService,
+		eventDispatcher:         eventDispatcher,
+		userPictureEventFactory: userPictureEventFactory,
+		userService:             userService,
+		fileService:             fileService,
+		userPictureService:      userPictureService,
 	}
 }
 
@@ -33,13 +39,18 @@ func (a *userPictureApiImpl) ChangeUserPicture(userId *models.UserId, userPictur
 		return
 	}
 
-	userPicture, err := a.fileService.GetFile(userPictureId)
+	userPictureEntity, err := a.fileService.GetFile(userPictureId)
 
 	if nil != err {
 		return
 	}
 
-	return a.userPictureService.ChangeUserPicture(userEntity, userPicture)
+	err = a.userPictureService.ChangeUserPicture(userEntity, userPictureEntity)
+
+	userPictureEvent := a.userPictureEventFactory.CreateUserPictureChangedEvent(userEntity, userPictureEntity)
+	a.eventDispatcher.Dispatch(userPictureEvent)
+
+	return
 }
 
 func (a *userPictureApiImpl) RemoveUserPicture(userId *models.UserId) (err common.Error) {
@@ -49,5 +60,10 @@ func (a *userPictureApiImpl) RemoveUserPicture(userId *models.UserId) (err commo
 		return
 	}
 
-	return a.userPictureService.RemoveUserPicture(userEntity)
+	err = a.userPictureService.RemoveUserPicture(userEntity)
+
+	userPictureEvent := a.userPictureEventFactory.CreateUserPictureRemovedEvent(userEntity)
+	a.eventDispatcher.Dispatch(userPictureEvent)
+
+	return
 }

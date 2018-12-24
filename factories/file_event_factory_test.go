@@ -20,6 +20,7 @@ func TestFileEventFactory(t *testing.T) {
 		fileEvent := fileEventFactory.CreateFileUploadedEvent(fileEntity)
 
 		assert.Equal(t, events.FileUploadedEventName, fileEvent.Name())
+		assert.Equal(t, fileEntity, fileEvent.FileEntity())
 	})
 
 	t.Run("CreateFileUpdatedEvent", func(t *testing.T) {
@@ -28,6 +29,7 @@ func TestFileEventFactory(t *testing.T) {
 		fileEvent := fileEventFactory.CreateFileUpdatedEvent(fileEntity)
 
 		assert.Equal(t, events.FileUpdatedEventName, fileEvent.Name())
+		assert.Equal(t, fileEntity, fileEvent.FileEntity())
 	})
 
 	t.Run("CreateFileDeletedEvent", func(t *testing.T) {
@@ -36,5 +38,6 @@ func TestFileEventFactory(t *testing.T) {
 		fileEvent := fileEventFactory.CreateFileDeletedEvent(fileEntity)
 
 		assert.Equal(t, events.FileDeletedEventName, fileEvent.Name())
+		assert.Equal(t, fileEntity, fileEvent.FileEntity())
 	})
 }

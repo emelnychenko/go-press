@@ -16,8 +16,8 @@ func TestPostVideoRoutesBind(t *testing.T) {
 		var postVideoController contracts.PostVideoController = new(postVideoControllerImpl)
 		router := mocks.NewMockRouter(ctrl)
 
-		router.EXPECT().AddRoute(http.MethodPut, "/v0/post/:postId/video/:fileId", gomock.AssignableToTypeOf(postVideoController.ChangePostVideo))
-		router.EXPECT().AddRoute(http.MethodDelete, "/v0/post/:postId/video", gomock.AssignableToTypeOf(postVideoController.RemovePostVideo))
+		router.EXPECT().AddRoute(http.MethodPut, "/post/:postId/video/:fileId", gomock.AssignableToTypeOf(postVideoController.ChangePostVideo))
+		router.EXPECT().AddRoute(http.MethodDelete, "/post/:postId/video", gomock.AssignableToTypeOf(postVideoController.RemovePostVideo))
 
 		BindPostVideoRoutes(router, postVideoController)
 	})

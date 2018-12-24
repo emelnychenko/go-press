@@ -20,6 +20,7 @@ func TestPostEventFactory(t *testing.T) {
 		postEvent := postEventFactory.CreatePostCreatedEvent(postEntity)
 
 		assert.Equal(t, events.PostCreatedEventName, postEvent.Name())
+		assert.Equal(t, postEntity, postEvent.PostEntity())
 	})
 
 	t.Run("CreatePostUpdatedEvent", func(t *testing.T) {
@@ -28,14 +29,7 @@ func TestPostEventFactory(t *testing.T) {
 		postEvent := postEventFactory.CreatePostUpdatedEvent(postEntity)
 
 		assert.Equal(t, events.PostUpdatedEventName, postEvent.Name())
-	})
-
-	t.Run("CreatePostAuthorChangedEvent", func(t *testing.T) {
-		postEntity := new(entities.PostEntity)
-		postEventFactory := new(postEventFactoryImpl)
-		postEvent := postEventFactory.CreatePostAuthorChangedEvent(postEntity)
-
-		assert.Equal(t, events.PostAuthorChangedEventName, postEvent.Name())
+		assert.Equal(t, postEntity, postEvent.PostEntity())
 	})
 
 	t.Run("CreatePostDeletedEvent", func(t *testing.T) {
@@ -44,5 +38,6 @@ func TestPostEventFactory(t *testing.T) {
 		postEvent := postEventFactory.CreatePostDeletedEvent(postEntity)
 
 		assert.Equal(t, events.PostDeletedEventName, postEvent.Name())
+		assert.Equal(t, postEntity, postEvent.PostEntity())
 	})
 }

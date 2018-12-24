@@ -8,7 +8,6 @@ type (
 	File struct {
 		Id      *PostId    `json:"id" xml:"id"`
 		Name    string     `json:"name" xml:"name"`
-		Path    string     `json:"path" xml:"path"`
 		Size    int64      `json:"size" xml:"size"`
 		Type    string     `json:"type" xml:"type"`
 		Created *time.Time `json:"created" xml:"created"`

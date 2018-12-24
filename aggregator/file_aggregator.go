@@ -20,7 +20,6 @@ func (a *fileAggregatorImpl) AggregateFile(fileEntity *entities.FileEntity) (fil
 	file.Name = fileEntity.Name
 	file.Size = fileEntity.Size
 	file.Type = fileEntity.Type
-	file.Path = fileEntity.Path
 	file.Created = fileEntity.Created
 
 	return

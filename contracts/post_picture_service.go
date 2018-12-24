@@ -7,7 +7,7 @@ import (
 
 type (
 	PostPictureService interface {
-		ChangePostPicture(postEntity *entities.PostEntity, postPicture *entities.FileEntity) common.Error
+		ChangePostPicture(postEntity *entities.PostEntity, postPictureEntity *entities.FileEntity) common.Error
 		RemovePostPicture(postEntity *entities.PostEntity) common.Error
 	}
 )

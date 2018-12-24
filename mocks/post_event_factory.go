@@ -62,20 +62,6 @@ func (mr *MockPostEventFactoryMockRecorder) CreatePostUpdatedEvent(postEntity in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePostUpdatedEvent", reflect.TypeOf((*MockPostEventFactory)(nil).CreatePostUpdatedEvent), postEntity)
 }
 
-// CreatePostAuthorChangedEvent mocks base method
-func (m *MockPostEventFactory) CreatePostAuthorChangedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePostAuthorChangedEvent", postEntity)
-	ret0, _ := ret[0].(contracts.PostEvent)
-	return ret0
-}
-
-// CreatePostAuthorChangedEvent indicates an expected call of CreatePostAuthorChangedEvent
-func (mr *MockPostEventFactoryMockRecorder) CreatePostAuthorChangedEvent(postEntity interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePostAuthorChangedEvent", reflect.TypeOf((*MockPostEventFactory)(nil).CreatePostAuthorChangedEvent), postEntity)
-}
-
 // CreatePostDeletedEvent mocks base method
 func (m *MockPostEventFactory) CreatePostDeletedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
 	m.ctrl.T.Helper()

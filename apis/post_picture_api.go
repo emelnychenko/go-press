@@ -8,21 +8,27 @@ import (
 
 type (
 	postPictureApiImpl struct {
-		postService        contracts.PostService
-		fileService        contracts.FileService
-		postPictureService contracts.PostPictureService
+		eventDispatcher         contracts.EventDispatcher
+		postPictureEventFactory contracts.PostPictureEventFactory
+		postService             contracts.PostService
+		fileService             contracts.FileService
+		postPictureService      contracts.PostPictureService
 	}
 )
 
 func NewPostPictureApi(
+	eventDispatcher contracts.EventDispatcher,
+	postPictureEventFactory contracts.PostPictureEventFactory,
 	postService contracts.PostService,
 	fileService contracts.FileService,
 	postPictureService contracts.PostPictureService,
 ) (postPictureApi contracts.PostPictureApi) {
 	return &postPictureApiImpl{
-		postService:        postService,
-		fileService:        fileService,
-		postPictureService: postPictureService,
+		eventDispatcher:         eventDispatcher,
+		postPictureEventFactory: postPictureEventFactory,
+		postService:             postService,
+		fileService:             fileService,
+		postPictureService:      postPictureService,
 	}
 }
 
@@ -33,13 +39,18 @@ func (a *postPictureApiImpl) ChangePostPicture(postId *models.PostId, postPictur
 		return
 	}
 
-	postPicture, err := a.fileService.GetFile(postPictureId)
+	postPictureEntity, err := a.fileService.GetFile(postPictureId)
 
 	if nil != err {
 		return
 	}
 
-	return a.postPictureService.ChangePostPicture(postEntity, postPicture)
+	err = a.postPictureService.ChangePostPicture(postEntity, postPictureEntity)
+
+	postPictureEvent := a.postPictureEventFactory.CreatePostPictureChangedEvent(postEntity, postPictureEntity)
+	a.eventDispatcher.Dispatch(postPictureEvent)
+	
+	return
 }
 
 func (a *postPictureApiImpl) RemovePostPicture(postId *models.PostId) (err common.Error) {
@@ -49,5 +60,10 @@ func (a *postPictureApiImpl) RemovePostPicture(postId *models.PostId) (err commo
 		return
 	}
 
-	return a.postPictureService.RemovePostPicture(postEntity)
+	err = a.postPictureService.RemovePostPicture(postEntity)
+
+	postPictureEvent := a.postPictureEventFactory.CreatePostPictureRemovedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postPictureEvent)
+
+	return
 }

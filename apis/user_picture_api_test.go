@@ -3,6 +3,7 @@ package apis
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -15,12 +16,14 @@ func TestNewUserPictureApi(t *testing.T) {
 	defer ctrl.Finish()
 
 	t.Run("NewUserPictureApi", func(t *testing.T) {
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		userPictureEventFactory := mocks.NewMockUserPictureEventFactory(ctrl)
 		userService := mocks.NewMockUserService(ctrl)
 		fileService := mocks.NewMockFileService(ctrl)
 		userPictureService := mocks.NewMockUserPictureService(ctrl)
 
 		userPictureApi, isUserPictureApi := NewUserPictureApi(
-			userService, fileService, userPictureService,
+			eventDispatcher, userPictureEventFactory, userService, fileService, userPictureService,
 		).(*userPictureApiImpl)
 
 		assert.True(t, isUserPictureApi)
@@ -36,17 +39,26 @@ func TestNewUserPictureApi(t *testing.T) {
 		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
 
 		userPictureId := new(models.FileId)
-		userPicture := new(entities.FileEntity)
+		userPictureEntity := new(entities.FileEntity)
 		fileService := mocks.NewMockFileService(ctrl)
-		fileService.EXPECT().GetFile(userPictureId).Return(userPicture, nil)
+		fileService.EXPECT().GetFile(userPictureId).Return(userPictureEntity, nil)
+
+		userPictureEvent := new(events.UserPictureEvent)
+		userPictureEventFactory := mocks.NewMockUserPictureEventFactory(ctrl)
+		userPictureEventFactory.EXPECT().CreateUserPictureChangedEvent(userEntity, userPictureEntity).Return(userPictureEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(userPictureEvent)
 
 		userPictureService := mocks.NewMockUserPictureService(ctrl)
-		userPictureService.EXPECT().ChangeUserPicture(userEntity, userPicture).Return(nil)
+		userPictureService.EXPECT().ChangeUserPicture(userEntity, userPictureEntity).Return(nil)
 
 		userPictureApi := &userPictureApiImpl{
-			userService: userService,
-			fileService: fileService,
-			userPictureService: userPictureService,
+			eventDispatcher:         eventDispatcher,
+			userPictureEventFactory: userPictureEventFactory,
+			userService:             userService,
+			fileService:             fileService,
+			userPictureService:      userPictureService,
 		}
 		assert.Nil(t, userPictureApi.ChangeUserPicture(userId, userPictureId))
 	})
@@ -90,12 +102,21 @@ func TestNewUserPictureApi(t *testing.T) {
 		userService := mocks.NewMockUserService(ctrl)
 		userService.EXPECT().GetUser(userId).Return(userEntity, nil)
 
+		userPictureEvent := new(events.UserPictureEvent)
+		userPictureEventFactory := mocks.NewMockUserPictureEventFactory(ctrl)
+		userPictureEventFactory.EXPECT().CreateUserPictureRemovedEvent(userEntity).Return(userPictureEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(userPictureEvent)
+
 		userPictureService := mocks.NewMockUserPictureService(ctrl)
 		userPictureService.EXPECT().RemoveUserPicture(userEntity).Return(nil)
 
 		userPictureApi := &userPictureApiImpl{
-			userService: userService,
-			userPictureService: userPictureService,
+			eventDispatcher:         eventDispatcher,
+			userPictureEventFactory: userPictureEventFactory,
+			userService:             userService,
+			userPictureService:      userPictureService,
 		}
 		assert.Nil(t, userPictureApi.RemoveUserPicture(userId))
 	})

@@ -8,6 +8,6 @@ import (
 )
 
 func BindPostVideoRoutes(r contracts.Router, c contracts.PostVideoController) {
-	r.AddRoute(http.MethodPut, fmt.Sprintf("/v0/post/:%s/video/:%s", helpers.PostIdParameterName, helpers.FileIdParameterName), c.ChangePostVideo)
-	r.AddRoute(http.MethodDelete, fmt.Sprintf("/v0/post/:%s/video", helpers.PostIdParameterName), c.RemovePostVideo)
+	r.AddRoute(http.MethodPut, fmt.Sprintf("/post/:%s/video/:%s", helpers.PostIdParameterName, helpers.FileIdParameterName), c.ChangePostVideo)
+	r.AddRoute(http.MethodDelete, fmt.Sprintf("/post/:%s/video", helpers.PostIdParameterName), c.RemovePostVideo)
 }

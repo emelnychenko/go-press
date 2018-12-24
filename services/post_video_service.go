@@ -16,8 +16,10 @@ func NewPostVideoService(postRepository contracts.PostRepository) contracts.Post
 	return &postVideoServiceImpl{postRepository: postRepository}
 }
 
-func (s *postVideoServiceImpl) ChangePostVideo(postEntity *entities.PostEntity, postVideo *entities.FileEntity) common.Error {
-	postEntity.SetVideo(postVideo)
+func (s *postVideoServiceImpl) ChangePostVideo(
+	postEntity *entities.PostEntity, postVideoEntity *entities.FileEntity,
+) common.Error {
+	postEntity.SetVideo(postVideoEntity)
 
 	return s.postRepository.SavePost(postEntity)
 }

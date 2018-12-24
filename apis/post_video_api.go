@@ -8,21 +8,27 @@ import (
 
 type (
 	postVideoApiImpl struct {
-		postService        contracts.PostService
-		fileService        contracts.FileService
-		postVideoService contracts.PostVideoService
+		eventDispatcher       contracts.EventDispatcher
+		postVideoEventFactory contracts.PostVideoEventFactory
+		postService           contracts.PostService
+		fileService           contracts.FileService
+		postVideoService      contracts.PostVideoService
 	}
 )
 
 func NewPostVideoApi(
+	eventDispatcher contracts.EventDispatcher,
+	postVideoEventFactory contracts.PostVideoEventFactory,
 	postService contracts.PostService,
 	fileService contracts.FileService,
 	postVideoService contracts.PostVideoService,
 ) (postVideoApi contracts.PostVideoApi) {
 	return &postVideoApiImpl{
-		postService:        postService,
-		fileService:        fileService,
-		postVideoService: postVideoService,
+		eventDispatcher:       eventDispatcher,
+		postVideoEventFactory: postVideoEventFactory,
+		postService:           postService,
+		fileService:           fileService,
+		postVideoService:      postVideoService,
 	}
 }
 
@@ -33,13 +39,18 @@ func (a *postVideoApiImpl) ChangePostVideo(postId *models.PostId, postVideoId *m
 		return
 	}
 
-	postVideo, err := a.fileService.GetFile(postVideoId)
+	postVideoEntity, err := a.fileService.GetFile(postVideoId)
 
 	if nil != err {
 		return
 	}
 
-	return a.postVideoService.ChangePostVideo(postEntity, postVideo)
+	err = a.postVideoService.ChangePostVideo(postEntity, postVideoEntity)
+
+	postVideoEvent := a.postVideoEventFactory.CreatePostVideoChangedEvent(postEntity, postVideoEntity)
+	a.eventDispatcher.Dispatch(postVideoEvent)
+
+	return
 }
 
 func (a *postVideoApiImpl) RemovePostVideo(postId *models.PostId) (err common.Error) {
@@ -49,5 +60,10 @@ func (a *postVideoApiImpl) RemovePostVideo(postId *models.PostId) (err common.Er
 		return
 	}
 
-	return a.postVideoService.RemovePostVideo(postEntity)
+	err = a.postVideoService.RemovePostVideo(postEntity)
+
+	postVideoEvent := a.postVideoEventFactory.CreatePostVideoRemovedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postVideoEvent)
+
+	return
 }

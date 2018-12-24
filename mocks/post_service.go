@@ -94,20 +94,6 @@ func (mr *MockPostServiceMockRecorder) UpdatePost(postEntity, data interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePost", reflect.TypeOf((*MockPostService)(nil).UpdatePost), postEntity, data)
 }
 
-// ChangePostAuthor mocks base method
-func (m *MockPostService) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor common.Subject) common.Error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ChangePostAuthor", postEntity, postAuthor)
-	ret0, _ := ret[0].(common.Error)
-	return ret0
-}
-
-// ChangePostAuthor indicates an expected call of ChangePostAuthor
-func (mr *MockPostServiceMockRecorder) ChangePostAuthor(postEntity, postAuthor interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePostAuthor", reflect.TypeOf((*MockPostService)(nil).ChangePostAuthor), postEntity, postAuthor)
-}
-
 // DeletePost mocks base method
 func (m *MockPostService) DeletePost(postEntity *entities.PostEntity) common.Error {
 	m.ctrl.T.Helper()

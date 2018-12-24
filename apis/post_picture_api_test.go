@@ -3,6 +3,7 @@ package apis
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -15,15 +16,19 @@ func TestNewPostPictureApi(t *testing.T) {
 	defer ctrl.Finish()
 
 	t.Run("NewPostPictureApi", func(t *testing.T) {
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postPictureEventFactory := mocks.NewMockPostPictureEventFactory(ctrl)
 		postService := mocks.NewMockPostService(ctrl)
 		fileService := mocks.NewMockFileService(ctrl)
 		postPictureService := mocks.NewMockPostPictureService(ctrl)
 
 		postPictureApi, isPostPictureApi := NewPostPictureApi(
-			postService, fileService, postPictureService,
+			eventDispatcher, postPictureEventFactory, postService, fileService, postPictureService,
 		).(*postPictureApiImpl)
 
 		assert.True(t, isPostPictureApi)
+		assert.Equal(t, eventDispatcher, postPictureApi.eventDispatcher)
+		assert.Equal(t, postPictureEventFactory, postPictureApi.postPictureEventFactory)
 		assert.Equal(t, postService, postPictureApi.postService)
 		assert.Equal(t, fileService, postPictureApi.fileService)
 		assert.Equal(t, postPictureService, postPictureApi.postPictureService)
@@ -36,17 +41,26 @@ func TestNewPostPictureApi(t *testing.T) {
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 
 		postPictureId := new(models.FileId)
-		postPicture := new(entities.FileEntity)
+		postPictureEntity := new(entities.FileEntity)
 		fileService := mocks.NewMockFileService(ctrl)
-		fileService.EXPECT().GetFile(postPictureId).Return(postPicture, nil)
+		fileService.EXPECT().GetFile(postPictureId).Return(postPictureEntity, nil)
+
+		postPictureEvent := new(events.PostPictureEvent)
+		postPictureEventFactory := mocks.NewMockPostPictureEventFactory(ctrl)
+		postPictureEventFactory.EXPECT().CreatePostPictureChangedEvent(postEntity, postPictureEntity).Return(postPictureEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postPictureEvent)
 
 		postPictureService := mocks.NewMockPostPictureService(ctrl)
-		postPictureService.EXPECT().ChangePostPicture(postEntity, postPicture).Return(nil)
+		postPictureService.EXPECT().ChangePostPicture(postEntity, postPictureEntity).Return(nil)
 
 		postPictureApi := &postPictureApiImpl{
-			postService: postService,
-			fileService: fileService,
-			postPictureService: postPictureService,
+			eventDispatcher:         eventDispatcher,
+			postPictureEventFactory: postPictureEventFactory,
+			postService:             postService,
+			fileService:             fileService,
+			postPictureService:      postPictureService,
 		}
 		assert.Nil(t, postPictureApi.ChangePostPicture(postId, postPictureId))
 	})
@@ -90,12 +104,21 @@ func TestNewPostPictureApi(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 
+		postPictureEvent := new(events.PostPictureEvent)
+		postPictureEventFactory := mocks.NewMockPostPictureEventFactory(ctrl)
+		postPictureEventFactory.EXPECT().CreatePostPictureRemovedEvent(postEntity).Return(postPictureEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(postPictureEvent)
+
 		postPictureService := mocks.NewMockPostPictureService(ctrl)
 		postPictureService.EXPECT().RemovePostPicture(postEntity).Return(nil)
 
 		postPictureApi := &postPictureApiImpl{
-			postService: postService,
-			postPictureService: postPictureService,
+			eventDispatcher:         eventDispatcher,
+			postPictureEventFactory: postPictureEventFactory,
+			postService:             postService,
+			postPictureService:      postPictureService,
 		}
 		assert.Nil(t, postPictureApi.RemovePostPicture(postId))
 	})
