@@ -9,6 +9,8 @@ const (
 	PostCreatedEventName = "PostCreatedEvent"
 	PostUpdatedEventName = "PostUpdatedEvent"
 	PostDeletedEventName = "PostDeletedEvent"
+	PostPublishedEventName = "PostPublishedEvent"
+	PostConcealedEventName = "PostConcealedEvent"
 )
 
 type (
@@ -34,5 +36,15 @@ func NewPostUpdatedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
 
 func NewPostDeletedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
 	event := &Event{name: PostDeletedEventName}
+	return &PostEvent{postEntity: postEntity, Event: event}
+}
+
+func NewPostPublishedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
+	event := &Event{name: PostPublishedEventName}
+	return &PostEvent{postEntity: postEntity, Event: event}
+}
+
+func NewPostConcealedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
+	event := &Event{name: PostConcealedEventName}
 	return &PostEvent{postEntity: postEntity, Event: event}
 }

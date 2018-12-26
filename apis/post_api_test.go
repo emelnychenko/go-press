@@ -3,6 +3,7 @@ package apis
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -124,6 +125,41 @@ func TestPostApi(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
+	t.Run("CreatePost:PostPublishedEvent", func(t *testing.T) {
+		postEntity := &entities.PostEntity{Status: enums.PostPublishedStatus}
+		postAuthor := models.NewSystemUser()
+		post := new(models.Post)
+		data := new(models.PostCreate)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+
+		postCreatedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostCreatedEvent(postEntity).Return(postCreatedEvent)
+		eventDispatcher.EXPECT().Dispatch(postCreatedEvent)
+
+		postPublishedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostPublishedEvent(postEntity).Return(postPublishedEvent)
+		eventDispatcher.EXPECT().Dispatch(postPublishedEvent)
+
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().CreatePost(postAuthor, data).Return(postEntity, nil)
+
+		postAggregator := mocks.NewMockPostAggregator(ctrl)
+		postAggregator.EXPECT().AggregatePost(postEntity).Return(post)
+
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+			postAggregator: postAggregator,
+		}
+		response, err := postApi.CreatePost(postAuthor, data)
+
+		assert.Equal(t, post, response)
+		assert.Nil(t, err)
+	})
+
 	t.Run("CreatePost:Error", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 
@@ -154,6 +190,66 @@ func TestPostApi(t *testing.T) {
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
 		postService.EXPECT().UpdatePost(postEntity, data).Return(nil)
+
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+		}
+		assert.Nil(t, postApi.UpdatePost(postId, data))
+	})
+
+	t.Run("UpdatePost:PostPublishedEvent", func(t *testing.T) {
+		postId := new(models.PostId)
+		postEntity := new(entities.PostEntity)
+		data := new(models.PostUpdate)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+
+		postUpdatedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostUpdatedEvent(postEntity).Return(postUpdatedEvent)
+		eventDispatcher.EXPECT().Dispatch(postUpdatedEvent)
+
+		postPublishedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostPublishedEvent(postEntity).Return(postPublishedEvent)
+		eventDispatcher.EXPECT().Dispatch(postPublishedEvent)
+
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+		postService.EXPECT().UpdatePost(postEntity, data).Do(func(postEntity *entities.PostEntity, data *models.PostUpdate) {
+			postEntity.Status = enums.PostPublishedStatus
+		}).Return(nil)
+
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+		}
+		assert.Nil(t, postApi.UpdatePost(postId, data))
+	})
+
+	t.Run("UpdatePost:PostConcealedEvent", func(t *testing.T) {
+		postId := new(models.PostId)
+		postEntity := &entities.PostEntity{Status: enums.PostPublishedStatus}
+		data := new(models.PostUpdate)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+
+		postUpdatedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostUpdatedEvent(postEntity).Return(postUpdatedEvent)
+		eventDispatcher.EXPECT().Dispatch(postUpdatedEvent)
+
+		postConcealedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostConcealedEvent(postEntity).Return(postConcealedEvent)
+		eventDispatcher.EXPECT().Dispatch(postConcealedEvent)
+
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+		postService.EXPECT().UpdatePost(postEntity, data).Do(func(postEntity *entities.PostEntity, data *models.PostUpdate) {
+			postEntity.Status = enums.PostScheduledStatus
+		}).Return(nil)
 
 		postApi := &postApiImpl{
 			eventDispatcher: eventDispatcher,
@@ -204,6 +300,33 @@ func TestPostApi(t *testing.T) {
 
 		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
 		eventDispatcher.EXPECT().Dispatch(postEvent)
+
+		postService := mocks.NewMockPostService(ctrl)
+		postService.EXPECT().GetPost(postId).Return(postEntity, nil)
+		postService.EXPECT().DeletePost(postEntity).Return(nil)
+
+		postApi := &postApiImpl{
+			eventDispatcher: eventDispatcher,
+			postEventFactory: postEventFactory,
+			postService: postService,
+		}
+		assert.Nil(t, postApi.DeletePost(postId))
+	})
+
+	t.Run("DeletePost:PostConcealedEvent", func(t *testing.T) {
+		postId := new(models.PostId)
+		postEntity := &entities.PostEntity{Status: enums.PostPublishedStatus}
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		postEventFactory := mocks.NewMockPostEventFactory(ctrl)
+
+		postDeletedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostDeletedEvent(postEntity).Return(postDeletedEvent)
+		eventDispatcher.EXPECT().Dispatch(postDeletedEvent)
+
+		postConcealedEvent := new(events.PostEvent)
+		postEventFactory.EXPECT().CreatePostConcealedEvent(postEntity).Return(postConcealedEvent)
+		eventDispatcher.EXPECT().Dispatch(postConcealedEvent)
 
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetPost(postId).Return(postEntity, nil)

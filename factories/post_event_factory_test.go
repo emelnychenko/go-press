@@ -40,4 +40,22 @@ func TestPostEventFactory(t *testing.T) {
 		assert.Equal(t, events.PostDeletedEventName, postEvent.Name())
 		assert.Equal(t, postEntity, postEvent.PostEntity())
 	})
+
+	t.Run("CreatePostPublishedEvent", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		postEventFactory := new(postEventFactoryImpl)
+		postEvent := postEventFactory.CreatePostPublishedEvent(postEntity)
+
+		assert.Equal(t, events.PostPublishedEventName, postEvent.Name())
+		assert.Equal(t, postEntity, postEvent.PostEntity())
+	})
+
+	t.Run("CreatePostConcealedEvent", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		postEventFactory := new(postEventFactoryImpl)
+		postEvent := postEventFactory.CreatePostConcealedEvent(postEntity)
+
+		assert.Equal(t, events.PostConcealedEventName, postEvent.Name())
+		assert.Equal(t, postEntity, postEvent.PostEntity())
+	})
 }

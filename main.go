@@ -11,6 +11,7 @@ import (
 	"github.com/emelnychenko/go-press/factories"
 	"github.com/emelnychenko/go-press/hasher"
 	"github.com/emelnychenko/go-press/helpers"
+	"github.com/emelnychenko/go-press/normalizers"
 	"github.com/emelnychenko/go-press/parameters"
 	"github.com/emelnychenko/go-press/providers"
 	"github.com/emelnychenko/go-press/repositories"
@@ -76,6 +77,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(factories.NewFileModelFactory)
 	_ = container.Provide(providers.NewAwsS3StorageProvider)
 	_ = container.Provide(strategies.NewFilePathStrategy)
+	_ = container.Provide(normalizers.NewPostNormalizer)
 	_ = container.Provide(resolvers.NewSubjectResolver)
 	_ = container.Provide(repositories.NewUserRepository)
 	_ = container.Provide(repositories.NewPostRepository)

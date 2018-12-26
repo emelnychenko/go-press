@@ -11,15 +11,17 @@ import (
 type (
 	postServiceImpl struct {
 		postEntityFactory contracts.PostEntityFactory
+		postNormalizer    contracts.PostNormalizer
 		postRepository    contracts.PostRepository
 	}
 )
 
 func NewPostService(
 	postEntityFactory contracts.PostEntityFactory,
+	postNormalizer contracts.PostNormalizer,
 	postRepository contracts.PostRepository,
 ) (postService contracts.PostService) {
-	return &postServiceImpl{postEntityFactory, postRepository}
+	return &postServiceImpl{postEntityFactory, postNormalizer, postRepository}
 }
 
 func (s *postServiceImpl) ListPosts() ([]*entities.PostEntity, common.Error) {
@@ -41,6 +43,7 @@ func (s *postServiceImpl) CreatePost(postAuthor common.Subject, data *models.Pos
 	postEntity.Views = data.Views
 	postEntity.SetAuthor(postAuthor)
 
+	s.postNormalizer.NormalizePostEntity(postEntity)
 	err = s.postRepository.SavePost(postEntity)
 	return
 }
@@ -57,6 +60,7 @@ func (s *postServiceImpl) UpdatePost(postEntity *entities.PostEntity, data *mode
 	updated := time.Now().UTC()
 	postEntity.Updated = &updated
 
+	s.postNormalizer.NormalizePostEntity(postEntity)
 	return s.postRepository.SavePost(postEntity)
 }
 

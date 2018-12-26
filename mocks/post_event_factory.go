@@ -75,3 +75,31 @@ func (mr *MockPostEventFactoryMockRecorder) CreatePostDeletedEvent(postEntity in
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePostDeletedEvent", reflect.TypeOf((*MockPostEventFactory)(nil).CreatePostDeletedEvent), postEntity)
 }
+
+// CreatePostPublishedEvent mocks base method
+func (m *MockPostEventFactory) CreatePostPublishedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreatePostPublishedEvent", postEntity)
+	ret0, _ := ret[0].(contracts.PostEvent)
+	return ret0
+}
+
+// CreatePostPublishedEvent indicates an expected call of CreatePostPublishedEvent
+func (mr *MockPostEventFactoryMockRecorder) CreatePostPublishedEvent(postEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePostPublishedEvent", reflect.TypeOf((*MockPostEventFactory)(nil).CreatePostPublishedEvent), postEntity)
+}
+
+// CreatePostConcealedEvent mocks base method
+func (m *MockPostEventFactory) CreatePostConcealedEvent(postEntity *entities.PostEntity) contracts.PostEvent {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreatePostConcealedEvent", postEntity)
+	ret0, _ := ret[0].(contracts.PostEvent)
+	return ret0
+}
+
+// CreatePostConcealedEvent indicates an expected call of CreatePostConcealedEvent
+func (mr *MockPostEventFactoryMockRecorder) CreatePostConcealedEvent(postEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePostConcealedEvent", reflect.TypeOf((*MockPostEventFactory)(nil).CreatePostConcealedEvent), postEntity)
+}

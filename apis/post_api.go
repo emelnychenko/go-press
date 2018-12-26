@@ -3,6 +3,7 @@ package apis
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -58,8 +59,13 @@ func (a *postApiImpl) CreatePost(postAuthor common.Subject, data *models.PostCre
 		return
 	}
 
-	postEvent := a.postEventFactory.CreatePostCreatedEvent(postEntity)
-	a.eventDispatcher.Dispatch(postEvent)
+	postCreatedEvent := a.postEventFactory.CreatePostCreatedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postCreatedEvent)
+
+	if enums.PostPublishedStatus == postEntity.Status {
+		postPublishedEvent := a.postEventFactory.CreatePostPublishedEvent(postEntity)
+		a.eventDispatcher.Dispatch(postPublishedEvent)
+	}
 
 	post = a.postAggregator.AggregatePost(postEntity)
 	return
@@ -73,14 +79,30 @@ func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate)
 		return
 	}
 
+	postStatusBefore := postEntity.Status
+
 	err = postService.UpdatePost(postEntity, data)
 
 	if nil != err {
 		return
 	}
 
-	postEvent := a.postEventFactory.CreatePostUpdatedEvent(postEntity)
-	a.eventDispatcher.Dispatch(postEvent)
+	postUpdatedEvent := a.postEventFactory.CreatePostUpdatedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postUpdatedEvent)
+
+	postStatusAfter := postEntity.Status
+
+	if enums.PostPublishedStatus != postStatusBefore &&
+		enums.PostPublishedStatus == postStatusAfter {
+		postPublishedEvent := a.postEventFactory.CreatePostPublishedEvent(postEntity)
+		a.eventDispatcher.Dispatch(postPublishedEvent)
+	}
+
+	if enums.PostPublishedStatus == postStatusBefore &&
+		enums.PostPublishedStatus != postStatusAfter {
+		postConcealedEvent := a.postEventFactory.CreatePostConcealedEvent(postEntity)
+		a.eventDispatcher.Dispatch(postConcealedEvent)
+	}
 
 	return
 }
@@ -99,8 +121,13 @@ func (a *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
 		return
 	}
 
-	postEvent := a.postEventFactory.CreatePostDeletedEvent(postEntity)
-	a.eventDispatcher.Dispatch(postEvent)
+	if enums.PostPublishedStatus == postEntity.Status {
+		postConcealedEvent := a.postEventFactory.CreatePostConcealedEvent(postEntity)
+		a.eventDispatcher.Dispatch(postConcealedEvent)
+	}
+
+	postDeletedEvent := a.postEventFactory.CreatePostDeletedEvent(postEntity)
+	a.eventDispatcher.Dispatch(postDeletedEvent)
 
 	return
 }

@@ -34,6 +34,24 @@ func TestPostEvents(t *testing.T) {
 		assert.Equal(t, PostDeletedEventName, postEvent.name)
 	})
 
+	t.Run("NewPostPublishedEvent", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		postEvent, isPostEvent := NewPostPublishedEvent(postEntity).(*PostEvent)
+
+		assert.True(t, isPostEvent)
+		assert.Equal(t, postEntity, postEvent.postEntity)
+		assert.Equal(t, PostPublishedEventName, postEvent.name)
+	})
+
+	t.Run("NewPostConcealedEvent", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		postEvent, isPostEvent := NewPostConcealedEvent(postEntity).(*PostEvent)
+
+		assert.True(t, isPostEvent)
+		assert.Equal(t, postEntity, postEvent.postEntity)
+		assert.Equal(t, PostConcealedEventName, postEvent.name)
+	})
+
 	t.Run("PostEntity", func(t *testing.T) {
 		postEntity := new(entities.PostEntity)
 		postEvent := &PostEvent{postEntity: postEntity}

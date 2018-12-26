@@ -16,12 +16,14 @@ func TestPostService(t *testing.T) {
 
 	t.Run("NewPostService", func(t *testing.T) {
 		postEntityFactory := mocks.NewMockPostEntityFactory(ctrl)
+		postNormalizer := mocks.NewMockPostNormalizer(ctrl)
 		postRepository := mocks.NewMockPostRepository(ctrl)
 
-		postService, isPostService := NewPostService(postEntityFactory, postRepository).(*postServiceImpl)
+		postService, isPostService := NewPostService(postEntityFactory, postNormalizer, postRepository).(*postServiceImpl)
 
 		assert.True(t, isPostService)
 		assert.Equal(t, postEntityFactory, postService.postEntityFactory)
+		assert.Equal(t, postNormalizer, postService.postNormalizer)
 		assert.Equal(t, postRepository, postService.postRepository)
 	})
 
@@ -45,6 +47,9 @@ func TestPostService(t *testing.T) {
 		postRepository := mocks.NewMockPostRepository(ctrl)
 		postRepository.EXPECT().SavePost(postEntity).Return(nil)
 
+		postNormalizer := mocks.NewMockPostNormalizer(ctrl)
+		postNormalizer.EXPECT().NormalizePostEntity(postEntity)
+
 		postAuthor := models.NewSystemUser()
 		data := &models.PostCreate{
 			Title:       "0",
@@ -55,7 +60,11 @@ func TestPostService(t *testing.T) {
 			Views:       5,
 			Published:   new(time.Time),
 		}
-		postService := &postServiceImpl{postEntityFactory: postEntityFactory, postRepository: postRepository}
+		postService := &postServiceImpl{
+			postEntityFactory: postEntityFactory,
+			postNormalizer: postNormalizer,
+			postRepository: postRepository,
+		}
 		response, err := postService.CreatePost(postAuthor, data)
 
 		assert.IsType(t, postEntity, response)
@@ -87,6 +96,9 @@ func TestPostService(t *testing.T) {
 		postRepository := mocks.NewMockPostRepository(ctrl)
 		postRepository.EXPECT().SavePost(postEntity).Return(nil)
 
+		postNormalizer := mocks.NewMockPostNormalizer(ctrl)
+		postNormalizer.EXPECT().NormalizePostEntity(postEntity)
+
 		data := &models.PostUpdate{
 			Title:       "0",
 			Description: "1",
@@ -96,7 +108,7 @@ func TestPostService(t *testing.T) {
 			Views:       5,
 			Published:   new(time.Time),
 		}
-		postService := &postServiceImpl{postRepository: postRepository}
+		postService := &postServiceImpl{postNormalizer: postNormalizer, postRepository: postRepository}
 		assert.Nil(t, postService.UpdatePost(postEntity, data))
 
 		assert.Equal(t, data.Title, postEntity.Title)
