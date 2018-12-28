@@ -24,7 +24,7 @@ func (h *bCryptHasherImpl) Make(password string) (hashedPassword string, err com
 	hash, bCryptErr := bcrypt.GenerateFromPassword([]byte(password), h.cost)
 
 	if bCryptErr != err {
-		err = common.NewSystemError(bCryptErr)
+		err = common.NewSystemErrorFromBuiltin(bCryptErr)
 	}
 
 	hashedPassword = string(hash)
@@ -35,7 +35,7 @@ func (*bCryptHasherImpl) Check(hashedPassword, password string) (err common.Erro
 	bCryptErr := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 
 	if nil != bCryptErr {
-		err = common.NewSystemError(bCryptErr)
+		err = common.NewSystemErrorFromBuiltin(bCryptErr)
 	}
 
 	return

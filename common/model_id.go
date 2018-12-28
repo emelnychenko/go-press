@@ -18,7 +18,7 @@ func ParseModelId(value string) (*ModelId, Error) {
 	id, err := uuid.Parse(value)
 
 	if nil != err {
-		return nil, NewSystemError(err)
+		return nil, NewSystemErrorFromBuiltin(err)
 	}
 
 	return &ModelId{id}, nil

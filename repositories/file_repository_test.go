@@ -59,7 +59,7 @@ func TestFileRepository(t *testing.T) {
 
 		fileEntity, err := fileRepository.GetFile(fileId)
 		assert.NotNil(t, fileEntity)
-		assert.Error(t, err, common.NewSystemError(gorm.ErrInvalidSQL))
+		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveFile", func(t *testing.T) {

@@ -21,7 +21,7 @@ func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePat
 	fileExtensions, mimeErr := mime.ExtensionsByType(fileEntity.Type)
 
 	if nil != mimeErr {
-		err = common.NewSystemError(mimeErr)
+		err = common.NewSystemErrorFromBuiltin(mimeErr)
 		return
 	}
 

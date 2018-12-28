@@ -16,12 +16,16 @@ func TestPostController(t *testing.T) {
 	t.Run("NewPostController", func(t *testing.T) {
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
 		postApi := mocks.NewMockPostApi(ctrl)
-		postController, isPostController := NewPostController(postHttpHelper, postModelFactory, postApi).(*postControllerImpl)
+		postController, isPostController := NewPostController(
+			postHttpHelper, postModelFactory, postStatusValidator, postApi,
+		).(*postControllerImpl)
 
 		assert.True(t, isPostController)
 		assert.Equal(t, postHttpHelper, postController.postHttpHelper)
 		assert.Equal(t, postModelFactory, postController.postModelFactory)
+		assert.Equal(t, postStatusValidator, postController.postStatusValidator)
 		assert.Equal(t, postApi, postController.postApi)
 	})
 
@@ -106,6 +110,9 @@ func TestPostController(t *testing.T) {
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePostCreate().Return(data)
 
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
+		postStatusValidator.EXPECT().ValidatePostCreate(data).Return(nil)
+
 		postApi := mocks.NewMockPostApi(ctrl)
 		// TODO: Change any
 		postApi.EXPECT().CreatePost(gomock.Any(), data).Return(post, nil)
@@ -114,8 +121,9 @@ func TestPostController(t *testing.T) {
 		httpContext.EXPECT().BindModel(data).Return(nil)
 
 		postController := &postControllerImpl{
-			postModelFactory: postModelFactory,
-			postApi:          postApi,
+			postModelFactory:    postModelFactory,
+			postStatusValidator: postStatusValidator,
+			postApi:             postApi,
 		}
 		response, err := postController.CreatePost(httpContext)
 
@@ -141,12 +149,36 @@ func TestPostController(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("CreatePost:PostStatusValidateError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		data := new(models.PostCreate)
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postModelFactory.EXPECT().CreatePostCreate().Return(data)
+
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
+		postStatusValidator.EXPECT().ValidatePostCreate(data).Return(systemErr)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(data).Return(nil)
+
+		postController := &postControllerImpl{
+			postModelFactory:    postModelFactory,
+			postStatusValidator: postStatusValidator,
+		}
+		_, err := postController.CreatePost(httpContext)
+
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("CreatePost:ApiError", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 		data := new(models.PostCreate)
 
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePostCreate().Return(data)
+
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
+		postStatusValidator.EXPECT().ValidatePostCreate(data).Return(nil)
 
 		postApi := mocks.NewMockPostApi(ctrl)
 		postApi.EXPECT().CreatePost(gomock.Any(), data).Return(nil, systemErr)
@@ -155,8 +187,9 @@ func TestPostController(t *testing.T) {
 		httpContext.EXPECT().BindModel(data).Return(nil)
 
 		postController := &postControllerImpl{
-			postModelFactory: postModelFactory,
-			postApi:          postApi,
+			postModelFactory:    postModelFactory,
+			postStatusValidator: postStatusValidator,
+			postApi:             postApi,
 		}
 		_, err := postController.CreatePost(httpContext)
 
@@ -169,6 +202,9 @@ func TestPostController(t *testing.T) {
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePostUpdate().Return(data)
 
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
+		postStatusValidator.EXPECT().ValidatePostUpdate(data).Return(nil)
+
 		postApi := mocks.NewMockPostApi(ctrl)
 		postApi.EXPECT().UpdatePost(postId, data).Return(nil)
 
@@ -179,9 +215,10 @@ func TestPostController(t *testing.T) {
 		postHttpHelper.EXPECT().ParsePostId(httpContext).Return(postId, nil)
 
 		postController := &postControllerImpl{
-			postHttpHelper:   postHttpHelper,
-			postModelFactory: postModelFactory,
-			postApi:          postApi,
+			postHttpHelper:      postHttpHelper,
+			postModelFactory:    postModelFactory,
+			postStatusValidator: postStatusValidator,
+			postApi:             postApi,
 		}
 		_, err := postController.UpdatePost(httpContext)
 
@@ -223,6 +260,33 @@ func TestPostController(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("UpdatePost:ValidatePostUpdate", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postId := new(models.PostId)
+		data := new(models.PostUpdate)
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postModelFactory.EXPECT().CreatePostUpdate().Return(data)
+
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
+		postStatusValidator.EXPECT().ValidatePostUpdate(data).Return(systemErr)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(data).Return(nil)
+
+		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
+		postHttpHelper.EXPECT().ParsePostId(httpContext).Return(postId, nil)
+
+		postController := &postControllerImpl{
+			postHttpHelper:      postHttpHelper,
+			postModelFactory:    postModelFactory,
+			postStatusValidator: postStatusValidator,
+		}
+
+		_, err := postController.UpdatePost(httpContext)
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("UpdatePost:ApiError", func(t *testing.T) {
 		postId := new(models.PostId)
 		systemErr := common.NewUnknownError()
@@ -230,6 +294,9 @@ func TestPostController(t *testing.T) {
 		data := new(models.PostUpdate)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePostUpdate().Return(data)
+
+		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
+		postStatusValidator.EXPECT().ValidatePostUpdate(data).Return(nil)
 
 		postApi := mocks.NewMockPostApi(ctrl)
 		postApi.EXPECT().UpdatePost(postId, data).Return(systemErr)
@@ -241,9 +308,10 @@ func TestPostController(t *testing.T) {
 		postHttpHelper.EXPECT().ParsePostId(httpContext).Return(postId, nil)
 
 		postController := &postControllerImpl{
-			postHttpHelper:   postHttpHelper,
-			postModelFactory: postModelFactory,
-			postApi:          postApi,
+			postHttpHelper:      postHttpHelper,
+			postModelFactory:    postModelFactory,
+			postStatusValidator: postStatusValidator,
+			postApi:             postApi,
 		}
 		_, err := postController.UpdatePost(httpContext)
 

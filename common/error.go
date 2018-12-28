@@ -21,8 +21,8 @@ func NewError(message string, code int) Error {
 	return &errorImpl{message, code}
 }
 
-func NewUnknownError() Error {
-	return &errorImpl{"An error occurred", http.StatusInternalServerError}
+func NewErrorFromBuiltin(err error, code int) Error {
+	return NewError(err.Error(), code)
 }
 
 func (e *errorImpl) Error() string {
@@ -33,19 +33,33 @@ func (e *errorImpl) Code() int {
 	return e.code
 }
 
-func NewSystemError(err error) Error {
-	return &errorImpl{err.Error(), http.StatusInternalServerError}
+func NewUnknownError() Error {
+	return NewError("An error occurred", http.StatusInternalServerError)
+}
+
+func NewSystemError(message string) Error {
+	return NewError(message, http.StatusInternalServerError)
+}
+
+func NewSystemErrorFromBuiltin(err error) Error {
+	message := err.Error()
+	return NewSystemError(message)
 }
 
 func NewBadRequestError(message string) Error {
-	return &errorImpl{message, http.StatusBadRequest}
+	return NewError(message, http.StatusBadRequest)
+}
+
+func NewBadRequestErrorFromBuiltin(err error) Error {
+	message := err.Error()
+	return NewBadRequestError(message)
 }
 
 func NewNotFoundError(message string) Error {
-	return &errorImpl{message, http.StatusNotFound}
+	return NewError(message, http.StatusNotFound)
 }
 
 func NewObjectNotFoundError(request string) Error {
 	message := fmt.Sprintf("The object was not found on request: %s", request)
-	return &errorImpl{message, http.StatusNotFound}
+	return NewNotFoundError(message)
 }

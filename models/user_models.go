@@ -19,24 +19,24 @@ type (
 	}
 
 	UserCreate struct {
-		FirstName string `json:"firstName" xml:"firstName"`
-		LastName  string `json:"lastName" xml:"lastName"`
-		Email     string `json:"email" xml:"email"`
-		Password  string `json:"password" xml:"password"`
+		FirstName string `json:"firstName" xml:"firstName" validate:"required"`
+		LastName  string `json:"lastName" xml:"lastName" validate:"required"`
+		Email     string `json:"email" xml:"email" validate:"required,email"`
+		Password  string `json:"password" xml:"password" validate:"required"`
 	}
 
 	UserUpdate struct {
-		FirstName string `json:"firstName" xml:"firstName"`
-		LastName  string `json:"lastName" xml:"lastName"`
+		FirstName string `json:"firstName" xml:"firstName" validate:"required"`
+		LastName  string `json:"lastName" xml:"lastName" validate:"required"`
 	}
 
 	UserChangePassword struct {
-		OldPassword string `json:"oldPassword" xml:"oldPassword"`
-		NewPassword string `json:"newPassword" xml:"newPassword"`
+		OldPassword string `json:"oldPassword" xml:"oldPassword" validate:"required"`
+		NewPassword string `json:"newPassword" xml:"newPassword" validate:"required"`
 	}
 
 	UserChangeIdentity struct {
-		Email string `json:"email" xml:"email"`
+		Email string `json:"email" xml:"email" validate:"required,email"`
 	}
 )
 

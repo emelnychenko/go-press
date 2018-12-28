@@ -36,7 +36,7 @@ func (*fileHttpHelperImpl) OpenFormFile(formHeader *multipart.FileHeader) (file 
 	file, formHeaderErr := formHeader.Open()
 
 	if nil != formHeaderErr {
-		err = common.NewSystemError(formHeaderErr)
+		err = common.NewSystemErrorFromBuiltin(formHeaderErr)
 	}
 
 	return

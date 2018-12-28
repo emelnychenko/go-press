@@ -26,7 +26,7 @@ func (c *subjectResolverImpl) ResolveSubject(subjectId *common.ModelId, subjectT
 		subject, err = c.userApi.GetUser(subjectId)
 	default:
 		stringErr := errors.New("SubjectType out of range")
-		err = common.NewSystemError(stringErr)
+		err = common.NewSystemErrorFromBuiltin(stringErr)
 	}
 
 	return

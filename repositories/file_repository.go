@@ -21,7 +21,7 @@ func NewFileRepository(db *gorm.DB) (fileRepository contracts.FileRepository) {
 
 func (r *fileRepositoryImpl) ListFiles() (fileEntities []*entities.FileEntity, err common.Error) {
 	if gormErr := r.db.Find(&fileEntities).Error; nil != gormErr {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -34,7 +34,7 @@ func (r *fileRepositoryImpl) GetFile(fileId *models.FileId) (fileEntity *entitie
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewFileByIdNotFoundError(fileId)
 		} else {
-			err = common.NewSystemError(gormErr)
+			err = common.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
@@ -43,7 +43,7 @@ func (r *fileRepositoryImpl) GetFile(fileId *models.FileId) (fileEntity *entitie
 
 func (r *fileRepositoryImpl) SaveFile(fileEntity *entities.FileEntity) (err common.Error) {
 	if gormErr := r.db.Save(fileEntity).Error; gormErr != nil {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -51,7 +51,7 @@ func (r *fileRepositoryImpl) SaveFile(fileEntity *entities.FileEntity) (err comm
 
 func (r *fileRepositoryImpl) RemoveFile(fileEntity *entities.FileEntity) (err common.Error) {
 	if gormErr := r.db.Delete(fileEntity).Error; gormErr != nil {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

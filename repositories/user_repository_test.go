@@ -68,7 +68,7 @@ func TestUserRepository(t *testing.T) {
 
 		userEntity, err := repository.GetUser(userId)
 		assert.NotNil(t, userEntity)
-		assert.Error(t, err, common.NewSystemError(gorm.ErrInvalidSQL))
+		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("LookupUser", func(t *testing.T) {
@@ -92,7 +92,7 @@ func TestUserRepository(t *testing.T) {
 
 		userEntity, err := repository.LookupUser("")
 		assert.NotNil(t, userEntity)
-		assert.Error(t, err, common.NewSystemError(gorm.ErrInvalidSQL))
+		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveUser", func(t *testing.T) {

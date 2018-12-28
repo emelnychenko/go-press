@@ -41,6 +41,7 @@ MOCKS=(
     "contracts/post_picture_event_factory.go|mocks/post_picture_event_factory.go"
     "contracts/post_video_event_factory.go|mocks/post_video_event_factory.go"
     "contracts/post_model_factory.go|mocks/post_model_factory.go"
+    "contracts/post_status_validator.go|mocks/post_status_validator.go"
     "contracts/post_normalizer.go|mocks/post_normalizer.go"
     "contracts/post_repository.go|mocks/post_repository.go"
     "contracts/post_service.go|mocks/post_service.go"

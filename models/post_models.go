@@ -23,21 +23,21 @@ type (
 	}
 
 	PostCreate struct {
-		Title       string            `json:"title" xml:"title"`
+		Title       string            `json:"title" xml:"title" validate:"required"`
 		Description string            `json:"description" xml:"description"`
-		Content     string            `json:"content" xml:"content"`
-		Status      enums.PostStatus  `json:"status" xml:"status"`
-		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy"`
+		Content     string            `json:"content" xml:"content" validate:"required"`
+		Status      enums.PostStatus  `json:"status" xml:"status" validate:"required"`
+		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy" validate:"required"`
 		Views       int               `json:"views" xml:"views"`
 		Published   *time.Time        `json:"published" xml:"published"`
 	}
 
 	PostUpdate struct {
-		Title       string            `json:"title" xml:"title"`
+		Title       string            `json:"title" xml:"title" validate:"required"`
 		Description string            `json:"description" xml:"description"`
-		Content     string            `json:"content" xml:"content"`
-		Status      enums.PostStatus  `json:"status" xml:"status"`
-		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy"`
+		Content     string            `json:"content" xml:"content" validate:"required"`
+		Status      enums.PostStatus  `json:"status" xml:"status" validate:"required"`
+		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy" validate:"required"`
 		Views       int               `json:"views" xml:"views"`
 		Published   *time.Time        `json:"published" xml:"published"`
 	}

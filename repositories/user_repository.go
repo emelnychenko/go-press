@@ -21,7 +21,7 @@ func NewUserRepository(db *gorm.DB) contracts.UserRepository {
 
 func (c *userRepositoryImpl) ListUsers() (userEntities []*entities.UserEntity, err common.Error) {
 	if gormErr := c.db.Find(&userEntities).Error; nil != gormErr {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -34,7 +34,7 @@ func (c *userRepositoryImpl) GetUser(userId *models.UserId) (userEntity *entitie
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewUserByIdNotFoundError(userId)
 		} else {
-			err = common.NewSystemError(gormErr)
+			err = common.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
@@ -48,7 +48,7 @@ func (c *userRepositoryImpl) LookupUser(userIdentity string) (userEntity *entiti
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewUserNotFoundError(userIdentity)
 		} else {
-			err = common.NewSystemError(gormErr)
+			err = common.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
@@ -57,7 +57,7 @@ func (c *userRepositoryImpl) LookupUser(userIdentity string) (userEntity *entiti
 
 func (c *userRepositoryImpl) SaveUser(userEntity *entities.UserEntity) (err common.Error) {
 	if gormErr := c.db.Save(userEntity).Error; gormErr != nil {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -65,7 +65,7 @@ func (c *userRepositoryImpl) SaveUser(userEntity *entities.UserEntity) (err comm
 
 func (c *userRepositoryImpl) RemoveUser(userEntity *entities.UserEntity) (err common.Error) {
 	if gormErr := c.db.Delete(userEntity).Error; gormErr != nil {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

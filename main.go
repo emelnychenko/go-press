@@ -57,6 +57,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewPostHttpHelper)
 	_ = container.Provide(helpers.NewFileHttpHelper)
 	_ = container.Provide(validators.NewContentTypeValidator)
+	_ = container.Provide(validators.NewPostStatusValidator)
 	_ = container.Provide(parameters.NewAwsS3Parameters)
 	_ = container.Provide(factories.NewAwsS3WriterProxyFactory)
 	_ = container.Provide(factories.NewAwsS3Factory)

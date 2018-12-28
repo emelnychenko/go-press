@@ -21,7 +21,7 @@ func NewPostRepository(db *gorm.DB) (postRepository contracts.PostRepository) {
 
 func (c *postRepositoryImpl) ListPosts() (postEntities []*entities.PostEntity, err common.Error) {
 	if gormErr := c.db.Find(&postEntities).Error; nil != gormErr {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -34,7 +34,7 @@ func (c *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entitie
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewPostByIdNotFoundError(postId)
 		} else {
-			err = common.NewSystemError(gormErr)
+			err = common.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
@@ -43,7 +43,7 @@ func (c *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entitie
 
 func (c *postRepositoryImpl) SavePost(postEntity *entities.PostEntity) (err common.Error) {
 	if gormErr := c.db.Save(postEntity).Error; gormErr != nil {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -51,7 +51,7 @@ func (c *postRepositoryImpl) SavePost(postEntity *entities.PostEntity) (err comm
 
 func (c *postRepositoryImpl) RemovePost(postEntity *entities.PostEntity) (err common.Error) {
 	if gormErr := c.db.Delete(postEntity).Error; gormErr != nil {
-		err = common.NewSystemError(gormErr)
+		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

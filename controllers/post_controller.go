@@ -7,17 +7,24 @@ import (
 )
 
 type postControllerImpl struct {
-	postHttpHelper   contracts.PostHttpHelper
-	postModelFactory contracts.PostModelFactory
-	postApi          contracts.PostApi
+	postHttpHelper      contracts.PostHttpHelper
+	postModelFactory    contracts.PostModelFactory
+	postStatusValidator contracts.PostStatusValidator
+	postApi             contracts.PostApi
 }
 
 func NewPostController(
 	postHttpHelper contracts.PostHttpHelper,
 	postModelFactory contracts.PostModelFactory,
+	postStatusValidator contracts.PostStatusValidator,
 	postApi contracts.PostApi,
 ) (postController contracts.PostController) {
-	return &postControllerImpl{postHttpHelper, postModelFactory, postApi}
+	return &postControllerImpl{
+		postHttpHelper,
+		postModelFactory,
+		postStatusValidator,
+		postApi,
+	}
 }
 
 func (c *postControllerImpl) ListPosts(httpContext contracts.HttpContext) (posts interface{}, err common.Error) {
@@ -43,6 +50,10 @@ func (c *postControllerImpl) CreatePost(httpContext contracts.HttpContext) (post
 		return
 	}
 
+	if err = c.postStatusValidator.ValidatePostCreate(data); err != nil {
+		return
+	}
+
 	subject := models.NewSystemUser() // TODO: Replace stub
 	post, err = c.postApi.CreatePost(subject, data)
 	return
@@ -58,6 +69,10 @@ func (c *postControllerImpl) UpdatePost(httpContext contracts.HttpContext) (_ in
 	data := c.postModelFactory.CreatePostUpdate()
 
 	if err = httpContext.BindModel(data); err != nil {
+		return
+	}
+
+	if err = c.postStatusValidator.ValidatePostUpdate(data); err != nil {
 		return
 	}
 
