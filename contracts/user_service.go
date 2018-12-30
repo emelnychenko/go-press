@@ -8,7 +8,9 @@ import (
 
 type (
 	UserService interface {
-		ListUsers() ([]*entities.UserEntity, common.Error)
+		ListUsers(
+			userPaginationQuery *models.UserPaginationQuery,
+		) (paginationResult *models.PaginationResult, err common.Error)
 		GetUser(userId *models.UserId) (*entities.UserEntity, common.Error)
 		LookupUser(userIdentity string) (*entities.UserEntity, common.Error)
 		ChallengeUser(userEntity *entities.UserEntity, password string) common.Error

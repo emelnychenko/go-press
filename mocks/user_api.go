@@ -35,18 +35,18 @@ func (m *MockUserApi) EXPECT() *MockUserApiMockRecorder {
 }
 
 // ListUsers mocks base method
-func (m *MockUserApi) ListUsers() ([]*models.User, common.Error) {
+func (m *MockUserApi) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, common.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListUsers")
-	ret0, _ := ret[0].([]*models.User)
+	ret := m.ctrl.Call(m, "ListUsers", userPaginationQuery)
+	ret0, _ := ret[0].(*models.PaginationResult)
 	ret1, _ := ret[1].(common.Error)
 	return ret0, ret1
 }
 
 // ListUsers indicates an expected call of ListUsers
-func (mr *MockUserApiMockRecorder) ListUsers() *gomock.Call {
+func (mr *MockUserApiMockRecorder) ListUsers(userPaginationQuery interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUsers", reflect.TypeOf((*MockUserApi)(nil).ListUsers))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUsers", reflect.TypeOf((*MockUserApi)(nil).ListUsers), userPaginationQuery)
 }
 
 // GetUser mocks base method

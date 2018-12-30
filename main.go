@@ -12,6 +12,7 @@ import (
 	"github.com/emelnychenko/go-press/hasher"
 	"github.com/emelnychenko/go-press/helpers"
 	"github.com/emelnychenko/go-press/normalizers"
+	"github.com/emelnychenko/go-press/paginators"
 	"github.com/emelnychenko/go-press/parameters"
 	"github.com/emelnychenko/go-press/providers"
 	"github.com/emelnychenko/go-press/repositories"
@@ -32,7 +33,7 @@ func NewServer() (e *echo.Echo, err error) {
 }
 
 func ConnectDatabase() (db *gorm.DB, err error) {
-	db, err = gorm.Open("sqlite3", ":memory:")
+	db, err = gorm.Open("sqlite3", "./runtime.db")
 
 	if err != nil {
 		panic("failed to connect database")
@@ -56,6 +57,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewUserEchoHelper)
 	_ = container.Provide(helpers.NewPostHttpHelper)
 	_ = container.Provide(helpers.NewFileHttpHelper)
+	_ = container.Provide(paginators.NewDbPaginator)
+	_ = container.Provide(validators.NewModelValidator)
 	_ = container.Provide(validators.NewContentTypeValidator)
 	_ = container.Provide(validators.NewPostStatusValidator)
 	_ = container.Provide(parameters.NewAwsS3Parameters)
@@ -63,6 +66,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(factories.NewAwsS3Factory)
 	_ = container.Provide(factories.NewAwsS3UploaderFactory)
 	_ = container.Provide(factories.NewAwsS3DownloaderFactory)
+	_ = container.Provide(factories.NewPaginationModelFactory)
 	_ = container.Provide(factories.NewUserEntityFactory)
 	_ = container.Provide(factories.NewUserEventFactory)
 	_ = container.Provide(factories.NewUserPictureEventFactory)
@@ -138,6 +142,7 @@ func main() {
 
 	err := container.Invoke(func(e *echo.Echo, db *gorm.DB) {
 		defer db.Close()
+		db.LogMode(true)
 		e.Logger.Fatal(e.Start(":1323"))
 	})
 

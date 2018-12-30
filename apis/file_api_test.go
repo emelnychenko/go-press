@@ -37,30 +37,34 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("ListFiles", func(t *testing.T) {
+		paginationQuery := new(models.FilePaginationQuery)
+		entityPaginationResult := new(models.PaginationResult)
+		paginationResult := new(models.PaginationResult)
+
 		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().ListFiles(paginationQuery).Return(entityPaginationResult, nil)
+
 		fileAggregator := mocks.NewMockFileAggregator(ctrl)
+		fileAggregator.EXPECT().AggregatePaginationResult(entityPaginationResult).Return(paginationResult)
+
 		fileApi := &fileApiImpl{fileService: fileService, fileAggregator: fileAggregator}
-		var fileEntities []*entities.FileEntity
-		var replies []*models.File
+		response, err := fileApi.ListFiles(paginationQuery)
 
-		fileService.EXPECT().ListFiles().Return(fileEntities, nil)
-		fileAggregator.EXPECT().AggregateFiles(fileEntities).Return(replies)
-		files, err := fileApi.ListFiles()
-
-		assert.Equal(t, replies, files)
+		assert.Equal(t, paginationResult, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("ListFiles:Error", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
+		paginationQuery := new(models.FilePaginationQuery)
 
 		fileService := mocks.NewMockFileService(ctrl)
+		fileService.EXPECT().ListFiles(paginationQuery).Return(nil, systemErr)
+
 		fileApi := &fileApiImpl{fileService: fileService}
+		response, err := fileApi.ListFiles(paginationQuery)
 
-		fileService.EXPECT().ListFiles().Return(nil, systemErr)
-		files, err := fileApi.ListFiles()
-
-		assert.Nil(t, files)
+		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)
 	})
 

@@ -7,7 +7,9 @@ import (
 
 type (
 	UserApi interface {
-		ListUsers() (users []*models.User, err common.Error)
+		ListUsers(
+			userPaginationQuery *models.UserPaginationQuery,
+		) (paginationResult *models.PaginationResult, err common.Error)
 		GetUser(userId *models.UserId) (user *models.User, err common.Error)
 		CreateUser(data *models.UserCreate) (user *models.User, err common.Error)
 		UpdateUser(userId *models.UserId, data *models.UserUpdate) (err common.Error)

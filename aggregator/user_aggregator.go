@@ -39,3 +39,13 @@ func (a *userAggregatorImpl) AggregateUsers(userEntities []*entities.UserEntity)
 
 	return users
 }
+
+func (a *userAggregatorImpl) AggregatePaginationResult(
+	entityPaginationResult *models.PaginationResult,
+) (
+	paginationResult *models.PaginationResult,
+) {
+	userEntities := entityPaginationResult.Data.([]*entities.UserEntity)
+	users := a.AggregateUsers(userEntities)
+	return &models.PaginationResult{Total: entityPaginationResult.Total, Data: users}
+}

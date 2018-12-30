@@ -19,7 +19,10 @@ func TestPostController(t *testing.T) {
 		postStatusValidator := mocks.NewMockPostStatusValidator(ctrl)
 		postApi := mocks.NewMockPostApi(ctrl)
 		postController, isPostController := NewPostController(
-			postHttpHelper, postModelFactory, postStatusValidator, postApi,
+			postHttpHelper,
+			postModelFactory,
+			postStatusValidator,
+			postApi,
 		).(*postControllerImpl)
 
 		assert.True(t, isPostController)
@@ -30,25 +33,62 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("ListPosts", func(t *testing.T) {
-		var posts []*models.Post
+		postPaginationQuery := new(models.PostPaginationQuery)
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postModelFactory.EXPECT().CreatePostPaginationQuery().Return(postPaginationQuery)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(postPaginationQuery.PaginationQuery).Return(nil)
+		httpContext.EXPECT().BindModel(postPaginationQuery).Return(nil)
+
+		var paginationResult *models.PaginationResult
 		postApi := mocks.NewMockPostApi(ctrl)
-		postApi.EXPECT().ListPosts().Return(posts, nil)
+		postApi.EXPECT().ListPosts(postPaginationQuery).Return(paginationResult, nil)
 
-		postController := &postControllerImpl{postApi: postApi}
-		response, err := postController.ListPosts(nil)
+		postController := &postControllerImpl{
+			postModelFactory: postModelFactory,
+			postApi: postApi,
+		}
+		response, err := postController.ListPosts(httpContext)
 
-		assert.Equal(t, posts, response)
+		assert.Equal(t, paginationResult, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("ListPosts:Error", func(t *testing.T) {
+	t.Run("ListPosts:BindPaginationQueryError", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 
-		postApi := mocks.NewMockPostApi(ctrl)
-		postApi.EXPECT().ListPosts().Return(nil, systemErr)
+		postPaginationQuery := new(models.PostPaginationQuery)
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postModelFactory.EXPECT().CreatePostPaginationQuery().Return(postPaginationQuery)
 
-		postController := &postControllerImpl{postApi: postApi}
-		response, err := postController.ListPosts(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(postPaginationQuery.PaginationQuery).Return(systemErr)
+
+		postController := &postControllerImpl{
+			postModelFactory: postModelFactory,
+		}
+		response, err := postController.ListPosts(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ListPosts:BindPostPaginationQueryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		postPaginationQuery := new(models.PostPaginationQuery)
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postModelFactory.EXPECT().CreatePostPaginationQuery().Return(postPaginationQuery)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(postPaginationQuery.PaginationQuery).Return(nil)
+		httpContext.EXPECT().BindModel(postPaginationQuery).Return(systemErr)
+
+		postController := &postControllerImpl{
+			postModelFactory: postModelFactory,
+		}
+		response, err := postController.ListPosts(httpContext)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

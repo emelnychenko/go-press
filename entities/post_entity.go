@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	PostTable = "posts"
+	PostTableName = "posts"
 )
 
 type (
@@ -41,7 +41,7 @@ func NewPostEntity() *PostEntity {
 }
 
 func (*PostEntity) TableName() string {
-	return PostTable
+	return PostTableName
 }
 
 func (e *PostEntity) SetPicture(postPicture *FileEntity) {

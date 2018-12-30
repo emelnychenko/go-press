@@ -34,3 +34,13 @@ func (a *fileAggregatorImpl) AggregateFiles(fileEntities []*entities.FileEntity)
 
 	return
 }
+
+func (a *fileAggregatorImpl) AggregatePaginationResult(
+	entityPaginationResult *models.PaginationResult,
+) (
+	paginationResult *models.PaginationResult,
+) {
+	fileEntities := entityPaginationResult.Data.([]*entities.FileEntity)
+	files := a.AggregateFiles(fileEntities)
+	return &models.PaginationResult{Total: entityPaginationResult.Total, Data: files}
+}

@@ -37,18 +37,18 @@ func (m *MockFileApi) EXPECT() *MockFileApiMockRecorder {
 }
 
 // ListFiles mocks base method
-func (m *MockFileApi) ListFiles() ([]*models.File, common.Error) {
+func (m *MockFileApi) ListFiles(filePaginationQuery *models.FilePaginationQuery) (*models.PaginationResult, common.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListFiles")
-	ret0, _ := ret[0].([]*models.File)
+	ret := m.ctrl.Call(m, "ListFiles", filePaginationQuery)
+	ret0, _ := ret[0].(*models.PaginationResult)
 	ret1, _ := ret[1].(common.Error)
 	return ret0, ret1
 }
 
 // ListFiles indicates an expected call of ListFiles
-func (mr *MockFileApiMockRecorder) ListFiles() *gomock.Call {
+func (mr *MockFileApiMockRecorder) ListFiles(filePaginationQuery interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFiles", reflect.TypeOf((*MockFileApi)(nil).ListFiles))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFiles", reflect.TypeOf((*MockFileApi)(nil).ListFiles), filePaginationQuery)
 }
 
 // GetFile mocks base method

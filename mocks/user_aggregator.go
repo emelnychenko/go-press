@@ -61,3 +61,17 @@ func (mr *MockUserAggregatorMockRecorder) AggregateUsers(collection interface{})
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateUsers", reflect.TypeOf((*MockUserAggregator)(nil).AggregateUsers), collection)
 }
+
+// AggregatePaginationResult mocks base method
+func (m *MockUserAggregator) AggregatePaginationResult(entityPaginationResult *models.PaginationResult) *models.PaginationResult {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AggregatePaginationResult", entityPaginationResult)
+	ret0, _ := ret[0].(*models.PaginationResult)
+	return ret0
+}
+
+// AggregatePaginationResult indicates an expected call of AggregatePaginationResult
+func (mr *MockUserAggregatorMockRecorder) AggregatePaginationResult(entityPaginationResult interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregatePaginationResult", reflect.TypeOf((*MockUserAggregator)(nil).AggregatePaginationResult), entityPaginationResult)
+}

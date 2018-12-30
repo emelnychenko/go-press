@@ -30,14 +30,16 @@ func NewPostApi(
 	}
 }
 
-func (a *postApiImpl) ListPosts() (posts []*models.Post, err common.Error) {
-	postEntities, err := a.postService.ListPosts()
+func (a *postApiImpl) ListPosts(
+	postPaginationQuery *models.PostPaginationQuery,
+) (paginationResult *models.PaginationResult, err common.Error) {
+	entityPaginationResult, err := a.postService.ListPosts(postPaginationQuery)
 
 	if nil != err {
 		return
 	}
 
-	posts = a.postAggregator.AggregatePosts(postEntities)
+	paginationResult = a.postAggregator.AggregatePaginationResult(entityPaginationResult)
 	return
 }
 

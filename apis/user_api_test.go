@@ -33,30 +33,32 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ListUsers", func(t *testing.T) {
-		var userEntities []*entities.UserEntity
-		var users []*models.User
+		paginationQuery := new(models.UserPaginationQuery)
+		entityPaginationResult := new(models.PaginationResult)
+		paginationResult := new(models.PaginationResult)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().ListUsers().Return(userEntities, nil)
+		userService.EXPECT().ListUsers(paginationQuery).Return(entityPaginationResult, nil)
 
 		userAggregator := mocks.NewMockUserAggregator(ctrl)
-		userAggregator.EXPECT().AggregateUsers(userEntities).Return(users)
+		userAggregator.EXPECT().AggregatePaginationResult(entityPaginationResult).Return(paginationResult)
 
 		userApi := &userApiImpl{userService: userService, userAggregator: userAggregator}
-		response, err := userApi.ListUsers()
+		response, err := userApi.ListUsers(paginationQuery)
 
-		assert.Equal(t, users, response)
+		assert.Equal(t, paginationResult, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("ListUsers:Error", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
+		paginationQuery := new(models.UserPaginationQuery)
 
 		userService := mocks.NewMockUserService(ctrl)
-		userService.EXPECT().ListUsers().Return(nil, systemErr)
+		userService.EXPECT().ListUsers(paginationQuery).Return(nil, systemErr)
 
 		userApi := &userApiImpl{userService: userService}
-		response, err := userApi.ListUsers()
+		response, err := userApi.ListUsers(paginationQuery)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

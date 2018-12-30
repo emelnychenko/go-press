@@ -16,6 +16,6 @@ func TestFileEntity(t *testing.T) {
 	t.Run("TableName", func(t *testing.T) {
 		fileEntity := new(FileEntity)
 
-		assert.Equal(t, FileTable, fileEntity.TableName())
+		assert.Equal(t, FileTableName, fileEntity.TableName())
 	})
 }

@@ -36,18 +36,18 @@ func (m *MockPostService) EXPECT() *MockPostServiceMockRecorder {
 }
 
 // ListPosts mocks base method
-func (m *MockPostService) ListPosts() ([]*entities.PostEntity, common.Error) {
+func (m *MockPostService) ListPosts(postPaginationQuery *models.PostPaginationQuery) (*models.PaginationResult, common.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListPosts")
-	ret0, _ := ret[0].([]*entities.PostEntity)
+	ret := m.ctrl.Call(m, "ListPosts", postPaginationQuery)
+	ret0, _ := ret[0].(*models.PaginationResult)
 	ret1, _ := ret[1].(common.Error)
 	return ret0, ret1
 }
 
 // ListPosts indicates an expected call of ListPosts
-func (mr *MockPostServiceMockRecorder) ListPosts() *gomock.Call {
+func (mr *MockPostServiceMockRecorder) ListPosts(postPaginationQuery interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPosts", reflect.TypeOf((*MockPostService)(nil).ListPosts))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPosts", reflect.TypeOf((*MockPostService)(nil).ListPosts), postPaginationQuery)
 }
 
 // GetPost mocks base method

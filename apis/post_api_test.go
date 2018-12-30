@@ -34,29 +34,32 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("ListPosts", func(t *testing.T) {
-		var postEntities []*entities.PostEntity
-		var posts []*models.Post
+		paginationQuery := new(models.PostPaginationQuery)
+		entityPaginationResult := new(models.PaginationResult)
+		paginationResult := new(models.PaginationResult)
 
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().ListPosts().Return(postEntities, nil)
+		postService.EXPECT().ListPosts(paginationQuery).Return(entityPaginationResult, nil)
 
 		postAggregator := mocks.NewMockPostAggregator(ctrl)
-		postAggregator.EXPECT().AggregatePosts(postEntities).Return(posts)
+		postAggregator.EXPECT().AggregatePaginationResult(entityPaginationResult).Return(paginationResult)
 
 		postApi := &postApiImpl{postService: postService, postAggregator: postAggregator}
-		response, err := postApi.ListPosts()
+		response, err := postApi.ListPosts(paginationQuery)
 
-		assert.Equal(t, posts, response)
+		assert.Equal(t, paginationResult, response)
 		assert.Nil(t, err)
 	})
 
 	t.Run("ListPosts:Error", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
+		paginationQuery := new(models.PostPaginationQuery)
+
 		postService := mocks.NewMockPostService(ctrl)
-		postService.EXPECT().ListPosts().Return(nil, systemErr)
+		postService.EXPECT().ListPosts(paginationQuery).Return(nil, systemErr)
 
 		postApi := &postApiImpl{postService: postService}
-		response, err := postApi.ListPosts()
+		response, err := postApi.ListPosts(paginationQuery)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

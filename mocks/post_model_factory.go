@@ -33,6 +33,20 @@ func (m *MockPostModelFactory) EXPECT() *MockPostModelFactoryMockRecorder {
 	return m.recorder
 }
 
+// CreatePostPaginationQuery mocks base method
+func (m *MockPostModelFactory) CreatePostPaginationQuery() *models.PostPaginationQuery {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreatePostPaginationQuery")
+	ret0, _ := ret[0].(*models.PostPaginationQuery)
+	return ret0
+}
+
+// CreatePostPaginationQuery indicates an expected call of CreatePostPaginationQuery
+func (mr *MockPostModelFactoryMockRecorder) CreatePostPaginationQuery() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePostPaginationQuery", reflect.TypeOf((*MockPostModelFactory)(nil).CreatePostPaginationQuery))
+}
+
 // CreatePost mocks base method
 func (m *MockPostModelFactory) CreatePost() *models.Post {
 	m.ctrl.T.Helper()

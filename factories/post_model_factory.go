@@ -7,11 +7,17 @@ import (
 
 type (
 	postModelFactoryImpl struct {
+		paginationModelFactory contracts.PaginationModelFactory
 	}
 )
 
-func NewPostModelFactory() contracts.PostModelFactory {
-	return new(postModelFactoryImpl)
+func NewPostModelFactory(paginationModelFactory contracts.PaginationModelFactory) contracts.PostModelFactory {
+	return &postModelFactoryImpl{paginationModelFactory}
+}
+
+func (f *postModelFactoryImpl) CreatePostPaginationQuery() *models.PostPaginationQuery {
+	paginationQuery := f.paginationModelFactory.CreatePaginationQuery()
+	return &models.PostPaginationQuery{PaginationQuery: paginationQuery}
 }
 
 func (*postModelFactoryImpl) CreatePost() *models.Post {

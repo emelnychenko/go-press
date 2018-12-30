@@ -9,7 +9,9 @@ import (
 
 type (
 	FileService interface {
-		ListFiles() (fileEntities []*entities.FileEntity, err common.Error)
+		ListFiles(
+			filePaginationQuery *models.FilePaginationQuery,
+		) (paginationResult *models.PaginationResult, err common.Error)
 		GetFile(fileId *models.FileId) (fileEntity *entities.FileEntity, err common.Error)
 		UploadFile(fileSource io.Reader, data *models.FileUpload) (fileEntity *entities.FileEntity, err common.Error)
 		DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) (err common.Error)

@@ -8,17 +8,18 @@ import (
 
 type (
 	routerImpl struct {
-		echo *echo.Echo
+		echo           *echo.Echo
+		modelValidator contracts.ModelValidator
 	}
 )
 
-func NewRouter(echo *echo.Echo) (router contracts.Router) {
-	return &routerImpl{echo: echo}
+func NewRouter(echo *echo.Echo, modelValidator contracts.ModelValidator) (router contracts.Router) {
+	return &routerImpl{echo: echo, modelValidator: modelValidator}
 }
 
 func (r *routerImpl) AddRoute(httpMethod string, routePath string, httpHandlerFunc contracts.HttpHandlerFunc) {
 	r.echo.Add(httpMethod, routePath, func(context echo.Context) error {
-		httpContext := NewHttpContext(context)
+		httpContext := NewHttpContext(context, r.modelValidator)
 		response, err := httpHandlerFunc(httpContext)
 
 		if context.Response().Committed {
@@ -32,4 +33,3 @@ func (r *routerImpl) AddRoute(httpMethod string, routePath string, httpHandlerFu
 		return context.JSON(http.StatusOK, response)
 	})
 }
-

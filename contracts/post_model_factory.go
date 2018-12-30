@@ -6,6 +6,7 @@ import (
 
 type (
 	PostModelFactory interface {
+		CreatePostPaginationQuery() *models.PostPaginationQuery
 		CreatePost() *models.Post
 		CreatePostCreate() *models.PostCreate
 		CreatePostUpdate() *models.PostUpdate

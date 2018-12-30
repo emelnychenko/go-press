@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	UserTable = "users"
+	UserTableName = "users"
 )
 
 type (
@@ -31,7 +31,7 @@ func NewUserEntity() *UserEntity {
 }
 
 func (*UserEntity) TableName() string {
-	return UserTable
+	return UserTableName
 }
 
 func (c *UserEntity) SubjectId() *common.ModelId {

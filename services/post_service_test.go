@@ -28,12 +28,14 @@ func TestPostService(t *testing.T) {
 	})
 
 	t.Run("ListPosts", func(t *testing.T) {
-		var postEntities []*entities.PostEntity
+		postPaginationQuery := new(models.PostPaginationQuery)
+
+		var postEntities *models.PaginationResult
 		postRepository := mocks.NewMockPostRepository(ctrl)
-		postRepository.EXPECT().ListPosts().Return(postEntities, nil)
+		postRepository.EXPECT().ListPosts(postPaginationQuery).Return(postEntities, nil)
 
 		postService := &postServiceImpl{postRepository: postRepository}
-		response, err := postService.ListPosts()
+		response, err := postService.ListPosts(postPaginationQuery)
 
 		assert.Equal(t, postEntities, response)
 		assert.Nil(t, err)

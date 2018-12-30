@@ -5,17 +5,29 @@ import (
 	mocket "github.com/Selvatico/go-mocket"
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/mocks"
+	"github.com/emelnychenko/go-press/models"
+	"github.com/golang/mock/gomock"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestPostRepository(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
 	mocket.Catcher.Register()
 	mocket.Catcher.Logging = true
 
+	dbPaginator := mocks.NewMockDbPaginator(ctrl)
 	db, _ := gorm.Open(mocket.DriverName, "")
-	postRepository := NewPostRepository(db)
+	postRepository, isPostRepository := NewPostRepository(db, dbPaginator).(*postRepositoryImpl)
+
+	assert.True(t, isPostRepository)
+	assert.Equal(t, db, postRepository.db)
+	assert.Equal(t, dbPaginator, postRepository.dbPaginator)
 
 	postId := common.NewModelId()
 	commonReply := []map[string]interface{}{{
@@ -23,19 +35,38 @@ func TestPostRepository(t *testing.T) {
 	}}
 
 	t.Run("ListPosts", func(t *testing.T) {
+		postPaginationQuery := &models.PostPaginationQuery{
+			Status: enums.PostDraftStatus,
+			Privacy: enums.PostPublicPrivacy,
+			Author: "Test",
+			PaginationQuery: &models.PaginationQuery{Limit: 20},
+		}
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+		dbPaginator.EXPECT().Paginate(
+			gomock.Any(), postPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
+		).Return(nil)
 
-		postEntities, err := postRepository.ListPosts()
-		assert.IsType(t, []*entities.PostEntity{}, postEntities)
+		paginationResult, err := postRepository.ListPosts(postPaginationQuery)
+		assert.IsType(t, []*entities.PostEntity{}, paginationResult.Data)
 		assert.Nil(t, err)
 	})
 
 	t.Run("ListPosts:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		postPaginationQuery := &models.PostPaginationQuery{
+			Status: enums.PostDraftStatus,
+			Privacy: enums.PostPublicPrivacy,
+			Author: "Test",
+			PaginationQuery: &models.PaginationQuery{Limit: 20},
+		}
 		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		dbPaginator.EXPECT().Paginate(
+			gomock.Any(), postPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
+		).Return(systemErr)
 
-		postEntities, err := postRepository.ListPosts()
-		assert.NotNil(t, postEntities)
-		assert.Error(t, err)
+		postEntities, err := postRepository.ListPosts(postPaginationQuery)
+		assert.Nil(t, postEntities)
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("GetPost", func(t *testing.T) {

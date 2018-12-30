@@ -32,25 +32,62 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("ListFiles", func(t *testing.T) {
-		var files []*models.File
+		filePaginationQuery := new(models.FilePaginationQuery)
+		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
+		fileModelFactory.EXPECT().CreateFilePaginationQuery().Return(filePaginationQuery)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(filePaginationQuery.PaginationQuery).Return(nil)
+		httpContext.EXPECT().BindModel(filePaginationQuery).Return(nil)
+
+		var paginationResult *models.PaginationResult
 		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().ListFiles().Return(files, nil)
+		fileApi.EXPECT().ListFiles(filePaginationQuery).Return(paginationResult, nil)
 
-		fileController := &fileControllerImpl{fileApi: fileApi}
-		response, err := fileController.ListFiles(nil)
+		fileController := &fileControllerImpl{
+			fileModelFactory: fileModelFactory,
+			fileApi: fileApi,
+		}
+		response, err := fileController.ListFiles(httpContext)
 
-		assert.Equal(t, files, response)
+		assert.Equal(t, paginationResult, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("ListFiles:Error", func(t *testing.T) {
+	t.Run("ListFiles:BindPaginationQueryError", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 
-		fileApi := mocks.NewMockFileApi(ctrl)
-		fileApi.EXPECT().ListFiles().Return(nil, systemErr)
+		filePaginationQuery := new(models.FilePaginationQuery)
+		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
+		fileModelFactory.EXPECT().CreateFilePaginationQuery().Return(filePaginationQuery)
 
-		fileController := &fileControllerImpl{fileApi: fileApi}
-		response, err := fileController.ListFiles(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(filePaginationQuery.PaginationQuery).Return(systemErr)
+
+		fileController := &fileControllerImpl{
+			fileModelFactory: fileModelFactory,
+		}
+		response, err := fileController.ListFiles(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ListFiles:BindFilePaginationQueryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		filePaginationQuery := new(models.FilePaginationQuery)
+		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
+		fileModelFactory.EXPECT().CreateFilePaginationQuery().Return(filePaginationQuery)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(filePaginationQuery.PaginationQuery).Return(nil)
+		httpContext.EXPECT().BindModel(filePaginationQuery).Return(systemErr)
+
+		fileController := &fileControllerImpl{
+			fileModelFactory: fileModelFactory,
+		}
+		response, err := fileController.ListFiles(httpContext)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

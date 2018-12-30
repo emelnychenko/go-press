@@ -11,26 +11,35 @@ import (
 
 type (
 	userRepositoryImpl struct {
-		db *gorm.DB
+		db          *gorm.DB
+		dbPaginator contracts.DbPaginator
 	}
 )
 
-func NewUserRepository(db *gorm.DB) contracts.UserRepository {
-	return &userRepositoryImpl{db}
+func NewUserRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contracts.UserRepository {
+	return &userRepositoryImpl{db, dbPaginator}
 }
 
-func (c *userRepositoryImpl) ListUsers() (userEntities []*entities.UserEntity, err common.Error) {
-	if gormErr := c.db.Find(&userEntities).Error; nil != gormErr {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+func (r *userRepositoryImpl) ListUsers(
+	userPaginationQuery *models.UserPaginationQuery,
+) (paginationResult *models.PaginationResult, err common.Error) {
+	paginationTotal, userEntities := 0, make([]*entities.UserEntity, userPaginationQuery.Limit)
+	db := r.db.Model(&userEntities).Order("created desc")
+
+	err = r.dbPaginator.Paginate(db, userPaginationQuery.PaginationQuery, &userEntities, &paginationTotal)
+
+	if nil != err {
+		return
 	}
 
+	paginationResult = &models.PaginationResult{Total: paginationTotal, Data: userEntities}
 	return
 }
 
-func (c *userRepositoryImpl) GetUser(userId *models.UserId) (userEntity *entities.UserEntity, err common.Error) {
+func (r *userRepositoryImpl) GetUser(userId *models.UserId) (userEntity *entities.UserEntity, err common.Error) {
 	userEntity = new(entities.UserEntity)
 
-	if gormErr := c.db.First(userEntity, "id = ?", userId).Error; gormErr != nil {
+	if gormErr := r.db.First(userEntity, "id = ?", userId).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewUserByIdNotFoundError(userId)
 		} else {
@@ -41,10 +50,10 @@ func (c *userRepositoryImpl) GetUser(userId *models.UserId) (userEntity *entitie
 	return
 }
 
-func (c *userRepositoryImpl) LookupUser(userIdentity string) (userEntity *entities.UserEntity, err common.Error) {
+func (r *userRepositoryImpl) LookupUser(userIdentity string) (userEntity *entities.UserEntity, err common.Error) {
 	userEntity = new(entities.UserEntity)
 
-	if gormErr := c.db.First(userEntity, "email = ?", userIdentity).Error; gormErr != nil {
+	if gormErr := r.db.First(userEntity, "email = ?", userIdentity).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewUserNotFoundError(userIdentity)
 		} else {
@@ -55,16 +64,16 @@ func (c *userRepositoryImpl) LookupUser(userIdentity string) (userEntity *entiti
 	return
 }
 
-func (c *userRepositoryImpl) SaveUser(userEntity *entities.UserEntity) (err common.Error) {
-	if gormErr := c.db.Save(userEntity).Error; gormErr != nil {
+func (r *userRepositoryImpl) SaveUser(userEntity *entities.UserEntity) (err common.Error) {
+	if gormErr := r.db.Save(userEntity).Error; gormErr != nil {
 		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (c *userRepositoryImpl) RemoveUser(userEntity *entities.UserEntity) (err common.Error) {
-	if gormErr := c.db.Delete(userEntity).Error; gormErr != nil {
+func (r *userRepositoryImpl) RemoveUser(userEntity *entities.UserEntity) (err common.Error) {
+	if gormErr := r.db.Delete(userEntity).Error; gormErr != nil {
 		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 

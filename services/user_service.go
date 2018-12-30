@@ -25,8 +25,10 @@ func NewUserService(
 	return &userServiceImpl{hasher: hasher, userEntityFactory: userEntityFactory, userRepository: userRepository}
 }
 
-func (s *userServiceImpl) ListUsers() ([]*entities.UserEntity, common.Error) {
-	return s.userRepository.ListUsers()
+func (s *userServiceImpl) ListUsers(
+	userPaginationQuery *models.UserPaginationQuery,
+) (*models.PaginationResult, common.Error) {
+	return s.userRepository.ListUsers(userPaginationQuery)
 }
 
 func (s *userServiceImpl) CreateUser(data *models.UserCreate) (*entities.UserEntity, common.Error) {

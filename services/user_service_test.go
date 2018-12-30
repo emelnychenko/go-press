@@ -28,12 +28,14 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("ListUsers", func(t *testing.T) {
-		var userEntities []*entities.UserEntity
+		userPaginationQuery := new(models.UserPaginationQuery)
+
+		var userEntities *models.PaginationResult
 		userRepository := mocks.NewMockUserRepository(ctrl)
-		userRepository.EXPECT().ListUsers().Return(userEntities, nil)
+		userRepository.EXPECT().ListUsers(userPaginationQuery).Return(userEntities, nil)
 
 		userService := &userServiceImpl{userRepository: userRepository}
-		response, err := userService.ListUsers()
+		response, err := userService.ListUsers(userPaginationQuery)
 
 		assert.Equal(t, userEntities, response)
 		assert.Nil(t, err)

@@ -44,4 +44,19 @@ func TestFileAggregator(t *testing.T) {
 		assert.IsType(t, []*models.File{}, response)
 		assert.Equal(t, len(fileEntities), len(response))
 	})
+
+	t.Run("AggregatePaginationResult", func(t *testing.T) {
+		file := new(models.File)
+		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
+		fileModelFactory.EXPECT().CreateFile().Return(file)
+
+		fileEntities := []*entities.FileEntity{entities.NewFileEntity()}
+		fileAggregator := &fileAggregatorImpl{fileModelFactory: fileModelFactory}
+
+		entityPaginationResult := &models.PaginationResult{Data: fileEntities}
+		paginationResult := fileAggregator.AggregatePaginationResult(entityPaginationResult)
+
+		assert.IsType(t, []*models.File{}, paginationResult.Data)
+		assert.Equal(t, len(fileEntities), len(paginationResult.Data.([]*models.File)))
+	})
 }

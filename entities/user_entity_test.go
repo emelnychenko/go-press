@@ -19,7 +19,7 @@ func TestUserEntity(t *testing.T) {
 	t.Run("TableName", func(t *testing.T) {
 		userEntity := new(UserEntity)
 
-		assert.Equal(t, UserTable, userEntity.TableName())
+		assert.Equal(t, UserTableName, userEntity.TableName())
 	})
 
 	t.Run("SubjectId", func(t *testing.T) {

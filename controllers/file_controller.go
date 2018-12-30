@@ -24,8 +24,18 @@ func NewFileController(
 	}
 }
 
-func (c *fileControllerImpl) ListFiles(httpContext contracts.HttpContext) (files interface{}, err common.Error) {
-	files, err = c.fileApi.ListFiles()
+func (c *fileControllerImpl) ListFiles(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+	filePaginationQuery := c.fileModelFactory.CreateFilePaginationQuery()
+
+	if err = httpContext.BindModel(filePaginationQuery.PaginationQuery); err != nil {
+		return
+	}
+
+	if err = httpContext.BindModel(filePaginationQuery); err != nil {
+		return
+	}
+
+	paginationResult, err = c.fileApi.ListFiles(filePaginationQuery)
 	return
 }
 

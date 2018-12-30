@@ -7,11 +7,17 @@ import (
 
 type (
 	userModelFactoryImpl struct {
+		paginationModelFactory contracts.PaginationModelFactory
 	}
 )
 
-func NewUserModelFactory() contracts.UserModelFactory {
-	return new(userModelFactoryImpl)
+func NewUserModelFactory(paginationModelFactory contracts.PaginationModelFactory) contracts.UserModelFactory {
+	return &userModelFactoryImpl{paginationModelFactory}
+}
+
+func (f *userModelFactoryImpl) CreateUserPaginationQuery() *models.UserPaginationQuery {
+	paginationQuery := f.paginationModelFactory.CreatePaginationQuery()
+	return &models.UserPaginationQuery{PaginationQuery: paginationQuery}
 }
 
 func (*userModelFactoryImpl) CreateUser() *models.User {

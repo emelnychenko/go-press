@@ -54,3 +54,13 @@ func (a *postAggregatorImpl) AggregatePosts(postEntities []*entities.PostEntity)
 
 	return
 }
+
+func (a *postAggregatorImpl) AggregatePaginationResult(
+	entityPaginationResult *models.PaginationResult,
+) (
+	paginationResult *models.PaginationResult,
+) {
+	postEntities := entityPaginationResult.Data.([]*entities.PostEntity)
+	posts := a.AggregatePosts(postEntities)
+	return &models.PaginationResult{Total: entityPaginationResult.Total, Data: posts}
+}

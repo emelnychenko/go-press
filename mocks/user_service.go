@@ -36,18 +36,18 @@ func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 }
 
 // ListUsers mocks base method
-func (m *MockUserService) ListUsers() ([]*entities.UserEntity, common.Error) {
+func (m *MockUserService) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, common.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListUsers")
-	ret0, _ := ret[0].([]*entities.UserEntity)
+	ret := m.ctrl.Call(m, "ListUsers", userPaginationQuery)
+	ret0, _ := ret[0].(*models.PaginationResult)
 	ret1, _ := ret[1].(common.Error)
 	return ret0, ret1
 }
 
 // ListUsers indicates an expected call of ListUsers
-func (mr *MockUserServiceMockRecorder) ListUsers() *gomock.Call {
+func (mr *MockUserServiceMockRecorder) ListUsers(userPaginationQuery interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUsers", reflect.TypeOf((*MockUserService)(nil).ListUsers))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUsers", reflect.TypeOf((*MockUserService)(nil).ListUsers), userPaginationQuery)
 }
 
 // GetUser mocks base method

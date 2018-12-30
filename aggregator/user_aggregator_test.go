@@ -53,4 +53,19 @@ func TestUserAggregator(t *testing.T) {
 		assert.IsType(t, []*models.User{}, response)
 		assert.Equal(t, len(userEntities), len(response))
 	})
+
+	t.Run("AggregatePaginationResult", func(t *testing.T) {
+		user := new(models.User)
+		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
+		userModelFactory.EXPECT().CreateUser().Return(user)
+
+		userEntities := []*entities.UserEntity{entities.NewUserEntity()}
+		userAggregator := &userAggregatorImpl{userModelFactory: userModelFactory}
+
+		entityPaginationResult := &models.PaginationResult{Data: userEntities}
+		paginationResult := userAggregator.AggregatePaginationResult(entityPaginationResult)
+
+		assert.IsType(t, []*models.User{}, paginationResult.Data)
+		assert.Equal(t, len(userEntities), len(paginationResult.Data.([]*models.User)))
+	})
 }

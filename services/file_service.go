@@ -32,8 +32,10 @@ func NewFileService(
 	}
 }
 
-func (s *fileServiceImpl) ListFiles() ([]*entities.FileEntity, common.Error) {
-	return s.fileRepository.ListFiles()
+func (s *fileServiceImpl) ListFiles(
+	filePaginationQuery *models.FilePaginationQuery,
+) (*models.PaginationResult, common.Error) {
+	return s.fileRepository.ListFiles(filePaginationQuery)
 }
 
 func (s *fileServiceImpl) GetFile(fileId *models.FileId) (*entities.FileEntity, common.Error) {

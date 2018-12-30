@@ -7,11 +7,17 @@ import (
 
 type (
 	fileModelFactoryImpl struct {
+		paginationModelFactory contracts.PaginationModelFactory
 	}
 )
 
-func NewFileModelFactory() contracts.FileModelFactory {
-	return new(fileModelFactoryImpl)
+func NewFileModelFactory(paginationModelFactory contracts.PaginationModelFactory) contracts.FileModelFactory {
+	return &fileModelFactoryImpl{paginationModelFactory}
+}
+
+func (f *fileModelFactoryImpl) CreateFilePaginationQuery() *models.FilePaginationQuery {
+	paginationQuery := f.paginationModelFactory.CreatePaginationQuery()
+	return &models.FilePaginationQuery{PaginationQuery: paginationQuery}
 }
 
 func (*fileModelFactoryImpl) CreateFile() *models.File {

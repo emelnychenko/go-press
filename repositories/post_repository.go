@@ -11,26 +11,47 @@ import (
 
 type (
 	postRepositoryImpl struct {
-		db *gorm.DB
+		db          *gorm.DB
+		dbPaginator contracts.DbPaginator
 	}
 )
 
-func NewPostRepository(db *gorm.DB) (postRepository contracts.PostRepository) {
-	return &postRepositoryImpl{db}
+func NewPostRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) (postRepository contracts.PostRepository) {
+	return &postRepositoryImpl{db, dbPaginator}
 }
 
-func (c *postRepositoryImpl) ListPosts() (postEntities []*entities.PostEntity, err common.Error) {
-	if gormErr := c.db.Find(&postEntities).Error; nil != gormErr {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+func (r *postRepositoryImpl) ListPosts(
+	postPaginationQuery *models.PostPaginationQuery,
+) (paginationResult *models.PaginationResult, err common.Error) {
+	paginationTotal, postEntities := 0, make([]*entities.PostEntity, postPaginationQuery.Limit)
+	db := r.db.Model(&postEntities).Order("created desc")
+
+	if "" != postPaginationQuery.Status {
+		db = db.Where("status = ?", postPaginationQuery.Status)
 	}
 
+	if "" != postPaginationQuery.Privacy {
+		db = db.Where("privacy = ?", postPaginationQuery.Privacy)
+	}
+
+	if "" != postPaginationQuery.Author {
+		db = db.Where("author_id = ?", postPaginationQuery.Author)
+	}
+
+	err = r.dbPaginator.Paginate(db, postPaginationQuery.PaginationQuery, &postEntities, &paginationTotal)
+
+	if nil != err {
+		return
+	}
+
+	paginationResult = &models.PaginationResult{Total: paginationTotal, Data: postEntities}
 	return
 }
 
-func (c *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entities.PostEntity, err common.Error) {
+func (r *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entities.PostEntity, err common.Error) {
 	postEntity = new(entities.PostEntity)
 
-	if gormErr := c.db.First(postEntity, "id = ?", postId).Error; gormErr != nil {
+	if gormErr := r.db.First(postEntity, "id = ?", postId).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewPostByIdNotFoundError(postId)
 		} else {
@@ -41,16 +62,16 @@ func (c *postRepositoryImpl) GetPost(postId *models.PostId) (postEntity *entitie
 	return
 }
 
-func (c *postRepositoryImpl) SavePost(postEntity *entities.PostEntity) (err common.Error) {
-	if gormErr := c.db.Save(postEntity).Error; gormErr != nil {
+func (r *postRepositoryImpl) SavePost(postEntity *entities.PostEntity) (err common.Error) {
+	if gormErr := r.db.Save(postEntity).Error; gormErr != nil {
 		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (c *postRepositoryImpl) RemovePost(postEntity *entities.PostEntity) (err common.Error) {
-	if gormErr := c.db.Delete(postEntity).Error; gormErr != nil {
+func (r *postRepositoryImpl) RemovePost(postEntity *entities.PostEntity) (err common.Error) {
+	if gormErr := r.db.Delete(postEntity).Error; gormErr != nil {
 		err = common.NewSystemErrorFromBuiltin(gormErr)
 	}
 

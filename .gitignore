@@ -10,3 +10,4 @@ stub.db
 .env
 coverage.txt
 profile.out
+runtime.db

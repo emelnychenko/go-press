@@ -30,14 +30,16 @@ func NewFileApi(
 	}
 }
 
-func (a *fileApiImpl) ListFiles() (files []*models.File, err common.Error) {
-	fileEntities, err := a.fileService.ListFiles()
+func (a *fileApiImpl) ListFiles(
+	filePaginationQuery *models.FilePaginationQuery,
+) (paginationResult *models.PaginationResult, err common.Error) {
+	entityPaginationResult, err := a.fileService.ListFiles(filePaginationQuery)
 
 	if nil != err {
 		return
 	}
 
-	files = a.fileAggregator.AggregateFiles(fileEntities)
+	paginationResult = a.fileAggregator.AggregatePaginationResult(entityPaginationResult)
 	return
 }
 

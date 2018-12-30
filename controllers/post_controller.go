@@ -7,10 +7,10 @@ import (
 )
 
 type postControllerImpl struct {
-	postHttpHelper      contracts.PostHttpHelper
-	postModelFactory    contracts.PostModelFactory
-	postStatusValidator contracts.PostStatusValidator
-	postApi             contracts.PostApi
+	postHttpHelper         contracts.PostHttpHelper
+	postModelFactory       contracts.PostModelFactory
+	postStatusValidator    contracts.PostStatusValidator
+	postApi                contracts.PostApi
 }
 
 func NewPostController(
@@ -27,8 +27,18 @@ func NewPostController(
 	}
 }
 
-func (c *postControllerImpl) ListPosts(httpContext contracts.HttpContext) (posts interface{}, err common.Error) {
-	posts, err = c.postApi.ListPosts()
+func (c *postControllerImpl) ListPosts(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+	postPaginationQuery := c.postModelFactory.CreatePostPaginationQuery()
+
+	if err = httpContext.BindModel(postPaginationQuery.PaginationQuery); err != nil {
+		return
+	}
+
+	if err = httpContext.BindModel(postPaginationQuery); err != nil {
+		return
+	}
+
+	paginationResult, err = c.postApi.ListPosts(postPaginationQuery)
 	return
 }
 

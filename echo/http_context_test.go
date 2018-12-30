@@ -2,7 +2,9 @@ package echo
 
 import (
 	"errors"
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/echo_mocks"
+	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
@@ -17,10 +19,12 @@ func TestHttpContext(t *testing.T) {
 
 	t.Run("NewHttpContext", func(t *testing.T) {
 		context := echo_mocks.NewMockContext(ctrl)
-		httpContext, isHttpContext := NewHttpContext(context).(*httpContextImpl)
+		modelValidator := mocks.NewMockModelValidator(ctrl)
+		httpContext, isHttpContext := NewHttpContext(context, modelValidator).(*httpContextImpl)
 
 		assert.True(t, isHttpContext)
 		assert.Equal(t, context, httpContext.context)
+		assert.Equal(t, modelValidator, httpContext.modelValidator)
 	})
 
 	t.Run("Request", func(t *testing.T) {
@@ -60,11 +64,14 @@ func TestHttpContext(t *testing.T) {
 		context := echo_mocks.NewMockContext(ctrl)
 		context.EXPECT().Bind(data).Return(nil)
 
-		httpContext := &httpContextImpl{context: context}
+		modelValidator := mocks.NewMockModelValidator(ctrl)
+		modelValidator.EXPECT().ValidateModel(data).Return(nil)
+
+		httpContext := &httpContextImpl{context: context, modelValidator: modelValidator}
 		assert.Nil(t, httpContext.BindModel(data))
 	})
 
-	t.Run("BindModel:Error", func(t *testing.T) {
+	t.Run("BindModel:BindError", func(t *testing.T) {
 		systemErr := errors.New("")
 		var data interface{}
 
@@ -73,6 +80,20 @@ func TestHttpContext(t *testing.T) {
 
 		httpContext := &httpContextImpl{context: context}
 		assert.Error(t, httpContext.BindModel(data))
+	})
+
+	t.Run("BindModel:ValidateModelError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		var data interface{}
+
+		context := echo_mocks.NewMockContext(ctrl)
+		context.EXPECT().Bind(data).Return(nil)
+
+		modelValidator := mocks.NewMockModelValidator(ctrl)
+		modelValidator.EXPECT().ValidateModel(data).Return(systemErr)
+
+		httpContext := &httpContextImpl{context: context, modelValidator: modelValidator}
+		assert.Equal(t, systemErr, httpContext.BindModel(data))
 	})
 
 	t.Run("FormFile", func(t *testing.T) {

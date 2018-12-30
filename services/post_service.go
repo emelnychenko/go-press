@@ -21,11 +21,17 @@ func NewPostService(
 	postNormalizer contracts.PostNormalizer,
 	postRepository contracts.PostRepository,
 ) (postService contracts.PostService) {
-	return &postServiceImpl{postEntityFactory, postNormalizer, postRepository}
+	return &postServiceImpl{
+		postEntityFactory,
+		postNormalizer,
+		postRepository,
+	}
 }
 
-func (s *postServiceImpl) ListPosts() ([]*entities.PostEntity, common.Error) {
-	return s.postRepository.ListPosts()
+func (s *postServiceImpl) ListPosts(
+	postPaginationQuery *models.PostPaginationQuery,
+) (*models.PaginationResult, common.Error) {
+	return s.postRepository.ListPosts(postPaginationQuery)
 }
 
 func (s *postServiceImpl) GetPost(postId *models.PostId) (*entities.PostEntity, common.Error) {

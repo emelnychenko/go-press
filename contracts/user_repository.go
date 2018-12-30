@@ -8,7 +8,9 @@ import (
 
 type (
 	UserRepository interface {
-		ListUsers() ([]*entities.UserEntity, common.Error)
+		ListUsers(
+			userPaginationQuery *models.UserPaginationQuery,
+		) (paginationResult *models.PaginationResult, err common.Error)
 		GetUser(userId *models.UserId) (*entities.UserEntity, common.Error)
 		LookupUser(userIdentity string) (*entities.UserEntity, common.Error)
 		SaveUser(userEntity *entities.UserEntity) common.Error

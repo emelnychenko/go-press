@@ -19,8 +19,18 @@ func NewUserController(
 	return &userControllerImpl{userHttpHelper, userModelFactory, userApi}
 }
 
-func (c *userControllerImpl) ListUsers(httpContext contracts.HttpContext) (users interface{}, err common.Error) {
-	users, err = c.userApi.ListUsers()
+func (c *userControllerImpl) ListUsers(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+	userPaginationQuery := c.userModelFactory.CreateUserPaginationQuery()
+
+	if err = httpContext.BindModel(userPaginationQuery.PaginationQuery); err != nil {
+		return
+	}
+
+	if err = httpContext.BindModel(userPaginationQuery); err != nil {
+		return
+	}
+
+	paginationResult, err = c.userApi.ListUsers(userPaginationQuery)
 	return
 }
 

@@ -71,4 +71,23 @@ func TestPostAggregator(t *testing.T) {
 		assert.IsType(t, []*models.Post{}, posts)
 		assert.Equal(t, len(postEntities), len(posts))
 	})
+
+	t.Run("AggregatePaginationResult", func(t *testing.T) {
+		post := new(models.Post)
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		postModelFactory.EXPECT().CreatePost().Return(post)
+
+		systemUser := models.NewSystemUser()
+		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
+		subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
+
+		postEntities := []*entities.PostEntity{entities.NewPostEntity()}
+		postAggregator := &postAggregatorImpl{postModelFactory: postModelFactory, subjectResolver: subjectResolver}
+
+		entityPaginationResult := &models.PaginationResult{Data: postEntities}
+		paginationResult := postAggregator.AggregatePaginationResult(entityPaginationResult)
+
+		assert.IsType(t, []*models.Post{}, paginationResult.Data)
+		assert.Equal(t, len(postEntities), len(paginationResult.Data.([]*models.Post)))
+	})
 }

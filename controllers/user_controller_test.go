@@ -26,25 +26,62 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("ListUsers", func(t *testing.T) {
-		var users []*models.User
+		userPaginationQuery := new(models.UserPaginationQuery)
+		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
+		userModelFactory.EXPECT().CreateUserPaginationQuery().Return(userPaginationQuery)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(userPaginationQuery.PaginationQuery).Return(nil)
+		httpContext.EXPECT().BindModel(userPaginationQuery).Return(nil)
+
+		var paginationResult *models.PaginationResult
 		userApi := mocks.NewMockUserApi(ctrl)
-		userApi.EXPECT().ListUsers().Return(users, nil)
+		userApi.EXPECT().ListUsers(userPaginationQuery).Return(paginationResult, nil)
 
-		userController := &userControllerImpl{userApi: userApi}
-		response, err := userController.ListUsers(nil)
+		userController := &userControllerImpl{
+			userModelFactory: userModelFactory,
+			userApi: userApi,
+		}
+		response, err := userController.ListUsers(httpContext)
 
-		assert.Equal(t, users, response)
+		assert.Equal(t, paginationResult, response)
 		assert.Nil(t, err)
 	})
 
-	t.Run("ListUsers:Error", func(t *testing.T) {
+	t.Run("ListUsers:BindPaginationQueryError", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 
-		userApi := mocks.NewMockUserApi(ctrl)
-		userApi.EXPECT().ListUsers().Return(nil, systemErr)
+		userPaginationQuery := new(models.UserPaginationQuery)
+		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
+		userModelFactory.EXPECT().CreateUserPaginationQuery().Return(userPaginationQuery)
 
-		userController := &userControllerImpl{userApi: userApi}
-		response, err := userController.ListUsers(nil)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(userPaginationQuery.PaginationQuery).Return(systemErr)
+
+		userController := &userControllerImpl{
+			userModelFactory: userModelFactory,
+		}
+		response, err := userController.ListUsers(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ListUsers:BindUserPaginationQueryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		userPaginationQuery := new(models.UserPaginationQuery)
+		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
+		userModelFactory.EXPECT().CreateUserPaginationQuery().Return(userPaginationQuery)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().BindModel(userPaginationQuery.PaginationQuery).Return(nil)
+		httpContext.EXPECT().BindModel(userPaginationQuery).Return(systemErr)
+
+		userController := &userControllerImpl{
+			userModelFactory: userModelFactory,
+		}
+		response, err := userController.ListUsers(httpContext)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

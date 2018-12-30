@@ -10,12 +10,13 @@ import (
 
 type (
 	httpContextImpl struct {
-		context echo.Context
+		context        echo.Context
+		modelValidator contracts.ModelValidator
 	}
 )
 
-func NewHttpContext(context echo.Context) (httpContext contracts.HttpContext) {
-	return &httpContextImpl{context: context}
+func NewHttpContext(context echo.Context, modelValidator contracts.ModelValidator) (httpContext contracts.HttpContext) {
+	return &httpContextImpl{context: context, modelValidator: modelValidator}
 }
 
 func (c *httpContextImpl) Request() *http.Request {
@@ -35,8 +36,10 @@ func (c *httpContextImpl) BindModel(data interface{}) (err common.Error) {
 
 	if nil != echoErr {
 		err = common.NewBadRequestErrorFromBuiltin(echoErr)
+		return
 	}
 
+	err = c.modelValidator.ValidateModel(data)
 	return
 }
 

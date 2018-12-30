@@ -33,6 +33,20 @@ func (m *MockUserModelFactory) EXPECT() *MockUserModelFactoryMockRecorder {
 	return m.recorder
 }
 
+// CreateUserPaginationQuery mocks base method
+func (m *MockUserModelFactory) CreateUserPaginationQuery() *models.UserPaginationQuery {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUserPaginationQuery")
+	ret0, _ := ret[0].(*models.UserPaginationQuery)
+	return ret0
+}
+
+// CreateUserPaginationQuery indicates an expected call of CreateUserPaginationQuery
+func (mr *MockUserModelFactoryMockRecorder) CreateUserPaginationQuery() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUserPaginationQuery", reflect.TypeOf((*MockUserModelFactory)(nil).CreateUserPaginationQuery))
+}
+
 // CreateUser mocks base method
 func (m *MockUserModelFactory) CreateUser() *models.User {
 	m.ctrl.T.Helper()

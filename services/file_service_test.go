@@ -30,12 +30,14 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("ListFiles", func(t *testing.T) {
-		var fileEntities []*entities.FileEntity
+		filePaginationQuery := new(models.FilePaginationQuery)
+
+		var fileEntities *models.PaginationResult
 		fileRepository := mocks.NewMockFileRepository(ctrl)
-		fileRepository.EXPECT().ListFiles().Return(fileEntities, nil)
+		fileRepository.EXPECT().ListFiles(filePaginationQuery).Return(fileEntities, nil)
 
 		fileService := &fileServiceImpl{fileRepository: fileRepository}
-		response, err := fileService.ListFiles()
+		response, err := fileService.ListFiles(filePaginationQuery)
 
 		assert.Equal(t, fileEntities, response)
 		assert.Nil(t, err)

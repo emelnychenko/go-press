@@ -20,7 +20,7 @@ func TestPostEntity(t *testing.T) {
 	t.Run("TableName", func(t *testing.T) {
 		postEntity := new(PostEntity)
 
-		assert.Equal(t, PostTable, postEntity.TableName())
+		assert.Equal(t, PostTableName, postEntity.TableName())
 	})
 
 	t.Run("SetPicture", func(t *testing.T) {

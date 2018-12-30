@@ -23,11 +23,11 @@ type (
 	}
 
 	PostCreate struct {
-		Title       string            `json:"title" xml:"title" validate:"required"`
+		Title       string            `json:"title" xml:"title"`
 		Description string            `json:"description" xml:"description"`
-		Content     string            `json:"content" xml:"content" validate:"required"`
-		Status      enums.PostStatus  `json:"status" xml:"status" validate:"required"`
-		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy" validate:"required"`
+		Content     string            `json:"content" xml:"content"`
+		Status      enums.PostStatus  `json:"status" xml:"status"`
+		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy"`
 		Views       int               `json:"views" xml:"views"`
 		Published   *time.Time        `json:"published" xml:"published"`
 	}
@@ -40,5 +40,13 @@ type (
 		Privacy     enums.PostPrivacy `json:"privacy" xml:"privacy" validate:"required"`
 		Views       int               `json:"views" xml:"views"`
 		Published   *time.Time        `json:"published" xml:"published"`
+	}
+
+	PostPaginationQuery struct {
+		*PaginationQuery
+		Status  enums.PostStatus  `query:"status"`
+		Privacy enums.PostPrivacy `query:"privacy"`
+		Author  string            `query:"author"`
+		Term    string            `query:"term"`
 	}
 )

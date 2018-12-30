@@ -33,6 +33,20 @@ func (m *MockFileModelFactory) EXPECT() *MockFileModelFactoryMockRecorder {
 	return m.recorder
 }
 
+// CreateFilePaginationQuery mocks base method
+func (m *MockFileModelFactory) CreateFilePaginationQuery() *models.FilePaginationQuery {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateFilePaginationQuery")
+	ret0, _ := ret[0].(*models.FilePaginationQuery)
+	return ret0
+}
+
+// CreateFilePaginationQuery indicates an expected call of CreateFilePaginationQuery
+func (mr *MockFileModelFactoryMockRecorder) CreateFilePaginationQuery() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFilePaginationQuery", reflect.TypeOf((*MockFileModelFactory)(nil).CreateFilePaginationQuery))
+}
+
 // CreateFile mocks base method
 func (m *MockFileModelFactory) CreateFile() *models.File {
 	m.ctrl.T.Helper()

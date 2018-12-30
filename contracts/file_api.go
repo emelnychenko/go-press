@@ -10,7 +10,9 @@ type (
 	PrepareFileDestination func(file *models.File) (fileDestination io.Writer)
 
 	FileApi interface {
-		ListFiles() (files []*models.File, err common.Error)
+		ListFiles(
+			filePaginationQuery *models.FilePaginationQuery,
+		) (paginationResult *models.PaginationResult, err common.Error)
 		GetFile(fileId *models.FileId) (file *models.File, err common.Error)
 		UploadFile(fileSource io.Reader, data *models.FileUpload) (file *models.File, err common.Error)
 		DownloadFile(fileId *models.FileId, prepareFileDestination PrepareFileDestination) (err common.Error)

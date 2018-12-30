@@ -4,6 +4,7 @@ import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/echo_mocks"
+	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
@@ -18,10 +19,12 @@ func TestRouter(t *testing.T) {
 
 	t.Run("NewRouter", func(t *testing.T) {
 		instance := new(echo.Echo)
-		router, isRouter := NewRouter(instance).(*routerImpl)
+		modelValidator := mocks.NewMockModelValidator(ctrl)
+		router, isRouter := NewRouter(instance, modelValidator).(*routerImpl)
 
 		assert.True(t, isRouter)
 		assert.Equal(t, instance, router.echo)
+		assert.Equal(t, modelValidator, router.modelValidator)
 	})
 
 	t.Run("AddRoute", func(t *testing.T) {

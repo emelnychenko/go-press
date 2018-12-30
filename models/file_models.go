@@ -23,4 +23,8 @@ type (
 	FileUpdate struct {
 		Name string `json:"name" xml:"name" validate:"required"`
 	}
+
+	FilePaginationQuery struct {
+		*PaginationQuery
+	}
 )

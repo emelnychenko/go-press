@@ -6,6 +6,7 @@ import (
 
 type (
 	UserModelFactory interface {
+		CreateUserPaginationQuery() *models.UserPaginationQuery
 		CreateUser() *models.User
 		CreateUserCreate() *models.UserCreate
 		CreateUserUpdate() *models.UserUpdate

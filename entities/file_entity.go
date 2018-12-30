@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	FileTable = "files"
+	FileTableName = "files"
 )
 
 type (
@@ -31,5 +31,5 @@ func NewFileEntity() *FileEntity {
 }
 
 func (*FileEntity) TableName() string {
-	return FileTable
+	return FileTableName
 }

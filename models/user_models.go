@@ -38,6 +38,10 @@ type (
 	UserChangeIdentity struct {
 		Email string `json:"email" xml:"email" validate:"required,email"`
 	}
+
+	UserPaginationQuery struct {
+		*PaginationQuery
+	}
 )
 
 func (c *User) SubjectId() *common.ModelId {

@@ -29,14 +29,16 @@ func NewUserApi(
 	}
 }
 
-func (a *userApiImpl) ListUsers() (users []*models.User, err common.Error) {
-	userEntities, err := a.userService.ListUsers()
+func (a *userApiImpl) ListUsers(
+	userPaginationQuery *models.UserPaginationQuery,
+) (paginationResult *models.PaginationResult, err common.Error) {
+	entityPaginationResult, err := a.userService.ListUsers(userPaginationQuery)
 
 	if nil != err {
 		return
 	}
 
-	users = a.userAggregator.AggregateUsers(userEntities)
+	paginationResult = a.userAggregator.AggregatePaginationResult(entityPaginationResult)
 	return
 }
 

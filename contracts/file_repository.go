@@ -8,7 +8,9 @@ import (
 
 type (
 	FileRepository interface {
-		ListFiles() (fileEntities []*entities.FileEntity, err common.Error)
+		ListFiles(
+			filePaginationQuery *models.FilePaginationQuery,
+		) (paginationResult *models.PaginationResult, err common.Error)
 		GetFile(fileId *models.FileId) (fileEntity *entities.FileEntity, err common.Error)
 		SaveFile(fileEntity *entities.FileEntity) (err common.Error)
 		RemoveFile(fileEntity *entities.FileEntity) (err common.Error)
