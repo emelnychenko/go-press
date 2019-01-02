@@ -36,9 +36,9 @@ func TestPostRepository(t *testing.T) {
 
 	t.Run("ListPosts", func(t *testing.T) {
 		postPaginationQuery := &models.PostPaginationQuery{
-			Status: enums.PostDraftStatus,
-			Privacy: enums.PostPublicPrivacy,
-			Author: "Test",
+			Status:          enums.PostDraftStatus,
+			Privacy:         enums.PostPublicPrivacy,
+			Author:          "Test",
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
@@ -54,9 +54,9 @@ func TestPostRepository(t *testing.T) {
 	t.Run("ListPosts:Error", func(t *testing.T) {
 		systemErr := common.NewUnknownError()
 		postPaginationQuery := &models.PostPaginationQuery{
-			Status: enums.PostDraftStatus,
-			Privacy: enums.PostPublicPrivacy,
-			Author: "Test",
+			Status:          enums.PostDraftStatus,
+			Privacy:         enums.PostPublicPrivacy,
+			Author:          "Test",
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
 		mocket.Catcher.Reset().NewMock().Error = errors.New("")
@@ -67,6 +67,22 @@ func TestPostRepository(t *testing.T) {
 		postEntities, err := postRepository.ListPosts(postPaginationQuery)
 		assert.Nil(t, postEntities)
 		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("GetScheduledPosts", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		postEntities, err := postRepository.GetScheduledPosts()
+		assert.IsType(t, []*entities.PostEntity{}, postEntities)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetPost:PostNotFoundError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+
+		postEntities, err := postRepository.GetScheduledPosts()
+		assert.NotNil(t, postEntities)
+		assert.Error(t, err)
 	})
 
 	t.Run("GetPost", func(t *testing.T) {

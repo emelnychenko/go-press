@@ -37,7 +37,10 @@ func (*dbPaginatorImpl) Paginate(
 	paginationOffset := paginationQuery.Offset()
 	selectErr := db.Limit(paginationQuery.Limit).Offset(paginationOffset).Find(paginationData).Error
 
-	if err = <-countErr; nil != err {
+	err = <-countErr
+	close(countErr)
+
+	if nil != err {
 		return
 	}
 

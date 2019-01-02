@@ -38,6 +38,8 @@ MOCKS=(
     "contracts/user_http_helper.go|mocks/user_http_helper.go"
     "contracts/user_controller.go|mocks/user_controller.go"
     "contracts/user_picture_controller.go|mocks/user_picture_controller.go"
+    "contracts/post_publisher_job.go|mocks/post_publisher_job.go"
+    "contracts/post_publisher_worker.go|mocks/post_publisher_worker.go"
     "contracts/post_entity_factory.go|mocks/post_entity_factory.go"
     "contracts/post_event_factory.go|mocks/post_event_factory.go"
     "contracts/post_author_event_factory.go|mocks/post_author_event_factory.go"

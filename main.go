@@ -15,11 +15,13 @@ import (
 	"github.com/emelnychenko/go-press/paginators"
 	"github.com/emelnychenko/go-press/parameters"
 	"github.com/emelnychenko/go-press/providers"
+	"github.com/emelnychenko/go-press/jobs"
 	"github.com/emelnychenko/go-press/repositories"
 	"github.com/emelnychenko/go-press/resolvers"
 	"github.com/emelnychenko/go-press/services"
 	"github.com/emelnychenko/go-press/strategies"
 	"github.com/emelnychenko/go-press/validators"
+	"github.com/emelnychenko/go-press/workers"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
@@ -45,6 +47,13 @@ func ConnectDatabase() (db *gorm.DB, err error) {
 	return
 }
 
+func StartWorkers(postWorker contracts.PostPublisherWorker) {
+	go func() {
+		if err := postWorker.Start(); nil != err {
+			panic(err)
+		}
+	}()
+}
 
 func BuildContainer() (container *dig.Container) {
 	container = dig.New()
@@ -58,6 +67,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewPostHttpHelper)
 	_ = container.Provide(helpers.NewFileHttpHelper)
 	_ = container.Provide(paginators.NewDbPaginator)
+	_ = container.Provide(jobs.NewPostPublisherJob)
+	_ = container.Provide(workers.NewPostPublisherWorker)
 	_ = container.Provide(validators.NewModelValidator)
 	_ = container.Provide(validators.NewContentTypeValidator)
 	_ = container.Provide(validators.NewPostStatusValidator)
@@ -140,7 +151,11 @@ func main() {
 		panic(err)
 	}
 
-	err := container.Invoke(func(e *echo.Echo, db *gorm.DB) {
+	if err := container.Invoke(StartWorkers); err != nil {
+		panic(err)
+	}
+
+	err := container.Invoke(func(e *echo.Echo, db *gorm.DB, worker contracts.PostPublisherWorker) {
 		defer db.Close()
 		db.LogMode(true)
 		e.Logger.Fatal(e.Start(":1323"))

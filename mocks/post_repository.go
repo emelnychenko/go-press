@@ -50,6 +50,21 @@ func (mr *MockPostRepositoryMockRecorder) ListPosts(postPaginationQuery interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPosts", reflect.TypeOf((*MockPostRepository)(nil).ListPosts), postPaginationQuery)
 }
 
+// GetScheduledPosts mocks base method
+func (m *MockPostRepository) GetScheduledPosts() ([]*entities.PostEntity, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetScheduledPosts")
+	ret0, _ := ret[0].([]*entities.PostEntity)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetScheduledPosts indicates an expected call of GetScheduledPosts
+func (mr *MockPostRepositoryMockRecorder) GetScheduledPosts() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetScheduledPosts", reflect.TypeOf((*MockPostRepository)(nil).GetScheduledPosts))
+}
+
 // GetPost mocks base method
 func (m *MockPostRepository) GetPost(postId *models.PostId) (*entities.PostEntity, common.Error) {
 	m.ctrl.T.Helper()

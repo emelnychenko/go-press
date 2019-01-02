@@ -4,9 +4,11 @@ import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type (
@@ -45,6 +47,22 @@ func (r *postRepositoryImpl) ListPosts(
 	}
 
 	paginationResult = &models.PaginationResult{Total: paginationTotal, Data: postEntities}
+	return
+}
+
+func (r *postRepositoryImpl) GetScheduledPosts() (postEntities []*entities.PostEntity, err common.Error) {
+	postEntities = []*entities.PostEntity{}
+
+	gormErr := r.db.Where("status = ?", enums.PostScheduledStatus).
+		Where("published < ?", time.Now().UTC().Format("2006-01-02 15:04:05")).
+		Order("published desc").
+		Limit(100).
+		Find(&postEntities).Error
+
+	if gormErr != nil {
+		err = common.NewSystemErrorFromBuiltin(gormErr)
+	}
+
 	return
 }
 

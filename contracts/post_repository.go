@@ -11,6 +11,7 @@ type (
 		ListPosts(
 			postPaginationQuery *models.PostPaginationQuery,
 		) (paginationResult *models.PaginationResult, err common.Error)
+		GetScheduledPosts() (postEntities []*entities.PostEntity, err common.Error)
 		GetPost(postId *models.PostId) (postEntity *entities.PostEntity, err common.Error)
 		SavePost(postEntity *entities.PostEntity) (err common.Error)
 		RemovePost(postEntity *entities.PostEntity) (err common.Error)

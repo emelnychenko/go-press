@@ -34,6 +34,10 @@ func (s *postServiceImpl) ListPosts(
 	return s.postRepository.ListPosts(postPaginationQuery)
 }
 
+func (s *postServiceImpl) GetScheduledPosts() (postEntities []*entities.PostEntity, err common.Error) {
+	return s.postRepository.GetScheduledPosts()
+}
+
 func (s *postServiceImpl) GetPost(postId *models.PostId) (*entities.PostEntity, common.Error) {
 	return s.postRepository.GetPost(postId)
 }

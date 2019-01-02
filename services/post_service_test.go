@@ -41,6 +41,18 @@ func TestPostService(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
+	t.Run("GetScheduledPosts", func(t *testing.T) {
+		var postEntities []*entities.PostEntity
+		postRepository := mocks.NewMockPostRepository(ctrl)
+		postRepository.EXPECT().GetScheduledPosts().Return(postEntities, nil)
+
+		postService := &postServiceImpl{postRepository: postRepository}
+		response, err := postService.GetScheduledPosts()
+
+		assert.Equal(t, postEntities, response)
+		assert.Nil(t, err)
+	})
+
 	t.Run("CreatePost", func(t *testing.T) {
 		postEntity := new(entities.PostEntity)
 		postEntityFactory := mocks.NewMockPostEntityFactory(ctrl)
