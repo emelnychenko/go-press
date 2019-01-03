@@ -9,10 +9,10 @@ type (
 	PollId = common.ModelId
 
 	Poll struct {
-		Id         *PollId    `json:"id" xml:"id"`
-		Title      string     `json:"title" xml:"title"`
-		Created    *time.Time `json:"created" xml:"created"`
-		Updated    *time.Time `json:"updated" xml:"updated"`
+		Id      *PollId    `json:"id" xml:"id"`
+		Title   string     `json:"title" xml:"title"`
+		Created *time.Time `json:"created" xml:"created"`
+		Updated *time.Time `json:"updated" xml:"updated"`
 	}
 
 	PollCreate struct {

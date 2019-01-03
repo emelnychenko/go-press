@@ -22,4 +22,3 @@ func NewCategoryHttpHelper() contracts.CategoryHttpHelper {
 func (*categoryHttpHelperImpl) ParseCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(CategoryIdParameterName))
 }
-

@@ -117,8 +117,8 @@ func TestTagApi(t *testing.T) {
 		tagApi := &tagApiImpl{
 			eventDispatcher: eventDispatcher,
 			tagEventFactory: tagEventFactory,
-			tagService: tagService,
-			tagAggregator: tagAggregator,
+			tagService:      tagService,
+			tagAggregator:   tagAggregator,
 		}
 		response, err := tagApi.CreateTag(data)
 
@@ -159,7 +159,7 @@ func TestTagApi(t *testing.T) {
 		tagApi := &tagApiImpl{
 			eventDispatcher: eventDispatcher,
 			tagEventFactory: tagEventFactory,
-			tagService: tagService,
+			tagService:      tagService,
 		}
 		assert.Nil(t, tagApi.UpdateTag(tagId, data))
 	})
@@ -213,7 +213,7 @@ func TestTagApi(t *testing.T) {
 		tagApi := &tagApiImpl{
 			eventDispatcher: eventDispatcher,
 			tagEventFactory: tagEventFactory,
-			tagService: tagService,
+			tagService:      tagService,
 		}
 		assert.Nil(t, tagApi.DeleteTag(tagId))
 	})

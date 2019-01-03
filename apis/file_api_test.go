@@ -109,10 +109,10 @@ func TestFileApi(t *testing.T) {
 		fileService := mocks.NewMockFileService(ctrl)
 		fileAggregator := mocks.NewMockFileAggregator(ctrl)
 		fileApi := &fileApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			fileEventFactory: fileEventFactory,
-			fileService: fileService,
-			fileAggregator: fileAggregator,
+			fileService:      fileService,
+			fileAggregator:   fileAggregator,
 		}
 
 		fileSource := bytes.NewBufferString("src")
@@ -203,9 +203,9 @@ func TestFileApi(t *testing.T) {
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			fileEventFactory: fileEventFactory,
-			fileService: fileService,
+			fileService:      fileService,
 		}
 		data := new(models.FileUpdate)
 
@@ -257,9 +257,9 @@ func TestFileApi(t *testing.T) {
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			fileEventFactory: fileEventFactory,
-			fileService: fileService,
+			fileService:      fileService,
 		}
 
 		fileService.EXPECT().GetFile(fileId).Return(fileEntity, nil)

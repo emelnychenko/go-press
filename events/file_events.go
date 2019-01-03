@@ -7,8 +7,8 @@ import (
 
 const (
 	FileUploadedEventName = "FileUploadedEvent"
-	FileUpdatedEventName = "FileUpdatedEvent"
-	FileDeletedEventName = "FileDeletedEvent"
+	FileUpdatedEventName  = "FileUpdatedEvent"
+	FileDeletedEventName  = "FileDeletedEvent"
 )
 
 type (

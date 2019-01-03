@@ -22,4 +22,3 @@ func NewBannerHttpHelper() contracts.BannerHttpHelper {
 func (*bannerHttpHelperImpl) ParseBannerId(httpContext contracts.HttpContext) (*models.BannerId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(BannerIdParameterName))
 }
-

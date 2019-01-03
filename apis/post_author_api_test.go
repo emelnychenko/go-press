@@ -115,9 +115,9 @@ func TestNewPostAuthorApi(t *testing.T) {
 		postAuthorService.EXPECT().ChangePostAuthor(postEntity, postAuthorEntity).Return(systemErr)
 
 		postAuthorApi := &postAuthorApiImpl{
-			postService:            postService,
-			userService:            userService,
-			postAuthorService:      postAuthorService,
+			postService:       postService,
+			userService:       userService,
+			postAuthorService: postAuthorService,
 		}
 
 		err := postAuthorApi.ChangePostAuthor(postId, postAuthorId)

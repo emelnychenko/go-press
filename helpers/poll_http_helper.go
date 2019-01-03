@@ -22,4 +22,3 @@ func NewPollHttpHelper() contracts.PollHttpHelper {
 func (*pollHttpHelperImpl) ParsePollId(httpContext contracts.HttpContext) (*models.PollId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(PollIdParameterName))
 }
-

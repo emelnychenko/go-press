@@ -154,7 +154,6 @@ func TestPostPictureController(t *testing.T) {
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
 		postHttpHelper.EXPECT().ParsePostId(httpContext).Return(postId, nil)
 
-
 		postPictureApi := mocks.NewMockPostPictureApi(ctrl)
 		postPictureApi.EXPECT().RemovePostPicture(postId).Return(systemErr)
 

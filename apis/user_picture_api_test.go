@@ -123,9 +123,9 @@ func TestNewUserPictureApi(t *testing.T) {
 		fileService.EXPECT().GetFile(userPictureId).Return(userPictureEntity, nil)
 
 		userPictureApi := &userPictureApiImpl{
-			contentTypeValidator:    contentTypeValidator,
-			userService:             userService,
-			fileService:             fileService,
+			contentTypeValidator: contentTypeValidator,
+			userService:          userService,
+			fileService:          fileService,
 		}
 
 		err := userPictureApi.ChangeUserPicture(userId, userPictureId)
@@ -153,10 +153,10 @@ func TestNewUserPictureApi(t *testing.T) {
 		userPictureService.EXPECT().ChangeUserPicture(userEntity, userPictureEntity).Return(systemErr)
 
 		userPictureApi := &userPictureApiImpl{
-			contentTypeValidator:    contentTypeValidator,
-			userService:             userService,
-			fileService:             fileService,
-			userPictureService:      userPictureService,
+			contentTypeValidator: contentTypeValidator,
+			userService:          userService,
+			fileService:          fileService,
+			userPictureService:   userPictureService,
 		}
 
 		err := userPictureApi.ChangeUserPicture(userId, userPictureId)
@@ -212,8 +212,8 @@ func TestNewUserPictureApi(t *testing.T) {
 		userPictureService.EXPECT().RemoveUserPicture(userEntity).Return(systemErr)
 
 		userPictureApi := &userPictureApiImpl{
-			userService:             userService,
-			userPictureService:      userPictureService,
+			userService:        userService,
+			userPictureService: userPictureService,
 		}
 
 		err := userPictureApi.RemoveUserPicture(userId)

@@ -154,7 +154,6 @@ func TestUserPictureController(t *testing.T) {
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
 		userHttpHelper.EXPECT().ParseUserId(httpContext).Return(userId, nil)
 
-
 		userPictureApi := mocks.NewMockUserPictureApi(ctrl)
 		userPictureApi.EXPECT().RemoveUserPicture(userId).Return(systemErr)
 

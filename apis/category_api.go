@@ -8,7 +8,7 @@ import (
 
 type (
 	categoryApiImpl struct {
-		eventDispatcher  contracts.EventDispatcher
+		eventDispatcher      contracts.EventDispatcher
 		categoryEventFactory contracts.CategoryEventFactory
 		categoryService      contracts.CategoryService
 		categoryAggregator   contracts.CategoryAggregator

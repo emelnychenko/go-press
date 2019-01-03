@@ -117,4 +117,3 @@ func (c *userControllerImpl) DeleteUser(httpContext contracts.HttpContext) (_ in
 	err = c.userApi.DeleteUser(userId)
 	return
 }
-

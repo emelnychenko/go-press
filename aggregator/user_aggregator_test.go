@@ -28,7 +28,7 @@ func TestUserAggregator(t *testing.T) {
 		userPictureId := new(models.FileId)
 		userPicture := new(models.File)
 		fileApi.EXPECT().GetFile(userPictureId).Return(userPicture, nil)
-		
+
 		user := new(models.User)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
 		userModelFactory.EXPECT().CreateUser().Return(user)

@@ -25,6 +25,3 @@ func (v *modelValidatorImpl) ValidateModel(model interface{}) (err common.Error)
 
 	return
 }
-
-
-

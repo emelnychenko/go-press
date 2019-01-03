@@ -40,7 +40,7 @@ func TestUserController(t *testing.T) {
 
 		userController := &userControllerImpl{
 			userModelFactory: userModelFactory,
-			userApi: userApi,
+			userApi:          userApi,
 		}
 		response, err := userController.ListUsers(httpContext)
 

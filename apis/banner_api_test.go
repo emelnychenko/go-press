@@ -115,10 +115,10 @@ func TestBannerApi(t *testing.T) {
 		bannerAggregator.EXPECT().AggregateBanner(bannerEntity).Return(banner)
 
 		bannerApi := &bannerApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:    eventDispatcher,
 			bannerEventFactory: bannerEventFactory,
-			bannerService: bannerService,
-			bannerAggregator: bannerAggregator,
+			bannerService:      bannerService,
+			bannerAggregator:   bannerAggregator,
 		}
 		response, err := bannerApi.CreateBanner(data)
 
@@ -157,9 +157,9 @@ func TestBannerApi(t *testing.T) {
 		bannerService.EXPECT().UpdateBanner(bannerEntity, data).Return(nil)
 
 		bannerApi := &bannerApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:    eventDispatcher,
 			bannerEventFactory: bannerEventFactory,
-			bannerService: bannerService,
+			bannerService:      bannerService,
 		}
 		assert.Nil(t, bannerApi.UpdateBanner(bannerId, data))
 	})
@@ -211,9 +211,9 @@ func TestBannerApi(t *testing.T) {
 		bannerService.EXPECT().DeleteBanner(bannerEntity).Return(nil)
 
 		bannerApi := &bannerApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:    eventDispatcher,
 			bannerEventFactory: bannerEventFactory,
-			bannerService: bannerService,
+			bannerService:      bannerService,
 		}
 		assert.Nil(t, bannerApi.DeleteBanner(bannerId))
 	})

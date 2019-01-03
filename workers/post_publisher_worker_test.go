@@ -40,8 +40,8 @@ func TestPostPublisherWorker(t *testing.T) {
 		postPublisherJob.EXPECT().PublishPost(postEntity).Return(nil)
 
 		postPublisherWorker := &postPublisherWorkerImpl{
-			sleepingTime: time.Second,
-			postService: postService,
+			sleepingTime:     time.Second,
+			postService:      postService,
 			postPublisherJob: postPublisherJob,
 		}
 
@@ -65,7 +65,7 @@ func TestPostPublisherWorker(t *testing.T) {
 
 		postPublisherWorker := &postPublisherWorkerImpl{
 			sleepingTime: time.Second,
-			postService: postService,
+			postService:  postService,
 		}
 
 		err := postPublisherWorker.Start()
@@ -85,8 +85,8 @@ func TestPostPublisherWorker(t *testing.T) {
 		postPublisherJob.EXPECT().PublishPost(postEntity).Return(systemErr)
 
 		postPublisherWorker := &postPublisherWorkerImpl{
-			sleepingTime: time.Second,
-			postService: postService,
+			sleepingTime:     time.Second,
+			postService:      postService,
 			postPublisherJob: postPublisherJob,
 		}
 

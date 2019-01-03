@@ -115,10 +115,10 @@ func TestCommentApi(t *testing.T) {
 		commentAggregator.EXPECT().AggregateComment(commentEntity).Return(comment)
 
 		commentApi := &commentApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:     eventDispatcher,
 			commentEventFactory: commentEventFactory,
-			commentService: commentService,
-			commentAggregator: commentAggregator,
+			commentService:      commentService,
+			commentAggregator:   commentAggregator,
 		}
 		response, err := commentApi.CreateComment(data)
 
@@ -157,9 +157,9 @@ func TestCommentApi(t *testing.T) {
 		commentService.EXPECT().UpdateComment(commentEntity, data).Return(nil)
 
 		commentApi := &commentApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:     eventDispatcher,
 			commentEventFactory: commentEventFactory,
-			commentService: commentService,
+			commentService:      commentService,
 		}
 		assert.Nil(t, commentApi.UpdateComment(commentId, data))
 	})
@@ -211,9 +211,9 @@ func TestCommentApi(t *testing.T) {
 		commentService.EXPECT().DeleteComment(commentEntity).Return(nil)
 
 		commentApi := &commentApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:     eventDispatcher,
 			commentEventFactory: commentEventFactory,
-			commentService: commentService,
+			commentService:      commentService,
 		}
 		assert.Nil(t, commentApi.DeleteComment(commentId))
 	})

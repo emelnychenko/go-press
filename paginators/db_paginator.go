@@ -22,7 +22,7 @@ func (*dbPaginatorImpl) Paginate(
 	paginationData interface{},
 	paginationTotal *int,
 ) (err common.Error) {
-	countRecords := func (db *gorm.DB, model interface{}, err chan common.Error, paginationTotal *int) {
+	countRecords := func(db *gorm.DB, model interface{}, err chan common.Error, paginationTotal *int) {
 		if gormErr := db.Model(model).Count(paginationTotal).Error; nil != gormErr {
 			err <- common.NewSystemErrorFromBuiltin(gormErr)
 			return

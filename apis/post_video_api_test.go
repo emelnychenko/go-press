@@ -125,9 +125,9 @@ func TestNewPostVideoApi(t *testing.T) {
 		fileService.EXPECT().GetFile(postVideoId).Return(postVideoEntity, nil)
 
 		postVideoApi := &postVideoApiImpl{
-			contentTypeValidator:  contentTypeValidator,
-			postService:           postService,
-			fileService:           fileService,
+			contentTypeValidator: contentTypeValidator,
+			postService:          postService,
+			fileService:          fileService,
 		}
 
 		err := postVideoApi.ChangePostVideo(postId, postVideoId)

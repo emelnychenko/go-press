@@ -115,10 +115,10 @@ func TestPollApi(t *testing.T) {
 		pollAggregator.EXPECT().AggregatePoll(pollEntity).Return(poll)
 
 		pollApi := &pollApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			pollEventFactory: pollEventFactory,
-			pollService: pollService,
-			pollAggregator: pollAggregator,
+			pollService:      pollService,
+			pollAggregator:   pollAggregator,
 		}
 		response, err := pollApi.CreatePoll(data)
 
@@ -157,9 +157,9 @@ func TestPollApi(t *testing.T) {
 		pollService.EXPECT().UpdatePoll(pollEntity, data).Return(nil)
 
 		pollApi := &pollApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			pollEventFactory: pollEventFactory,
-			pollService: pollService,
+			pollService:      pollService,
 		}
 		assert.Nil(t, pollApi.UpdatePoll(pollId, data))
 	})
@@ -211,9 +211,9 @@ func TestPollApi(t *testing.T) {
 		pollService.EXPECT().DeletePoll(pollEntity).Return(nil)
 
 		pollApi := &pollApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			pollEventFactory: pollEventFactory,
-			pollService: pollService,
+			pollService:      pollService,
 		}
 		assert.Nil(t, pollApi.DeletePoll(pollId))
 	})

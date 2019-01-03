@@ -76,8 +76,8 @@ func TestPostService(t *testing.T) {
 		}
 		postService := &postServiceImpl{
 			postEntityFactory: postEntityFactory,
-			postNormalizer: postNormalizer,
-			postRepository: postRepository,
+			postNormalizer:    postNormalizer,
+			postRepository:    postRepository,
 		}
 		response, err := postService.CreatePost(postAuthor, data)
 

@@ -34,6 +34,3 @@ func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePat
 	)
 	return
 }
-
-
-

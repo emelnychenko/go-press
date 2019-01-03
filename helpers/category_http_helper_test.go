@@ -11,7 +11,7 @@ import (
 func TestCategoryHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewCategoryHttpHelper", func(t *testing.T) {
 		_, isCategoryHttpHelper := NewCategoryHttpHelper().(*categoryHttpHelperImpl)
 		assert.True(t, isCategoryHttpHelper)

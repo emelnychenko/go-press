@@ -115,10 +115,10 @@ func TestCategoryApi(t *testing.T) {
 		categoryAggregator.EXPECT().AggregateCategory(categoryEntity).Return(category)
 
 		categoryApi := &categoryApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:      eventDispatcher,
 			categoryEventFactory: categoryEventFactory,
-			categoryService: categoryService,
-			categoryAggregator: categoryAggregator,
+			categoryService:      categoryService,
+			categoryAggregator:   categoryAggregator,
 		}
 		response, err := categoryApi.CreateCategory(data)
 
@@ -157,9 +157,9 @@ func TestCategoryApi(t *testing.T) {
 		categoryService.EXPECT().UpdateCategory(categoryEntity, data).Return(nil)
 
 		categoryApi := &categoryApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:      eventDispatcher,
 			categoryEventFactory: categoryEventFactory,
-			categoryService: categoryService,
+			categoryService:      categoryService,
 		}
 		assert.Nil(t, categoryApi.UpdateCategory(categoryId, data))
 	})
@@ -211,9 +211,9 @@ func TestCategoryApi(t *testing.T) {
 		categoryService.EXPECT().DeleteCategory(categoryEntity).Return(nil)
 
 		categoryApi := &categoryApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:      eventDispatcher,
 			categoryEventFactory: categoryEventFactory,
-			categoryService: categoryService,
+			categoryService:      categoryService,
 		}
 		assert.Nil(t, categoryApi.DeleteCategory(categoryId))
 	})

@@ -13,7 +13,7 @@ const (
 type (
 	UserPictureEvent struct {
 		*Event
-		userEntity *entities.UserEntity
+		userEntity  *entities.UserEntity
 		userPicture *entities.FileEntity
 	}
 )

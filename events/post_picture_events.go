@@ -13,7 +13,7 @@ const (
 type (
 	PostPictureEvent struct {
 		*Event
-		postEntity *entities.PostEntity
+		postEntity  *entities.PostEntity
 		postPicture *entities.FileEntity
 	}
 )

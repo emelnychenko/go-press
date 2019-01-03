@@ -46,7 +46,7 @@ func TestFileController(t *testing.T) {
 
 		fileController := &fileControllerImpl{
 			fileModelFactory: fileModelFactory,
-			fileApi: fileApi,
+			fileApi:          fileApi,
 		}
 		response, err := fileController.ListFiles(httpContext)
 

@@ -12,6 +12,6 @@ func TestPaginationModels(t *testing.T) {
 		paginationPage := 82
 
 		paginationQuery := &PaginationQuery{Limit: paginationLimit, Start: paginationStart, Page: paginationPage}
-		assert.Equal(t, (paginationPage - 1) * paginationLimit + paginationStart, paginationQuery.Offset())
+		assert.Equal(t, (paginationPage-1)*paginationLimit+paginationStart, paginationQuery.Offset())
 	})
 }

@@ -23,4 +23,3 @@ func TestUserErrors(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, err.Code())
 	})
 }
-

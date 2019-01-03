@@ -8,7 +8,7 @@ import (
 
 type (
 	channelApiImpl struct {
-		eventDispatcher  contracts.EventDispatcher
+		eventDispatcher     contracts.EventDispatcher
 		channelEventFactory contracts.ChannelEventFactory
 		channelService      contracts.ChannelService
 		channelAggregator   contracts.ChannelAggregator

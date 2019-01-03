@@ -136,7 +136,7 @@ func TestFileService(t *testing.T) {
 		fileService := &fileServiceImpl{
 			filePathStrategy:  filePathStrategy,
 			fileEntityFactory: fileEntityFactory,
-			storageProvider: storageProvider,
+			storageProvider:   storageProvider,
 		}
 		response, err := fileService.UploadFile(fileSource, data)
 

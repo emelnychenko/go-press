@@ -13,7 +13,7 @@ type (
 
 	errorImpl struct {
 		message string
-		code int
+		code    int
 	}
 )
 

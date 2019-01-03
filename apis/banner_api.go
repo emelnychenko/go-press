@@ -8,7 +8,7 @@ import (
 
 type (
 	bannerApiImpl struct {
-		eventDispatcher  contracts.EventDispatcher
+		eventDispatcher    contracts.EventDispatcher
 		bannerEventFactory contracts.BannerEventFactory
 		bannerService      contracts.BannerService
 		bannerAggregator   contracts.BannerAggregator

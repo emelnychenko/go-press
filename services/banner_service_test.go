@@ -48,7 +48,7 @@ func TestBannerService(t *testing.T) {
 
 		data := &models.BannerCreate{
 			Title: "0",
-			Key: "1",
+			Key:   "1",
 		}
 		bannerService := &bannerServiceImpl{
 			bannerEntityFactory: bannerEntityFactory,
@@ -82,7 +82,7 @@ func TestBannerService(t *testing.T) {
 
 		data := &models.BannerUpdate{
 			Title: "0",
-			Key: "1",
+			Key:   "1",
 		}
 		bannerService := &bannerServiceImpl{bannerRepository: bannerRepository}
 		assert.Nil(t, bannerService.UpdateBanner(bannerEntity, data))

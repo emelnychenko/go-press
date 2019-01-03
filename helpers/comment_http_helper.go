@@ -22,4 +22,3 @@ func NewCommentHttpHelper() contracts.CommentHttpHelper {
 func (*commentHttpHelperImpl) ParseCommentId(httpContext contracts.HttpContext) (*models.CommentId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(CommentIdParameterName))
 }
-

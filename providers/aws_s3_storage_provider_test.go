@@ -141,8 +141,8 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsSdkS3.EXPECT().DeleteObject(gomock.Any()).Return(nil, nil)
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
-			awsS3Parameters:         awsS3Parameters,
-			awsSdkS3:                awsSdkS3,
+			awsS3Parameters: awsS3Parameters,
+			awsSdkS3:        awsSdkS3,
 		}
 
 		fileEntity := new(entities.FileEntity)
@@ -157,8 +157,8 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsSdkS3.EXPECT().DeleteObject(gomock.Any()).Return(nil, errors.New(""))
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
-			awsS3Parameters:         awsS3Parameters,
-			awsSdkS3:                awsSdkS3,
+			awsS3Parameters: awsS3Parameters,
+			awsSdkS3:        awsSdkS3,
 		}
 
 		fileEntity := new(entities.FileEntity)

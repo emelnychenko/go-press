@@ -11,7 +11,7 @@ import (
 func TestUserEchoHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewUserEchoHelper", func(t *testing.T) {
 		_, isUserParamParser := NewUserEchoHelper().(*userEchoHelperImpl)
 		assert.True(t, isUserParamParser)

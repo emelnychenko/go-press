@@ -79,4 +79,3 @@ func TestPostStatusValidator(t *testing.T) {
 		assert.Nil(t, err)
 	})
 }
-

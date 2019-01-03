@@ -11,7 +11,7 @@ import (
 func TestBannerHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewBannerHttpHelper", func(t *testing.T) {
 		_, isBannerHttpHelper := NewBannerHttpHelper().(*bannerHttpHelperImpl)
 		assert.True(t, isBannerHttpHelper)

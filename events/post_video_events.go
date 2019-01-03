@@ -14,7 +14,7 @@ type (
 	PostVideoEvent struct {
 		*Event
 		postEntity *entities.PostEntity
-		postVideo *entities.FileEntity
+		postVideo  *entities.FileEntity
 	}
 )
 

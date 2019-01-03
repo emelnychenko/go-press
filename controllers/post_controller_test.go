@@ -47,7 +47,7 @@ func TestPostController(t *testing.T) {
 
 		postController := &postControllerImpl{
 			postModelFactory: postModelFactory,
-			postApi: postApi,
+			postApi:          postApi,
 		}
 		response, err := postController.ListPosts(httpContext)
 

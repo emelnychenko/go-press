@@ -8,7 +8,7 @@ import (
 
 type (
 	commentApiImpl struct {
-		eventDispatcher  contracts.EventDispatcher
+		eventDispatcher     contracts.EventDispatcher
 		commentEventFactory contracts.CommentEventFactory
 		commentService      contracts.CommentService
 		commentAggregator   contracts.CommentAggregator

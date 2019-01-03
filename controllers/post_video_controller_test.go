@@ -45,7 +45,7 @@ func TestPostVideoController(t *testing.T) {
 		postVideoController := &postVideoControllerImpl{
 			postHttpHelper: postHttpHelper,
 			fileHttpHelper: fileHttpHelper,
-			postVideoApi: postVideoApi,
+			postVideoApi:   postVideoApi,
 		}
 		response, err := postVideoController.ChangePostVideo(httpContext)
 
@@ -105,7 +105,7 @@ func TestPostVideoController(t *testing.T) {
 		postVideoController := &postVideoControllerImpl{
 			postHttpHelper: postHttpHelper,
 			fileHttpHelper: fileHttpHelper,
-			postVideoApi: postVideoApi,
+			postVideoApi:   postVideoApi,
 		}
 		_, err := postVideoController.ChangePostVideo(httpContext)
 
@@ -124,7 +124,7 @@ func TestPostVideoController(t *testing.T) {
 
 		postVideoController := &postVideoControllerImpl{
 			postHttpHelper: postHttpHelper,
-			postVideoApi: postVideoApi,
+			postVideoApi:   postVideoApi,
 		}
 		response, err := postVideoController.RemovePostVideo(httpContext)
 
@@ -154,13 +154,12 @@ func TestPostVideoController(t *testing.T) {
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
 		postHttpHelper.EXPECT().ParsePostId(httpContext).Return(postId, nil)
 
-
 		postVideoApi := mocks.NewMockPostVideoApi(ctrl)
 		postVideoApi.EXPECT().RemovePostVideo(postId).Return(systemErr)
 
 		postVideoController := &postVideoControllerImpl{
 			postHttpHelper: postHttpHelper,
-			postVideoApi: postVideoApi,
+			postVideoApi:   postVideoApi,
 		}
 		_, err := postVideoController.RemovePostVideo(httpContext)
 

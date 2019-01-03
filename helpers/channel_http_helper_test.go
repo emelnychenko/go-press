@@ -11,7 +11,7 @@ import (
 func TestChannelHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewChannelHttpHelper", func(t *testing.T) {
 		_, isChannelHttpHelper := NewChannelHttpHelper().(*channelHttpHelperImpl)
 		assert.True(t, isChannelHttpHelper)

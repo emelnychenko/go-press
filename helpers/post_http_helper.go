@@ -22,4 +22,3 @@ func NewPostHttpHelper() contracts.PostHttpHelper {
 func (*postHttpHelperImpl) ParsePostId(httpContext contracts.HttpContext) (*models.PostId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(PostIdParameterName))
 }
-

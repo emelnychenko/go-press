@@ -48,9 +48,9 @@ func TestPostPublisherJob(t *testing.T) {
 		eventDispatcher.EXPECT().Dispatch(postPublishedEvent)
 
 		postPublisherJob := &postPublisherJobImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postRepository: postRepository,
+			postRepository:   postRepository,
 		}
 
 		err := postPublisherJob.PublishPost(postEntity)

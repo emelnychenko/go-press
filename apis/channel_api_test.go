@@ -115,10 +115,10 @@ func TestChannelApi(t *testing.T) {
 		channelAggregator.EXPECT().AggregateChannel(channelEntity).Return(channel)
 
 		channelApi := &channelApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:     eventDispatcher,
 			channelEventFactory: channelEventFactory,
-			channelService: channelService,
-			channelAggregator: channelAggregator,
+			channelService:      channelService,
+			channelAggregator:   channelAggregator,
 		}
 		response, err := channelApi.CreateChannel(data)
 
@@ -157,9 +157,9 @@ func TestChannelApi(t *testing.T) {
 		channelService.EXPECT().UpdateChannel(channelEntity, data).Return(nil)
 
 		channelApi := &channelApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:     eventDispatcher,
 			channelEventFactory: channelEventFactory,
-			channelService: channelService,
+			channelService:      channelService,
 		}
 		assert.Nil(t, channelApi.UpdateChannel(channelId, data))
 	})
@@ -211,9 +211,9 @@ func TestChannelApi(t *testing.T) {
 		channelService.EXPECT().DeleteChannel(channelEntity).Return(nil)
 
 		channelApi := &channelApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:     eventDispatcher,
 			channelEventFactory: channelEventFactory,
-			channelService: channelService,
+			channelService:      channelService,
 		}
 		assert.Nil(t, channelApi.DeleteChannel(channelId))
 	})

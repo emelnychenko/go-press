@@ -8,7 +8,7 @@ import (
 type postVideoControllerImpl struct {
 	postHttpHelper contracts.PostHttpHelper
 	fileHttpHelper contracts.FileHttpHelper
-	postVideoApi contracts.PostVideoApi
+	postVideoApi   contracts.PostVideoApi
 }
 
 func NewPostVideoController(

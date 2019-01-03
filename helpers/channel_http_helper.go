@@ -22,4 +22,3 @@ func NewChannelHttpHelper() contracts.ChannelHttpHelper {
 func (*channelHttpHelperImpl) ParseChannelId(httpContext contracts.HttpContext) (*models.ChannelId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(ChannelIdParameterName))
 }
-

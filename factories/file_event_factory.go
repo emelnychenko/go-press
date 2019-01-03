@@ -26,4 +26,3 @@ func (*fileEventFactoryImpl) CreateFileUpdatedEvent(fileEntity *entities.FileEnt
 func (*fileEventFactoryImpl) CreateFileDeletedEvent(fileEntity *entities.FileEntity) contracts.FileEvent {
 	return events.NewFileDeletedEvent(fileEntity)
 }
-

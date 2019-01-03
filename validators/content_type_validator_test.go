@@ -66,4 +66,3 @@ func TestContentTypeValidator(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
-

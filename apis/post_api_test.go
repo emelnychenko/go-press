@@ -117,10 +117,10 @@ func TestPostApi(t *testing.T) {
 		postAggregator.EXPECT().AggregatePost(postEntity).Return(post)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
-			postAggregator: postAggregator,
+			postService:      postService,
+			postAggregator:   postAggregator,
 		}
 		response, err := postApi.CreatePost(postAuthor, data)
 
@@ -152,10 +152,10 @@ func TestPostApi(t *testing.T) {
 		postAggregator.EXPECT().AggregatePost(postEntity).Return(post)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
-			postAggregator: postAggregator,
+			postService:      postService,
+			postAggregator:   postAggregator,
 		}
 		response, err := postApi.CreatePost(postAuthor, data)
 
@@ -195,9 +195,9 @@ func TestPostApi(t *testing.T) {
 		postService.EXPECT().UpdatePost(postEntity, data).Return(nil)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
+			postService:      postService,
 		}
 		assert.Nil(t, postApi.UpdatePost(postId, data))
 	})
@@ -225,9 +225,9 @@ func TestPostApi(t *testing.T) {
 		}).Return(nil)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
+			postService:      postService,
 		}
 		assert.Nil(t, postApi.UpdatePost(postId, data))
 	})
@@ -255,9 +255,9 @@ func TestPostApi(t *testing.T) {
 		}).Return(nil)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
+			postService:      postService,
 		}
 		assert.Nil(t, postApi.UpdatePost(postId, data))
 	})
@@ -309,9 +309,9 @@ func TestPostApi(t *testing.T) {
 		postService.EXPECT().DeletePost(postEntity).Return(nil)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
+			postService:      postService,
 		}
 		assert.Nil(t, postApi.DeletePost(postId))
 	})
@@ -336,9 +336,9 @@ func TestPostApi(t *testing.T) {
 		postService.EXPECT().DeletePost(postEntity).Return(nil)
 
 		postApi := &postApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			postEventFactory: postEventFactory,
-			postService: postService,
+			postService:      postService,
 		}
 		assert.Nil(t, postApi.DeletePost(postId))
 	})

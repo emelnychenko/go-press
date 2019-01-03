@@ -79,7 +79,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("CreateUser:WithPassword", func(t *testing.T) {
-		password := "pass0";
+		password := "pass0"
 		hashedPassword := "<hash>pass0"
 		hasher := mocks.NewMockHasher(ctrl)
 		hasher.EXPECT().Make(password).Return(hashedPassword, nil)
@@ -133,7 +133,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("LookupUser", func(t *testing.T) {
-		userIdentity := "u_identity";
+		userIdentity := "u_identity"
 		userEntity := new(entities.UserEntity)
 		userRepository := mocks.NewMockUserRepository(ctrl)
 		userRepository.EXPECT().LookupUser(userIdentity).Return(userEntity, nil)
@@ -146,7 +146,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("ChallengeUser", func(t *testing.T) {
-		password := "pass0";
+		password := "pass0"
 		hashedPassword := "<hash>pass0"
 		hasher := mocks.NewMockHasher(ctrl)
 		hasher.EXPECT().Check(hashedPassword, password).Return(nil)
@@ -208,7 +208,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword", func(t *testing.T) {
-		password := "pass0";
+		password := "pass0"
 		hashedPassword := "<hash>pass0"
 		hasher := mocks.NewMockHasher(ctrl)
 		hasher.EXPECT().Make(password).Return(hashedPassword, nil)

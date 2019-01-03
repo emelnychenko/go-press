@@ -115,10 +115,10 @@ func TestUserApi(t *testing.T) {
 		userAggregator.EXPECT().AggregateUser(userEntity).Return(user)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
-			userAggregator: userAggregator,
+			userService:      userService,
+			userAggregator:   userAggregator,
 		}
 		response, err := userApi.CreateUser(data)
 
@@ -157,9 +157,9 @@ func TestUserApi(t *testing.T) {
 		userService.EXPECT().UpdateUser(userEntity, data).Return(nil)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
+			userService:      userService,
 		}
 		assert.Nil(t, userApi.UpdateUser(userId, data))
 	})
@@ -210,9 +210,9 @@ func TestUserApi(t *testing.T) {
 		userService.EXPECT().VerifyUser(userEntity).Return(nil)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
+			userService:      userService,
 		}
 		assert.Nil(t, userApi.VerifyUser(userId))
 	})
@@ -263,9 +263,9 @@ func TestUserApi(t *testing.T) {
 		userService.EXPECT().ChangeUserIdentity(userEntity, data).Return(nil)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
+			userService:      userService,
 		}
 		assert.Nil(t, userApi.ChangeUserIdentity(userId, data))
 	})
@@ -319,9 +319,9 @@ func TestUserApi(t *testing.T) {
 		userService.EXPECT().ChangeUserPassword(userEntity, data).Return(nil)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
+			userService:      userService,
 		}
 		assert.Nil(t, userApi.ChangeUserPassword(userId, data))
 	})
@@ -343,9 +343,9 @@ func TestUserApi(t *testing.T) {
 		userService.EXPECT().ChangeUserPassword(userEntity, data).Return(nil)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
+			userService:      userService,
 		}
 		assert.Nil(t, userApi.ChangeUserPassword(userId, data))
 	})
@@ -416,9 +416,9 @@ func TestUserApi(t *testing.T) {
 		userService.EXPECT().DeleteUser(userEntity).Return(nil)
 
 		userApi := &userApiImpl{
-			eventDispatcher: eventDispatcher,
+			eventDispatcher:  eventDispatcher,
 			userEventFactory: userEventFactory,
-			userService: userService,
+			userService:      userService,
 		}
 		assert.Nil(t, userApi.DeleteUser(userId))
 	})
@@ -447,7 +447,7 @@ func TestUserApi(t *testing.T) {
 		userApi := &userApiImpl{
 			userService: userService,
 		}
-		
+
 		err := userApi.DeleteUser(userId)
 		assert.Equal(t, systemErr, err)
 	})

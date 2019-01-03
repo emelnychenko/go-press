@@ -41,6 +41,3 @@ func (v *postStatusValidatorImpl) ValidatePostUpdate(data *models.PostUpdate) (e
 
 	return
 }
-
-
-

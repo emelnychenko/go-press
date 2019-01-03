@@ -11,7 +11,7 @@ import (
 func TestCommentHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewCommentHttpHelper", func(t *testing.T) {
 		_, isCommentHttpHelper := NewCommentHttpHelper().(*commentHttpHelperImpl)
 		assert.True(t, isCommentHttpHelper)

@@ -8,7 +8,7 @@ import (
 
 type (
 	tagApiImpl struct {
-		eventDispatcher  contracts.EventDispatcher
+		eventDispatcher contracts.EventDispatcher
 		tagEventFactory contracts.TagEventFactory
 		tagService      contracts.TagService
 		tagAggregator   contracts.TagAggregator

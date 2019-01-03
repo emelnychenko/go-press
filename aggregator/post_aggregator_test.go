@@ -46,8 +46,8 @@ func TestPostAggregator(t *testing.T) {
 		postEntity := &entities.PostEntity{PictureId: postPictureId, VideoId: postVideoId}
 		postAggregator := &postAggregatorImpl{
 			postModelFactory: postModelFactory,
-			subjectResolver: subjectResolver,
-			fileApi: fileApi,
+			subjectResolver:  subjectResolver,
+			fileApi:          fileApi,
 		}
 		response := postAggregator.AggregatePost(postEntity)
 		assert.Equal(t, post, response)

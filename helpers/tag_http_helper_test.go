@@ -11,7 +11,7 @@ import (
 func TestTagHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewTagHttpHelper", func(t *testing.T) {
 		_, isTagHttpHelper := NewTagHttpHelper().(*tagHttpHelperImpl)
 		assert.True(t, isTagHttpHelper)

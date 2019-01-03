@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	UserCreatedEventName = "UserCreatedEvent"
-	UserUpdatedEventName = "UserUpdatedEvent"
-	UserVerifiedEventName = "UserVerifiedEvent"
+	UserCreatedEventName         = "UserCreatedEvent"
+	UserUpdatedEventName         = "UserUpdatedEvent"
+	UserVerifiedEventName        = "UserVerifiedEvent"
 	UserIdentityChangedEventName = "UserIdentityChangedEvent"
 	UserPasswordChangedEventName = "UserPasswordChangedEvent"
-	UserDeletedEventName = "UserDeletedEvent"
+	UserDeletedEventName         = "UserDeletedEvent"
 )
 
 type (

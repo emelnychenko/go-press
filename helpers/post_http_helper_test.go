@@ -11,7 +11,7 @@ import (
 func TestPostHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	
+
 	t.Run("NewPostHttpHelper", func(t *testing.T) {
 		_, isPostHttpHelper := NewPostHttpHelper().(*postHttpHelperImpl)
 		assert.True(t, isPostHttpHelper)

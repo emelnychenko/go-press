@@ -7,10 +7,10 @@ import (
 )
 
 type postControllerImpl struct {
-	postHttpHelper         contracts.PostHttpHelper
-	postModelFactory       contracts.PostModelFactory
-	postStatusValidator    contracts.PostStatusValidator
-	postApi                contracts.PostApi
+	postHttpHelper      contracts.PostHttpHelper
+	postModelFactory    contracts.PostModelFactory
+	postStatusValidator contracts.PostStatusValidator
+	postApi             contracts.PostApi
 }
 
 func NewPostController(

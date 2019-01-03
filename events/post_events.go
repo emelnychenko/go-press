@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	PostCreatedEventName = "PostCreatedEvent"
-	PostUpdatedEventName = "PostUpdatedEvent"
-	PostDeletedEventName = "PostDeletedEvent"
+	PostCreatedEventName   = "PostCreatedEvent"
+	PostUpdatedEventName   = "PostUpdatedEvent"
+	PostDeletedEventName   = "PostDeletedEvent"
 	PostPublishedEventName = "PostPublishedEvent"
 	PostConcealedEventName = "PostConcealedEvent"
 )

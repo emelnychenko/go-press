@@ -22,4 +22,3 @@ func NewTagHttpHelper() contracts.TagHttpHelper {
 func (*tagHttpHelperImpl) ParseTagId(httpContext contracts.HttpContext) (*models.TagId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(TagIdParameterName))
 }
-
