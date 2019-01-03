@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func NewFileRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) (fileRepository contracts.FileRepository) {
+func NewFileRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contracts.FileRepository {
 	return &fileRepositoryImpl{db, dbPaginator}
 }
 
@@ -25,9 +25,9 @@ func (r *fileRepositoryImpl) ListFiles(
 ) (paginationResult *models.PaginationResult, err common.Error) {
 	paginationTotal, fileEntities := 0, make([]*entities.FileEntity, filePaginationQuery.Limit)
 	db := r.db.Model(&fileEntities).Order("created desc")
+	err = r.dbPaginator.Paginate(db, filePaginationQuery.PaginationQuery, &fileEntities, &paginationTotal)
 
-	if err = r.dbPaginator.Paginate(
-		db, filePaginationQuery.PaginationQuery, &fileEntities, &paginationTotal); nil != err {
+	if nil != err {
 		return
 	}
 

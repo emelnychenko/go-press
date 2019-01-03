@@ -18,7 +18,7 @@ type (
 	}
 )
 
-func NewPostRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) (postRepository contracts.PostRepository) {
+func NewPostRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contracts.PostRepository {
 	return &postRepositoryImpl{db, dbPaginator}
 }
 

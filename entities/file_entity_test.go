@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -9,7 +10,7 @@ func TestFileEntity(t *testing.T) {
 	t.Run("NewFileEntity", func(t *testing.T) {
 		fileEntity := NewFileEntity()
 
-		assert.NotNil(t, fileEntity.Id)
+		assert.IsType(t, new(models.FileId), fileEntity.Id)
 		assert.NotNil(t, fileEntity.Created)
 	})
 

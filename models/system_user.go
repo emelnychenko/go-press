@@ -8,7 +8,7 @@ import (
 
 type (
 	SystemUser struct {
-		Id *common.ModelId
+		Id *common.ModelId `json:"id" xml:"id"`
 	}
 )
 

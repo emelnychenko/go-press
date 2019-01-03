@@ -3,6 +3,7 @@ package entities
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,7 +12,7 @@ func TestPostEntity(t *testing.T) {
 	t.Run("NewPostEntity", func(t *testing.T) {
 		postEntity := NewPostEntity()
 
-		assert.NotNil(t, postEntity.Id)
+		assert.IsType(t, new(models.PostId), postEntity.Id)
 		assert.Equal(t, enums.PostDraftStatus, postEntity.Status)
 		assert.Equal(t, enums.PostPublicPrivacy, postEntity.Privacy)
 		assert.NotNil(t, postEntity.Created)

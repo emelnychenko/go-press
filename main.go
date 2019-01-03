@@ -11,11 +11,11 @@ import (
 	"github.com/emelnychenko/go-press/factories"
 	"github.com/emelnychenko/go-press/hasher"
 	"github.com/emelnychenko/go-press/helpers"
+	"github.com/emelnychenko/go-press/jobs"
 	"github.com/emelnychenko/go-press/normalizers"
 	"github.com/emelnychenko/go-press/paginators"
 	"github.com/emelnychenko/go-press/parameters"
 	"github.com/emelnychenko/go-press/providers"
-	"github.com/emelnychenko/go-press/jobs"
 	"github.com/emelnychenko/go-press/repositories"
 	"github.com/emelnychenko/go-press/resolvers"
 	"github.com/emelnychenko/go-press/services"
@@ -44,6 +44,12 @@ func ConnectDatabase() (db *gorm.DB, err error) {
 	db.AutoMigrate(new(entities.UserEntity))
 	db.AutoMigrate(new(entities.PostEntity))
 	db.AutoMigrate(new(entities.FileEntity))
+	db.AutoMigrate(new(entities.ChannelEntity))
+	db.AutoMigrate(new(entities.CategoryEntity))
+	db.AutoMigrate(new(entities.TagEntity))
+	db.AutoMigrate(new(entities.CommentEntity))
+	db.AutoMigrate(new(entities.BannerEntity))
+	db.AutoMigrate(new(entities.PollEntity))
 	return
 }
 
@@ -66,6 +72,12 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewUserEchoHelper)
 	_ = container.Provide(helpers.NewPostHttpHelper)
 	_ = container.Provide(helpers.NewFileHttpHelper)
+	_ = container.Provide(helpers.NewCommentHttpHelper)
+	_ = container.Provide(helpers.NewTagHttpHelper)
+	_ = container.Provide(helpers.NewCategoryHttpHelper)
+	_ = container.Provide(helpers.NewChannelHttpHelper)
+	_ = container.Provide(helpers.NewBannerHttpHelper)
+	_ = container.Provide(helpers.NewPollHttpHelper)
 	_ = container.Provide(paginators.NewDbPaginator)
 	_ = container.Provide(jobs.NewPostPublisherJob)
 	_ = container.Provide(workers.NewPostPublisherWorker)
@@ -91,6 +103,24 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(factories.NewFileEntityFactory)
 	_ = container.Provide(factories.NewFileEventFactory)
 	_ = container.Provide(factories.NewFileModelFactory)
+	_ = container.Provide(factories.NewChannelEntityFactory)
+	_ = container.Provide(factories.NewChannelModelFactory)
+	_ = container.Provide(factories.NewChannelEventFactory)
+	_ = container.Provide(factories.NewCategoryEntityFactory)
+	_ = container.Provide(factories.NewCategoryModelFactory)
+	_ = container.Provide(factories.NewCategoryEventFactory)
+	_ = container.Provide(factories.NewTagEntityFactory)
+	_ = container.Provide(factories.NewTagModelFactory)
+	_ = container.Provide(factories.NewTagEventFactory)
+	_ = container.Provide(factories.NewCommentEntityFactory)
+	_ = container.Provide(factories.NewCommentModelFactory)
+	_ = container.Provide(factories.NewCommentEventFactory)
+	_ = container.Provide(factories.NewBannerEntityFactory)
+	_ = container.Provide(factories.NewBannerModelFactory)
+	_ = container.Provide(factories.NewBannerEventFactory)
+	_ = container.Provide(factories.NewPollEntityFactory)
+	_ = container.Provide(factories.NewPollModelFactory)
+	_ = container.Provide(factories.NewPollEventFactory)
 	_ = container.Provide(providers.NewAwsS3StorageProvider)
 	_ = container.Provide(strategies.NewFilePathStrategy)
 	_ = container.Provide(normalizers.NewPostNormalizer)
@@ -98,6 +128,12 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(repositories.NewUserRepository)
 	_ = container.Provide(repositories.NewPostRepository)
 	_ = container.Provide(repositories.NewFileRepository)
+	_ = container.Provide(repositories.NewChannelRepository)
+	_ = container.Provide(repositories.NewCategoryRepository)
+	_ = container.Provide(repositories.NewTagRepository)
+	_ = container.Provide(repositories.NewCommentRepository)
+	_ = container.Provide(repositories.NewBannerRepository)
+	_ = container.Provide(repositories.NewPollRepository)
 	_ = container.Provide(services.NewUserService)
 	_ = container.Provide(services.NewUserPictureService)
 	_ = container.Provide(services.NewFileService)
@@ -105,9 +141,21 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(services.NewPostAuthorService)
 	_ = container.Provide(services.NewPostPictureService)
 	_ = container.Provide(services.NewPostVideoService)
+	_ = container.Provide(services.NewChannelService)
+	_ = container.Provide(services.NewCategoryService)
+	_ = container.Provide(services.NewTagService)
+	_ = container.Provide(services.NewCommentService)
+	_ = container.Provide(services.NewBannerService)
+	_ = container.Provide(services.NewPollService)
 	_ = container.Provide(aggregator.NewUserAggregator)
 	_ = container.Provide(aggregator.NewPostAggregator)
 	_ = container.Provide(aggregator.NewFileAggregator)
+	_ = container.Provide(aggregator.NewCommentAggregator)
+	_ = container.Provide(aggregator.NewCategoryAggregator)
+	_ = container.Provide(aggregator.NewTagAggregator)
+	_ = container.Provide(aggregator.NewChannelAggregator)
+	_ = container.Provide(aggregator.NewBannerAggregator)
+	_ = container.Provide(aggregator.NewPollAggregator)
 	_ = container.Provide(apis.NewUserApi)
 	_ = container.Provide(apis.NewUserPictureApi)
 	_ = container.Provide(apis.NewPostApi)
@@ -115,6 +163,12 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(apis.NewPostPictureApi)
 	_ = container.Provide(apis.NewPostVideoApi)
 	_ = container.Provide(apis.NewFileApi)
+	_ = container.Provide(apis.NewCommentApi)
+	_ = container.Provide(apis.NewCategoryApi)
+	_ = container.Provide(apis.NewTagApi)
+	_ = container.Provide(apis.NewChannelApi)
+	_ = container.Provide(apis.NewBannerApi)
+	_ = container.Provide(apis.NewPollApi)
 	_ = container.Provide(controllers.NewUserController)
 	_ = container.Provide(controllers.NewUserPictureController)
 	_ = container.Provide(controllers.NewPostController)
@@ -122,6 +176,12 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(controllers.NewPostPictureController)
 	_ = container.Provide(controllers.NewPostVideoController)
 	_ = container.Provide(controllers.NewFileController)
+	_ = container.Provide(controllers.NewCommentController)
+	_ = container.Provide(controllers.NewCategoryController)
+	_ = container.Provide(controllers.NewTagController)
+	_ = container.Provide(controllers.NewChannelController)
+	_ = container.Provide(controllers.NewBannerController)
+	_ = container.Provide(controllers.NewPollController)
 	return
 }
 
@@ -134,6 +194,12 @@ func BindRoutes(
 	postPictureController contracts.PostPictureController,
 	PostVideoController contracts.PostVideoController,
 	fileController contracts.FileController,
+	commentController contracts.CommentController,
+	categoryController contracts.CategoryController,
+	tagController contracts.TagController,
+	channelController contracts.ChannelController,
+	bannerController contracts.BannerController,
+	pollController contracts.PollController,
 ) {
 	controllers.BindUserRoutes(router, userController)
 	controllers.BindUserPictureRoutes(router, userPictureController)
@@ -142,6 +208,12 @@ func BindRoutes(
 	controllers.BindPostPictureRoutes(router, postPictureController)
 	controllers.BindPostVideoRoutes(router, PostVideoController)
 	controllers.BindFileRoutes(router, fileController)
+	controllers.BindCommentRoutes(router, commentController)
+	controllers.BindCategoryRoutes(router, categoryController)
+	controllers.BindTagRoutes(router, tagController)
+	controllers.BindChannelRoutes(router, channelController)
+	controllers.BindBannerRoutes(router, bannerController)
+	controllers.BindPollRoutes(router, pollController)
 }
 
 func main() {

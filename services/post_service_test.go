@@ -135,17 +135,6 @@ func TestPostService(t *testing.T) {
 		assert.NotNil(t, postEntity.Updated)
 	})
 
-	t.Run("ChangePostAuthor", func(t *testing.T) {
-		postEntity := new(entities.PostEntity)
-		postRepository := mocks.NewMockPostRepository(ctrl)
-		postRepository.EXPECT().SavePost(postEntity).Return(nil)
-
-		postAuthor := models.NewSystemUser()
-		postService := &postServiceImpl{postRepository: postRepository}
-
-		assert.Nil(t, postService.ChangePostAuthor(postEntity, postAuthor))
-	})
-
 	t.Run("DeletePost", func(t *testing.T) {
 		postEntity := new(entities.PostEntity)
 		postRepository := mocks.NewMockPostRepository(ctrl)

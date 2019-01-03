@@ -12,7 +12,7 @@ const (
 
 type (
 	FileEntity struct {
-		Id      *models.PostId `gorm:"primary_key;type:char(36);column:id"`
+		Id      *models.FileId `gorm:"primary_key;type:char(36);column:id"`
 		Name    string
 		Path    string
 		Size    int64

@@ -3,6 +3,7 @@ package entities
 import (
 	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,7 +12,7 @@ func TestUserEntity(t *testing.T) {
 	t.Run("NewUserEntity", func(t *testing.T) {
 		userEntity := NewUserEntity()
 
-		assert.NotNil(t, userEntity.Id)
+		assert.IsType(t, new(models.UserId), userEntity.Id)
 		assert.False(t, userEntity.Verified)
 		assert.NotNil(t, userEntity.Created)
 	})

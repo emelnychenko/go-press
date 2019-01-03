@@ -74,12 +74,6 @@ func (s *postServiceImpl) UpdatePost(postEntity *entities.PostEntity, data *mode
 	return s.postRepository.SavePost(postEntity)
 }
 
-func (s *postServiceImpl) ChangePostAuthor(postEntity *entities.PostEntity, postAuthor common.Subject) (err common.Error) {
-	postEntity.SetAuthor(postAuthor)
-
-	return s.postRepository.SavePost(postEntity)
-}
-
 func (s *postServiceImpl) DeletePost(postEntity *entities.PostEntity) common.Error {
 	return s.postRepository.RemovePost(postEntity)
 }

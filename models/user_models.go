@@ -7,6 +7,8 @@ import (
 )
 
 type (
+	UserId = common.ModelId
+
 	User struct {
 		Id        *UserId    `json:"id" xml:"id"`
 		FirstName string     `json:"firstName" xml:"firstName"`
