@@ -8,6 +8,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -67,8 +68,9 @@ func (*fileHttpHelperImpl) PrepareFileDestination(httpContext contracts.HttpCont
 		//	}
 		//}
 
+		contentLength := strconv.FormatInt(file.Size, 10)
 		response.Header().Set(echo.HeaderContentType, file.Type)
-		response.Header().Set(echo.HeaderContentLength, string(file.Size))
+		response.Header().Set(echo.HeaderContentLength, contentLength)
 		response.WriteHeader(http.StatusOK)
 		return response
 	}
