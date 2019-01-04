@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 )
 
@@ -76,6 +77,6 @@ func TestFileHttpHelper(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, responseWriter.Code)
 		assert.Equal(t, fileType, responseWriter.Header().Get(echo.HeaderContentType))
-		assert.Equal(t, string(fileSize), responseWriter.Header().Get(echo.HeaderContentLength))
+		assert.Equal(t, strconv.FormatInt(fileSize, 10), responseWriter.Header().Get(echo.HeaderContentLength))
 	})
 }
