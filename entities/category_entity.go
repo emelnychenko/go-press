@@ -15,8 +15,8 @@ type (
 		Id               *models.CategoryId `gorm:"primary_key;type:char(36);column:id"`
 		Name             string
 		ParentCategoryId *models.CategoryId `gorm:"type:char(36)"`
-		Left 			 int
-		Right 			 int
+		Left             int
+		Right            int
 		Created          *time.Time
 		Updated          *time.Time
 	}
@@ -27,7 +27,7 @@ type (
 
 	CategoryEntityTreeBranch struct {
 		CategoryEntity *CategoryEntity
-		Children []*CategoryEntityTreeBranch
+		Children       []*CategoryEntityTreeBranch
 	}
 
 	CategoryEntityNestedSet struct {
@@ -36,8 +36,8 @@ type (
 
 	CategoryEntityNestedSetNode struct {
 		CategoryEntity *CategoryEntity
-		Left int
-		Right int
+		Left           int
+		Right          int
 	}
 )
 

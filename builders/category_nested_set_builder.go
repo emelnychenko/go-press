@@ -37,7 +37,7 @@ func (b *categoryNestedSetBuilderImpl) BuildCategoryEntityNestedSetFromTree(
 		categoryEntityNestedSetNodes = append(
 			categoryEntityNestedSetNodes, categoryEntityNestedSetNodesFromTreeBranch...)
 
-		leftCursor = leftCursor + len(categoryEntityNestedSetNodesFromTreeBranch) * 2
+		leftCursor = leftCursor + len(categoryEntityNestedSetNodesFromTreeBranch)*2
 	}
 
 	categoryEntityNestedSet = &entities.CategoryEntityNestedSet{Nodes: categoryEntityNestedSetNodes}
@@ -57,7 +57,7 @@ func (b *categoryNestedSetBuilderImpl) buildCategoryEntityNestedSetNodesFromTree
 		categoryEntityNestedSetNodesFromTreeBranch := b.buildCategoryEntityNestedSetNodesFromTreeBranch(
 			categoryEntityTreeBranch, leftCursor)
 
-		leftCursor = leftCursor + len(categoryEntityNestedSetNodesFromTreeBranch) * 2
+		leftCursor = leftCursor + len(categoryEntityNestedSetNodesFromTreeBranch)*2
 		categoryEntityNestedSetNodes = append(categoryEntityNestedSetNodes, categoryEntityNestedSetNodesFromTreeBranch...)
 	}
 

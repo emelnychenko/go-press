@@ -21,7 +21,7 @@ func TestCategoryNestedSetBuilder(t *testing.T) {
 		assert.True(t, isCategoryNestedSetBuilder)
 		assert.Equal(t, categoryTreeBuilder, categoryNestedSetBuilder.categoryTreeBuilder)
 	})
-	
+
 	t.Run("BuildCategoryEntityNestedSet", func(t *testing.T) {
 		categoryEntityRoot0 := &entities.CategoryEntity{Id: common.NewModelId()}
 		categoryEntityRoot0Node0 := &entities.CategoryEntity{

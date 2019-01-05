@@ -43,7 +43,7 @@ func (a *categoryAggregatorImpl) aggregateCategoryTreeBranch(
 	categoryTree.Category = category
 
 	var childCategories []*models.CategoryTree
-	for _, categoryEntityTreeBranchChild := range categoryEntityTreeBranch.Children  {
+	for _, categoryEntityTreeBranchChild := range categoryEntityTreeBranch.Children {
 		childCategory := a.aggregateCategoryTreeBranch(categoryEntityTreeBranchChild)
 		childCategories = append(childCategories, childCategory)
 	}

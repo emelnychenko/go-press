@@ -13,7 +13,7 @@ func TestCategoryTreeBuilder(t *testing.T) {
 		_, isCategoryTreeBuilder := NewCategoryTreeBuilder().(*categoryTreeBuilderImpl)
 		assert.True(t, isCategoryTreeBuilder)
 	})
-	
+
 	t.Run("BuildCategoryEntityTree", func(t *testing.T) {
 		categoryEntityRoot0 := &entities.CategoryEntity{Id: common.NewModelId()}
 		categoryEntityRoot0Node0 := &entities.CategoryEntity{
