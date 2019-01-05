@@ -91,6 +91,20 @@ func TestCategoryController(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("GetCategoriesTree", func(t *testing.T) {
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		var categoriesTree []*models.CategoryTree
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().GetCategoriesTree().Return(categoriesTree, nil)
+
+		categoryController := &categoryControllerImpl{categoryApi: categoryApi}
+		response, err := categoryController.GetCategoriesTree(httpContext)
+
+		assert.Equal(t, categoriesTree, response)
+		assert.Nil(t, err)
+	})
+
 	t.Run("GetCategory", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
@@ -136,6 +150,56 @@ func TestCategoryController(t *testing.T) {
 
 		categoryController := &categoryControllerImpl{categoryHttpHelper: categoryHttpHelper, categoryApi: categoryApi}
 		response, err := categoryController.GetCategory(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("GetCategoryTree", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		var categoryTree *models.CategoryTree
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().GetCategoryTree(categoryId).Return(categoryTree, nil)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+
+		categoryController := &categoryControllerImpl{categoryHttpHelper: categoryHttpHelper, categoryApi: categoryApi}
+		response, err := categoryController.GetCategoryTree(httpContext)
+
+		assert.Equal(t, categoryTree, response)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryTree:ParserError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(nil, systemErr)
+
+		categoryController := &categoryControllerImpl{categoryHttpHelper: categoryHttpHelper}
+		response, err := categoryController.GetCategoryTree(httpContext)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("GetCategoryTree:ApiError", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().GetCategoryTree(categoryId).Return(nil, systemErr)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+
+		categoryController := &categoryControllerImpl{categoryHttpHelper: categoryHttpHelper, categoryApi: categoryApi}
+		response, err := categoryController.GetCategoryTree(httpContext)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

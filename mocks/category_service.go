@@ -50,6 +50,21 @@ func (mr *MockCategoryServiceMockRecorder) ListCategories(categoryPaginationQuer
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCategories", reflect.TypeOf((*MockCategoryService)(nil).ListCategories), categoryPaginationQuery)
 }
 
+// GetCategoriesTree mocks base method
+func (m *MockCategoryService) GetCategoriesTree() (*entities.CategoryEntityTree, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoriesTree")
+	ret0, _ := ret[0].(*entities.CategoryEntityTree)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoriesTree indicates an expected call of GetCategoriesTree
+func (mr *MockCategoryServiceMockRecorder) GetCategoriesTree() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoriesTree", reflect.TypeOf((*MockCategoryService)(nil).GetCategoriesTree))
+}
+
 // GetCategory mocks base method
 func (m *MockCategoryService) GetCategory(categoryId *models.CategoryId) (*entities.CategoryEntity, common.Error) {
 	m.ctrl.T.Helper()
@@ -63,6 +78,21 @@ func (m *MockCategoryService) GetCategory(categoryId *models.CategoryId) (*entit
 func (mr *MockCategoryServiceMockRecorder) GetCategory(categoryId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategory", reflect.TypeOf((*MockCategoryService)(nil).GetCategory), categoryId)
+}
+
+// GetCategoryTree mocks base method
+func (m *MockCategoryService) GetCategoryTree(categoryId *models.CategoryId) (*entities.CategoryEntityTree, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoryTree", categoryId)
+	ret0, _ := ret[0].(*entities.CategoryEntityTree)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoryTree indicates an expected call of GetCategoryTree
+func (mr *MockCategoryServiceMockRecorder) GetCategoryTree(categoryId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoryTree", reflect.TypeOf((*MockCategoryService)(nil).GetCategoryTree), categoryId)
 }
 
 // CreateCategory mocks base method

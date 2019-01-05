@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -26,8 +26,8 @@ func (a *tagAggregatorImpl) AggregateTag(tagEntity *entities.TagEntity) (tag *mo
 func (a *tagAggregatorImpl) AggregateTags(tagEntities []*entities.TagEntity) (tags []*models.Tag) {
 	tags = make([]*models.Tag, len(tagEntities))
 
-	for k, postEntity := range tagEntities {
-		tags[k] = a.AggregateTag(postEntity)
+	for k, tagEntity := range tagEntities {
+		tags[k] = a.AggregateTag(tagEntity)
 	}
 
 	return

@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -26,8 +26,8 @@ func (a *pollAggregatorImpl) AggregatePoll(pollEntity *entities.PollEntity) (pol
 func (a *pollAggregatorImpl) AggregatePolls(pollEntities []*entities.PollEntity) (polls []*models.Poll) {
 	polls = make([]*models.Poll, len(pollEntities))
 
-	for k, postEntity := range pollEntities {
-		polls[k] = a.AggregatePoll(postEntity)
+	for k, pollEntity := range pollEntities {
+		polls[k] = a.AggregatePoll(pollEntity)
 	}
 
 	return

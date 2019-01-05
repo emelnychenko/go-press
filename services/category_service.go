@@ -15,6 +15,7 @@ type (
 	}
 )
 
+//NewCategoryService
 func NewCategoryService(
 	categoryEntityFactory contracts.CategoryEntityFactory,
 	categoryRepository contracts.CategoryRepository,
@@ -25,16 +26,29 @@ func NewCategoryService(
 	}
 }
 
+//ListCategories
 func (s *categoryServiceImpl) ListCategories(
 	categoryPaginationQuery *models.CategoryPaginationQuery,
 ) (*models.PaginationResult, common.Error) {
 	return s.categoryRepository.ListCategories(categoryPaginationQuery)
 }
 
+//GetCategoriesTree
+func (s *categoryServiceImpl) GetCategoriesTree() (*entities.CategoryEntityTree, common.Error) {
+	return s.categoryRepository.GetCategoriesTree()
+}
+
+//GetCategory
 func (s *categoryServiceImpl) GetCategory(categoryId *models.CategoryId) (*entities.CategoryEntity, common.Error) {
 	return s.categoryRepository.GetCategory(categoryId)
 }
 
+//GetCategoryTree
+func (s *categoryServiceImpl) GetCategoryTree(categoryId *models.CategoryId) (*entities.CategoryEntityTree, common.Error) {
+	return s.categoryRepository.GetCategoryTree(categoryId)
+}
+
+//CreateCategory
 func (s *categoryServiceImpl) CreateCategory(data *models.CategoryCreate) (
 	categoryEntity *entities.CategoryEntity, err common.Error,
 ) {
@@ -45,6 +59,7 @@ func (s *categoryServiceImpl) CreateCategory(data *models.CategoryCreate) (
 	return
 }
 
+//UpdateCategory
 func (s *categoryServiceImpl) UpdateCategory(
 	categoryEntity *entities.CategoryEntity, data *models.CategoryUpdate,
 ) common.Error {
@@ -56,6 +71,7 @@ func (s *categoryServiceImpl) UpdateCategory(
 	return s.categoryRepository.SaveCategory(categoryEntity)
 }
 
+//DeleteCategory
 func (s *categoryServiceImpl) DeleteCategory(categoryEntity *entities.CategoryEntity) common.Error {
 	return s.categoryRepository.RemoveCategory(categoryEntity)
 }

@@ -15,6 +15,7 @@ type (
 	}
 )
 
+//NewCategoryApi
 func NewCategoryApi(
 	eventDispatcher contracts.EventDispatcher,
 	categoryEventFactory contracts.CategoryEventFactory,
@@ -29,6 +30,7 @@ func NewCategoryApi(
 	}
 }
 
+//ListCategories
 func (a *categoryApiImpl) ListCategories(
 	categoryPaginationQuery *models.CategoryPaginationQuery,
 ) (paginationResult *models.PaginationResult, err common.Error) {
@@ -42,6 +44,19 @@ func (a *categoryApiImpl) ListCategories(
 	return
 }
 
+//GetCategoriesTree
+func (a *categoryApiImpl) GetCategoriesTree() (categoriesTree []*models.CategoryTree, err common.Error) {
+	categoriesEntityTree, err := a.categoryService.GetCategoriesTree()
+
+	if nil != err {
+		return
+	}
+
+	categoriesTree = a.categoryAggregator.AggregateCategoriesTree(categoriesEntityTree)
+	return
+}
+
+//GetCategory
 func (a *categoryApiImpl) GetCategory(categoryId *models.CategoryId) (category *models.Category, err common.Error) {
 	categoryEntity, err := a.categoryService.GetCategory(categoryId)
 
@@ -53,6 +68,21 @@ func (a *categoryApiImpl) GetCategory(categoryId *models.CategoryId) (category *
 	return
 }
 
+//GetCategoryTree
+func (a *categoryApiImpl) GetCategoryTree(categoryId *models.CategoryId) (
+	categoryTree *models.CategoryTree, err common.Error,
+) {
+	categoryEntityTree, err := a.categoryService.GetCategoryTree(categoryId)
+
+	if nil != err {
+		return
+	}
+
+	categoryTree = a.categoryAggregator.AggregateCategoryTree(categoryEntityTree)
+	return
+}
+
+//CreateCategory
 func (a *categoryApiImpl) CreateCategory(data *models.CategoryCreate) (category *models.Category, err common.Error) {
 	categoryEntity, err := a.categoryService.CreateCategory(data)
 
@@ -67,6 +97,7 @@ func (a *categoryApiImpl) CreateCategory(data *models.CategoryCreate) (category 
 	return
 }
 
+//UpdateCategory
 func (a *categoryApiImpl) UpdateCategory(categoryId *models.CategoryId, data *models.CategoryUpdate) (err common.Error) {
 	categoryService := a.categoryService
 	categoryEntity, err := categoryService.GetCategory(categoryId)
@@ -86,6 +117,7 @@ func (a *categoryApiImpl) UpdateCategory(categoryId *models.CategoryId, data *mo
 	return
 }
 
+//DeleteCategory
 func (a *categoryApiImpl) DeleteCategory(categoryId *models.CategoryId) (err common.Error) {
 	categoryService := a.categoryService
 	categoryEntity, err := categoryService.GetCategory(categoryId)

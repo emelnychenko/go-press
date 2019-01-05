@@ -83,6 +83,8 @@ MOCKS=(
     "contracts/comment_api.go|mocks/comment_api.go"
     "contracts/comment_http_helper.go|mocks/comment_http_helper.go"
     "contracts/comment_controller.go|mocks/comment_controller.go"
+    "contracts/category_tree_builder.go|mocks/category_tree_builder.go"
+    "contracts/category_nested_set_builder.go|mocks/category_nested_set_builder.go"
     "contracts/category_repository.go|mocks/category_repository.go"
     "contracts/category_entity_factory.go|mocks/category_entity_factory.go"
     "contracts/category_model_factory.go|mocks/category_model_factory.go"

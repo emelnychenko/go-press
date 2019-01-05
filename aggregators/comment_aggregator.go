@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -26,8 +26,8 @@ func (a *commentAggregatorImpl) AggregateComment(commentEntity *entities.Comment
 func (a *commentAggregatorImpl) AggregateComments(commentEntities []*entities.CommentEntity) (comments []*models.Comment) {
 	comments = make([]*models.Comment, len(commentEntities))
 
-	for k, postEntity := range commentEntities {
-		comments[k] = a.AggregateComment(postEntity)
+	for k, commentEntity := range commentEntities {
+		comments[k] = a.AggregateComment(commentEntity)
 	}
 
 	return

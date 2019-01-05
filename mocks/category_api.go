@@ -49,6 +49,21 @@ func (mr *MockCategoryApiMockRecorder) ListCategories(categoryPaginationQuery in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCategories", reflect.TypeOf((*MockCategoryApi)(nil).ListCategories), categoryPaginationQuery)
 }
 
+// GetCategoriesTree mocks base method
+func (m *MockCategoryApi) GetCategoriesTree() ([]*models.CategoryTree, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoriesTree")
+	ret0, _ := ret[0].([]*models.CategoryTree)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoriesTree indicates an expected call of GetCategoriesTree
+func (mr *MockCategoryApiMockRecorder) GetCategoriesTree() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoriesTree", reflect.TypeOf((*MockCategoryApi)(nil).GetCategoriesTree))
+}
+
 // GetCategory mocks base method
 func (m *MockCategoryApi) GetCategory(categoryId *models.CategoryId) (*models.Category, common.Error) {
 	m.ctrl.T.Helper()
@@ -62,6 +77,21 @@ func (m *MockCategoryApi) GetCategory(categoryId *models.CategoryId) (*models.Ca
 func (mr *MockCategoryApiMockRecorder) GetCategory(categoryId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategory", reflect.TypeOf((*MockCategoryApi)(nil).GetCategory), categoryId)
+}
+
+// GetCategoryTree mocks base method
+func (m *MockCategoryApi) GetCategoryTree(categoryId *models.CategoryId) (*models.CategoryTree, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoryTree", categoryId)
+	ret0, _ := ret[0].(*models.CategoryTree)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoryTree indicates an expected call of GetCategoryTree
+func (mr *MockCategoryApiMockRecorder) GetCategoryTree(categoryId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoryTree", reflect.TypeOf((*MockCategoryApi)(nil).GetCategoryTree), categoryId)
 }
 
 // CreateCategory mocks base method

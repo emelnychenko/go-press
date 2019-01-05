@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -27,8 +27,8 @@ func (a *bannerAggregatorImpl) AggregateBanner(bannerEntity *entities.BannerEnti
 func (a *bannerAggregatorImpl) AggregateBanners(bannerEntities []*entities.BannerEntity) (banners []*models.Banner) {
 	banners = make([]*models.Banner, len(bannerEntities))
 
-	for k, postEntity := range bannerEntities {
-		banners[k] = a.AggregateBanner(postEntity)
+	for k, bannerEntity := range bannerEntities {
+		banners[k] = a.AggregateBanner(bannerEntity)
 	}
 
 	return

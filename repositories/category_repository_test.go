@@ -21,8 +21,11 @@ func TestCategoryRepository(t *testing.T) {
 	mocket.Catcher.Logging = true
 
 	dbPaginator := mocks.NewMockDbPaginator(ctrl)
+	categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
 	db, _ := gorm.Open(mocket.DriverName, "")
-	categoryRepository, isCategoryRepository := NewCategoryRepository(db, dbPaginator).(*categoryRepositoryImpl)
+
+	categoryRepository, isCategoryRepository := NewCategoryRepository(
+		db, dbPaginator, categoryTreeBuilder).(*categoryRepositoryImpl)
 
 	assert.True(t, isCategoryRepository)
 	assert.Equal(t, db, categoryRepository.db)
@@ -62,6 +65,25 @@ func TestCategoryRepository(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("GetCategoriesTree", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		categoryEntityTree := new(entities.CategoryEntityTree)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(gomock.Any()).Return(categoryEntityTree)
+
+		result, err := categoryRepository.GetCategoriesTree()
+		assert.Equal(t, categoryEntityTree, result)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoriesTree:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery(`SELECT *`).WithError(gorm.ErrInvalidSQL)
+
+		result, err := categoryRepository.GetCategoriesTree()
+		assert.Nil(t, result)
+		assert.Error(t, err)
+	})
+
 	t.Run("GetCategory", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
 
@@ -84,6 +106,39 @@ func TestCategoryRepository(t *testing.T) {
 		categoryEntity, err := categoryRepository.GetCategory(categoryId)
 		assert.NotNil(t, categoryEntity)
 		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+	})
+
+	t.Run("GetCategoryTree", func(t *testing.T) {
+		mocket.Catcher.Reset()
+		mocket.Catcher.NewMock().WithQuery("SELECT *").WithReply(commonReply)
+		mocket.Catcher.NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		categoryEntityTree := new(entities.CategoryEntityTree)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(gomock.Any()).Return(categoryEntityTree)
+
+		result, err := categoryRepository.GetCategoryTree(categoryId)
+		assert.Equal(t, categoryEntityTree, result)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryTree:GetCategoryError", func(t *testing.T) {
+		mocket.Catcher.Reset()
+		mocket.Catcher.NewMock().WithQuery("SELECT *").WithError(gorm.ErrInvalidSQL)
+		mocket.Catcher.NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		result, err := categoryRepository.GetCategoryTree(categoryId)
+		assert.Nil(t, result)
+		assert.Error(t, err)
+	})
+
+	t.Run("GetCategoryTree:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset()
+		mocket.Catcher.NewMock().WithQuery(`SELECT * FROM "categories"  WHERE (id`).WithReply(commonReply)
+		mocket.Catcher.NewMock().WithQuery(`SELECT * FROM "categories"  WHERE (left`).WithError(gorm.ErrInvalidSQL)
+
+		result, err := categoryRepository.GetCategoryTree(categoryId)
+		assert.Nil(t, result)
+		assert.Error(t, err)
 	})
 
 	t.Run("SaveCategory", func(t *testing.T) {

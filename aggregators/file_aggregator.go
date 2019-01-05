@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -28,8 +28,8 @@ func (a *fileAggregatorImpl) AggregateFile(fileEntity *entities.FileEntity) (fil
 func (a *fileAggregatorImpl) AggregateFiles(fileEntities []*entities.FileEntity) (files []*models.File) {
 	files = make([]*models.File, len(fileEntities))
 
-	for k, postEntity := range fileEntities {
-		files[k] = a.AggregateFile(postEntity)
+	for k, fileEntity := range fileEntities {
+		files[k] = a.AggregateFile(fileEntity)
 	}
 
 	return

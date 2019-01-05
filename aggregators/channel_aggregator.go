@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -26,8 +26,8 @@ func (a *channelAggregatorImpl) AggregateChannel(channelEntity *entities.Channel
 func (a *channelAggregatorImpl) AggregateChannels(channelEntities []*entities.ChannelEntity) (channels []*models.Channel) {
 	channels = make([]*models.Channel, len(channelEntities))
 
-	for k, postEntity := range channelEntities {
-		channels[k] = a.AggregateChannel(postEntity)
+	for k, channelEntity := range channelEntities {
+		channels[k] = a.AggregateChannel(channelEntity)
 	}
 
 	return

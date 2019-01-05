@@ -23,6 +23,7 @@ func NewCategoryController(
 	}
 }
 
+//ListCategories
 func (c *categoryControllerImpl) ListCategories(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
 	categoryPaginationQuery := c.categoryModelFactory.CreateCategoryPaginationQuery()
 
@@ -38,7 +39,18 @@ func (c *categoryControllerImpl) ListCategories(httpContext contracts.HttpContex
 	return
 }
 
-func (c *categoryControllerImpl) GetCategory(httpContext contracts.HttpContext) (category interface{}, err common.Error) {
+//GetCategoriesTree
+func (c *categoryControllerImpl) GetCategoriesTree(httpContext contracts.HttpContext) (
+	categoriesTree interface{}, err common.Error,
+) {
+	categoriesTree, err = c.categoryApi.GetCategoriesTree()
+	return
+}
+
+//GetCategory
+func (c *categoryControllerImpl) GetCategory(httpContext contracts.HttpContext) (
+	category interface{}, err common.Error,
+) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
 	if err != nil {
@@ -49,6 +61,21 @@ func (c *categoryControllerImpl) GetCategory(httpContext contracts.HttpContext) 
 	return
 }
 
+//GetCategoryTree
+func (c *categoryControllerImpl) GetCategoryTree(httpContext contracts.HttpContext) (
+	categoryTree interface{}, err common.Error,
+) {
+	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
+
+	if err != nil {
+		return
+	}
+
+	categoryTree, err = c.categoryApi.GetCategoryTree(categoryId)
+	return
+}
+
+//CreateCategory
 func (c *categoryControllerImpl) CreateCategory(httpContext contracts.HttpContext) (category interface{}, err common.Error) {
 	data := c.categoryModelFactory.CreateCategoryCreate()
 
@@ -60,6 +87,7 @@ func (c *categoryControllerImpl) CreateCategory(httpContext contracts.HttpContex
 	return
 }
 
+//UpdateCategory
 func (c *categoryControllerImpl) UpdateCategory(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
@@ -77,6 +105,7 @@ func (c *categoryControllerImpl) UpdateCategory(httpContext contracts.HttpContex
 	return
 }
 
+//DeleteCategory
 func (c *categoryControllerImpl) DeleteCategory(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 

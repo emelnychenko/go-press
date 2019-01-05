@@ -37,6 +37,11 @@ func TestCategoryModelFactory(t *testing.T) {
 		assert.NotNil(t, categoryModelFactory.CreateCategory())
 	})
 
+	t.Run("CreateCategoryTree", func(t *testing.T) {
+		categoryModelFactory := new(categoryModelFactoryImpl)
+		assert.NotNil(t, categoryModelFactory.CreateCategoryTree())
+	})
+
 	t.Run("CreateCategoryCreate", func(t *testing.T) {
 		categoryModelFactory := new(categoryModelFactoryImpl)
 		assert.NotNil(t, categoryModelFactory.CreateCategoryCreate())

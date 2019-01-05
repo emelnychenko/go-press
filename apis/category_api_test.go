@@ -64,6 +64,37 @@ func TestCategoryApi(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("GetCategoriesTree", func(t *testing.T) {
+		categoryEntityTree := new(entities.CategoryEntityTree)
+		categoryTree := new(models.CategoryTree)
+		categoriesTree := []*models.CategoryTree{categoryTree}
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategoriesTree().Return(categoryEntityTree, nil)
+
+		categoryAggregator := mocks.NewMockCategoryAggregator(ctrl)
+		categoryAggregator.EXPECT().AggregateCategoriesTree(categoryEntityTree).Return(categoriesTree)
+
+		categoryApi := &categoryApiImpl{categoryService: categoryService, categoryAggregator: categoryAggregator}
+		response, err := categoryApi.GetCategoriesTree()
+
+		assert.Equal(t, categoriesTree, response)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoriesTree:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategoriesTree().Return(nil, systemErr)
+
+		categoryApi := &categoryApiImpl{categoryService: categoryService}
+		response, err := categoryApi.GetCategoriesTree()
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("GetCategory", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -91,6 +122,38 @@ func TestCategoryApi(t *testing.T) {
 
 		categoryApi := &categoryApiImpl{categoryService: categoryService}
 		response, err := categoryApi.GetCategory(categoryId)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("GetCategoryTree", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		categoryEntityTree := new(entities.CategoryEntityTree)
+		categoryTree := new(models.CategoryTree)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategoryTree(categoryId).Return(categoryEntityTree, nil)
+
+		categoryAggregator := mocks.NewMockCategoryAggregator(ctrl)
+		categoryAggregator.EXPECT().AggregateCategoryTree(categoryEntityTree).Return(categoryTree)
+
+		categoryApi := &categoryApiImpl{categoryService: categoryService, categoryAggregator: categoryAggregator}
+		response, err := categoryApi.GetCategoryTree(categoryId)
+
+		assert.Equal(t, categoryTree, response)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryTree:Error", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategoryTree(categoryId).Return(nil, systemErr)
+
+		categoryApi := &categoryApiImpl{categoryService: categoryService}
+		response, err := categoryApi.GetCategoryTree(categoryId)
 
 		assert.Nil(t, response)
 		assert.Equal(t, systemErr, err)

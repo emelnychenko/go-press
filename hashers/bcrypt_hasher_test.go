@@ -1,4 +1,4 @@
-package hasher
+package hashers
 
 import (
 	"github.com/stretchr/testify/assert"

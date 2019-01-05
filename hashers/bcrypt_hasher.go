@@ -1,4 +1,4 @@
-package hasher
+package hashers
 
 import (
 	"github.com/emelnychenko/go-press/common"

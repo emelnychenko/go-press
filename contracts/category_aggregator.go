@@ -8,7 +8,9 @@ import (
 type (
 	CategoryAggregator interface {
 		AggregateCategory(categoryEntity *entities.CategoryEntity) *models.Category
+		AggregateCategoryTree(categoryEntityTree *entities.CategoryEntityTree) *models.CategoryTree
 		AggregateCategories(categoryEntities []*entities.CategoryEntity) []*models.Category
+		AggregateCategoriesTree(categoryEntityTree *entities.CategoryEntityTree) []*models.CategoryTree
 		AggregatePaginationResult(entityPaginationResult *models.PaginationResult) *models.PaginationResult
 	}
 )

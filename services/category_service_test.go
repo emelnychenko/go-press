@@ -62,6 +62,18 @@ func TestCategoryService(t *testing.T) {
 		assert.Equal(t, data.Name, categoryEntity.Name)
 	})
 
+	t.Run("GetCategoriesTree", func(t *testing.T) {
+		categoryEntityTree := new(entities.CategoryEntityTree)
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoriesTree().Return(categoryEntityTree, nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		result, err := categoryService.GetCategoriesTree()
+
+		assert.Equal(t, categoryEntityTree, result)
+		assert.Nil(t, err)
+	})
+
 	t.Run("GetCategory", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -72,6 +84,19 @@ func TestCategoryService(t *testing.T) {
 		response, err := categoryService.GetCategory(categoryId)
 
 		assert.Equal(t, categoryEntity, response)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryTree", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		categoryEntityTree := new(entities.CategoryEntityTree)
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoryTree(categoryId).Return(categoryEntityTree, nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		result, err := categoryService.GetCategoryTree(categoryId)
+
+		assert.Equal(t, categoryEntityTree, result)
 		assert.Nil(t, err)
 	})
 

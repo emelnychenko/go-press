@@ -61,6 +61,20 @@ func (mr *MockCategoryModelFactoryMockRecorder) CreateCategory() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategory", reflect.TypeOf((*MockCategoryModelFactory)(nil).CreateCategory))
 }
 
+// CreateCategoryTree mocks base method
+func (m *MockCategoryModelFactory) CreateCategoryTree() *models.CategoryTree {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateCategoryTree")
+	ret0, _ := ret[0].(*models.CategoryTree)
+	return ret0
+}
+
+// CreateCategoryTree indicates an expected call of CreateCategoryTree
+func (mr *MockCategoryModelFactoryMockRecorder) CreateCategoryTree() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryTree", reflect.TypeOf((*MockCategoryModelFactory)(nil).CreateCategoryTree))
+}
+
 // CreateCategoryCreate mocks base method
 func (m *MockCategoryModelFactory) CreateCategoryCreate() *models.CategoryCreate {
 	m.ctrl.T.Helper()

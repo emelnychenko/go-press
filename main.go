@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/emelnychenko/go-press/aggregator"
+	"github.com/emelnychenko/go-press/aggregators"
 	"github.com/emelnychenko/go-press/apis"
+	"github.com/emelnychenko/go-press/builders"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/controllers"
 	"github.com/emelnychenko/go-press/dispatchers"
 	echoImpl "github.com/emelnychenko/go-press/echo"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/factories"
-	"github.com/emelnychenko/go-press/hasher"
+	"github.com/emelnychenko/go-press/hashers"
 	"github.com/emelnychenko/go-press/helpers"
 	"github.com/emelnychenko/go-press/jobs"
 	"github.com/emelnychenko/go-press/normalizers"
@@ -68,7 +69,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(ConnectDatabase)
 	_ = container.Provide(NewServer)
 	_ = container.Provide(echoImpl.NewRouter)
-	_ = container.Provide(hasher.NewBCryptHasher)
+	_ = container.Provide(hashers.NewBCryptHasher)
 	_ = container.Provide(helpers.NewUserEchoHelper)
 	_ = container.Provide(helpers.NewPostHttpHelper)
 	_ = container.Provide(helpers.NewFileHttpHelper)
@@ -125,6 +126,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(strategies.NewFilePathStrategy)
 	_ = container.Provide(normalizers.NewPostNormalizer)
 	_ = container.Provide(resolvers.NewSubjectResolver)
+	_ = container.Provide(builders.NewCategoryTreeBuilder)
+	_ = container.Provide(builders.NewCategoryNestedSetBuilder)
 	_ = container.Provide(repositories.NewUserRepository)
 	_ = container.Provide(repositories.NewPostRepository)
 	_ = container.Provide(repositories.NewFileRepository)
@@ -147,15 +150,15 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(services.NewCommentService)
 	_ = container.Provide(services.NewBannerService)
 	_ = container.Provide(services.NewPollService)
-	_ = container.Provide(aggregator.NewUserAggregator)
-	_ = container.Provide(aggregator.NewPostAggregator)
-	_ = container.Provide(aggregator.NewFileAggregator)
-	_ = container.Provide(aggregator.NewCommentAggregator)
-	_ = container.Provide(aggregator.NewCategoryAggregator)
-	_ = container.Provide(aggregator.NewTagAggregator)
-	_ = container.Provide(aggregator.NewChannelAggregator)
-	_ = container.Provide(aggregator.NewBannerAggregator)
-	_ = container.Provide(aggregator.NewPollAggregator)
+	_ = container.Provide(aggregators.NewUserAggregator)
+	_ = container.Provide(aggregators.NewPostAggregator)
+	_ = container.Provide(aggregators.NewFileAggregator)
+	_ = container.Provide(aggregators.NewCommentAggregator)
+	_ = container.Provide(aggregators.NewCategoryAggregator)
+	_ = container.Provide(aggregators.NewTagAggregator)
+	_ = container.Provide(aggregators.NewChannelAggregator)
+	_ = container.Provide(aggregators.NewBannerAggregator)
+	_ = container.Provide(aggregators.NewPollAggregator)
 	_ = container.Provide(apis.NewUserApi)
 	_ = container.Provide(apis.NewUserPictureApi)
 	_ = container.Provide(apis.NewPostApi)

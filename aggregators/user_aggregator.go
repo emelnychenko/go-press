@@ -1,4 +1,4 @@
-package aggregator
+package aggregators
 
 import (
 	"github.com/emelnychenko/go-press/contracts"
@@ -33,8 +33,8 @@ func (a *userAggregatorImpl) AggregateUser(userEntity *entities.UserEntity) *mod
 func (a *userAggregatorImpl) AggregateUsers(userEntities []*entities.UserEntity) []*models.User {
 	users := make([]*models.User, len(userEntities))
 
-	for k, v := range userEntities {
-		users[k] = a.AggregateUser(v)
+	for k, userEntity := range userEntities {
+		users[k] = a.AggregateUser(userEntity)
 	}
 
 	return users

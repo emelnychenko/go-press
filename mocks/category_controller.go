@@ -49,6 +49,21 @@ func (mr *MockCategoryControllerMockRecorder) ListCategories(httpContext interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCategories", reflect.TypeOf((*MockCategoryController)(nil).ListCategories), httpContext)
 }
 
+// GetCategoriesTree mocks base method
+func (m *MockCategoryController) GetCategoriesTree(httpContext contracts.HttpContext) (interface{}, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoriesTree", httpContext)
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoriesTree indicates an expected call of GetCategoriesTree
+func (mr *MockCategoryControllerMockRecorder) GetCategoriesTree(httpContext interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoriesTree", reflect.TypeOf((*MockCategoryController)(nil).GetCategoriesTree), httpContext)
+}
+
 // GetCategory mocks base method
 func (m *MockCategoryController) GetCategory(httpContext contracts.HttpContext) (interface{}, common.Error) {
 	m.ctrl.T.Helper()
@@ -62,6 +77,21 @@ func (m *MockCategoryController) GetCategory(httpContext contracts.HttpContext) 
 func (mr *MockCategoryControllerMockRecorder) GetCategory(httpContext interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategory", reflect.TypeOf((*MockCategoryController)(nil).GetCategory), httpContext)
+}
+
+// GetCategoryTree mocks base method
+func (m *MockCategoryController) GetCategoryTree(httpContext contracts.HttpContext) (interface{}, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoryTree", httpContext)
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoryTree indicates an expected call of GetCategoryTree
+func (mr *MockCategoryControllerMockRecorder) GetCategoryTree(httpContext interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoryTree", reflect.TypeOf((*MockCategoryController)(nil).GetCategoryTree), httpContext)
 }
 
 // CreateCategory mocks base method

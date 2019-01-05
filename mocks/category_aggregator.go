@@ -48,6 +48,20 @@ func (mr *MockCategoryAggregatorMockRecorder) AggregateCategory(categoryEntity i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateCategory", reflect.TypeOf((*MockCategoryAggregator)(nil).AggregateCategory), categoryEntity)
 }
 
+// AggregateCategoryTree mocks base method
+func (m *MockCategoryAggregator) AggregateCategoryTree(categoryEntityTree *entities.CategoryEntityTree) *models.CategoryTree {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AggregateCategoryTree", categoryEntityTree)
+	ret0, _ := ret[0].(*models.CategoryTree)
+	return ret0
+}
+
+// AggregateCategoryTree indicates an expected call of AggregateCategoryTree
+func (mr *MockCategoryAggregatorMockRecorder) AggregateCategoryTree(categoryEntityTree interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateCategoryTree", reflect.TypeOf((*MockCategoryAggregator)(nil).AggregateCategoryTree), categoryEntityTree)
+}
+
 // AggregateCategories mocks base method
 func (m *MockCategoryAggregator) AggregateCategories(categoryEntities []*entities.CategoryEntity) []*models.Category {
 	m.ctrl.T.Helper()
@@ -60,6 +74,20 @@ func (m *MockCategoryAggregator) AggregateCategories(categoryEntities []*entitie
 func (mr *MockCategoryAggregatorMockRecorder) AggregateCategories(categoryEntities interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateCategories", reflect.TypeOf((*MockCategoryAggregator)(nil).AggregateCategories), categoryEntities)
+}
+
+// AggregateCategoriesTree mocks base method
+func (m *MockCategoryAggregator) AggregateCategoriesTree(categoryEntityTree *entities.CategoryEntityTree) []*models.CategoryTree {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AggregateCategoriesTree", categoryEntityTree)
+	ret0, _ := ret[0].([]*models.CategoryTree)
+	return ret0
+}
+
+// AggregateCategoriesTree indicates an expected call of AggregateCategoriesTree
+func (mr *MockCategoryAggregatorMockRecorder) AggregateCategoriesTree(categoryEntityTree interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AggregateCategoriesTree", reflect.TypeOf((*MockCategoryAggregator)(nil).AggregateCategoriesTree), categoryEntityTree)
 }
 
 // AggregatePaginationResult mocks base method
