@@ -96,4 +96,79 @@ func TestTagService(t *testing.T) {
 		tagService := &tagServiceImpl{tagRepository: tagRepository}
 		assert.Nil(t, tagService.DeleteTag(tagEntity))
 	})
+
+	t.Run("GetTagXrefs", func(t *testing.T) {
+		tagEntity := new(entities.TagEntity)
+		var tagXrefEntities []*entities.TagXrefEntity
+
+		tagRepository := mocks.NewMockTagRepository(ctrl)
+		tagRepository.EXPECT().GetTagXrefs(tagEntity).Return(tagXrefEntities, nil)
+
+		tagService := &tagServiceImpl{tagRepository: tagRepository}
+		results, err := tagService.GetTagXrefs(tagEntity)
+
+		assert.Equal(t, tagXrefEntities, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetTagObjectXrefs", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		var tagXrefEntities []*entities.TagXrefEntity
+
+		tagRepository := mocks.NewMockTagRepository(ctrl)
+		tagRepository.EXPECT().GetTagObjectXrefs(postEntity).Return(tagXrefEntities, nil)
+
+		tagService := &tagServiceImpl{tagRepository: tagRepository}
+		results, err := tagService.GetTagObjectXrefs(postEntity)
+
+		assert.Equal(t, tagXrefEntities, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetTagXref", func(t *testing.T) {
+		tagEntity := new(entities.TagEntity)
+		postEntity := new(entities.PostEntity)
+		tagXrefEntity := new(entities.TagXrefEntity)
+
+		tagRepository := mocks.NewMockTagRepository(ctrl)
+		tagRepository.EXPECT().GetTagXref(tagEntity, postEntity).Return(tagXrefEntity, nil)
+
+		tagService := &tagServiceImpl{tagRepository: tagRepository}
+		result, err := tagService.GetTagXref(tagEntity, postEntity)
+
+		assert.Equal(t, tagXrefEntity, result)
+		assert.Nil(t, err)
+	})
+
+	t.Run("CreateTagXref", func(t *testing.T) {
+		tagEntity := new(entities.TagEntity)
+		postEntity := new(entities.PostEntity)
+		tagXrefEntity := new(entities.TagXrefEntity)
+
+		tagEntityFactory := mocks.NewMockTagEntityFactory(ctrl)
+		tagEntityFactory.EXPECT().CreateTagXrefEntity(tagEntity, postEntity).Return(tagXrefEntity)
+
+		tagRepository := mocks.NewMockTagRepository(ctrl)
+		tagRepository.EXPECT().SaveTagXref(tagXrefEntity).Return(nil)
+
+		tagService := &tagServiceImpl{
+			tagRepository: tagRepository, tagEntityFactory: tagEntityFactory,
+		}
+		result, err := tagService.CreateTagXref(tagEntity, postEntity)
+
+		assert.Equal(t, tagXrefEntity, result)
+		assert.Nil(t, err)
+	})
+
+	t.Run("DeleteTagXref", func(t *testing.T) {
+		tagXrefEntity := new(entities.TagXrefEntity)
+
+		tagRepository := mocks.NewMockTagRepository(ctrl)
+		tagRepository.EXPECT().RemoveTagXref(tagXrefEntity).Return(nil)
+
+		tagService := &tagServiceImpl{tagRepository: tagRepository}
+		err := tagService.DeleteTagXref(tagXrefEntity)
+
+		assert.Nil(t, err)
+	})
 }

@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	io "io"
@@ -37,26 +37,26 @@ func (m *MockFileService) EXPECT() *MockFileServiceMockRecorder {
 }
 
 // ListFiles mocks base method
-func (m *MockFileService) ListFiles(filePaginationQuery *models.FilePaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockFileService) ListFiles(arg0 *models.FilePaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListFiles", filePaginationQuery)
+	ret := m.ctrl.Call(m, "ListFiles", arg0)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
 // ListFiles indicates an expected call of ListFiles
-func (mr *MockFileServiceMockRecorder) ListFiles(filePaginationQuery interface{}) *gomock.Call {
+func (mr *MockFileServiceMockRecorder) ListFiles(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFiles", reflect.TypeOf((*MockFileService)(nil).ListFiles), filePaginationQuery)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFiles", reflect.TypeOf((*MockFileService)(nil).ListFiles), arg0)
 }
 
 // GetFile mocks base method
-func (m *MockFileService) GetFile(fileId *models.FileId) (*entities.FileEntity, common.Error) {
+func (m *MockFileService) GetFile(fileId *models.FileId) (*entities.FileEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFile", fileId)
 	ret0, _ := ret[0].(*entities.FileEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -67,11 +67,11 @@ func (mr *MockFileServiceMockRecorder) GetFile(fileId interface{}) *gomock.Call 
 }
 
 // UploadFile mocks base method
-func (m *MockFileService) UploadFile(fileSource io.Reader, data *models.FileUpload) (*entities.FileEntity, common.Error) {
+func (m *MockFileService) UploadFile(fileSource io.Reader, data *models.FileUpload) (*entities.FileEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadFile", fileSource, data)
 	ret0, _ := ret[0].(*entities.FileEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -82,10 +82,10 @@ func (mr *MockFileServiceMockRecorder) UploadFile(fileSource, data interface{}) 
 }
 
 // DownloadFile mocks base method
-func (m *MockFileService) DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) common.Error {
+func (m *MockFileService) DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownloadFile", fileEntity, fileDestination)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -96,10 +96,10 @@ func (mr *MockFileServiceMockRecorder) DownloadFile(fileEntity, fileDestination 
 }
 
 // UpdateFile mocks base method
-func (m *MockFileService) UpdateFile(fileEntity *entities.FileEntity, data *models.FileUpdate) common.Error {
+func (m *MockFileService) UpdateFile(fileEntity *entities.FileEntity, data *models.FileUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateFile", fileEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -110,10 +110,10 @@ func (mr *MockFileServiceMockRecorder) UpdateFile(fileEntity, data interface{}) 
 }
 
 // DeleteFile mocks base method
-func (m *MockFileService) DeleteFile(fileEntity *entities.FileEntity) common.Error {
+func (m *MockFileService) DeleteFile(fileEntity *entities.FileEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteFile", fileEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

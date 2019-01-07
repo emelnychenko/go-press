@@ -2,16 +2,14 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/models"
 )
 
-func NewUserNotFoundError(request string) common.Error {
+func NewUserNotFoundError(request string) Error {
 	message := fmt.Sprintf("The user was not found on request: %s", request)
-	return common.NewNotFoundError(message)
+	return NewNotFoundError(message)
 }
 
-func NewUserByIdNotFoundError(fileId *models.UserId) common.Error {
-	request := fmt.Sprintf("id = %s", fileId)
+func NewUserByIdNotFoundError(userId fmt.Stringer) Error {
+	request := fmt.Sprintf("id = %s", userId)
 	return NewUserNotFoundError(request)
 }

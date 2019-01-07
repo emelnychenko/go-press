@@ -1,11 +1,9 @@
 package contracts
 
-import (
-	"github.com/emelnychenko/go-press/common"
-)
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	CategoryEdgesBuilderJob interface {
-		BuildCategoriesEdges() (err common.Error)
+		BuildCategoriesEdges() (err errors.Error)
 	}
 )

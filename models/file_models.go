@@ -1,15 +1,14 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"time"
 )
 
 type (
-	FileId = common.ModelId
+	FileId = ModelId
 
 	File struct {
-		Id      *PostId    `json:"id" xml:"id"`
+		Id      *FileId    `json:"id" xml:"id"`
 		Name    string     `json:"name" xml:"name"`
 		Size    int64      `json:"size" xml:"size"`
 		Type    string     `json:"type" xml:"type"`

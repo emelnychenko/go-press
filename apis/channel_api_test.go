@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("ListChannels:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.ChannelPaginationQuery)
 
 		channelService := mocks.NewMockChannelService(ctrl)
@@ -83,7 +83,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("GetChannel:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		channelId := new(models.ChannelId)
 		channelService := mocks.NewMockChannelService(ctrl)
@@ -127,7 +127,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("CreateChannel:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.ChannelCreate)
 		channelService := mocks.NewMockChannelService(ctrl)
@@ -165,7 +165,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("UpdateChannel:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		channelId := new(models.ChannelId)
 		channelService := mocks.NewMockChannelService(ctrl)
@@ -177,7 +177,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("UpdateChannel:UpdateChannelError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		channelId := new(models.ChannelId)
 		channelEntity := new(entities.ChannelEntity)
@@ -219,7 +219,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("DeleteChannel:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		channelId := new(models.ChannelId)
 		channelService := mocks.NewMockChannelService(ctrl)
@@ -230,7 +230,7 @@ func TestChannelApi(t *testing.T) {
 	})
 
 	t.Run("DeleteChannel:DeleteChannelError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		channelId := new(models.ChannelId)
 		channelEntity := new(entities.ChannelEntity)
 

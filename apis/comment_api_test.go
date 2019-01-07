@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("ListComments:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.CommentPaginationQuery)
 
 		commentService := mocks.NewMockCommentService(ctrl)
@@ -83,7 +83,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("GetComment:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		commentId := new(models.CommentId)
 		commentService := mocks.NewMockCommentService(ctrl)
@@ -127,7 +127,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("CreateComment:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.CommentCreate)
 		commentService := mocks.NewMockCommentService(ctrl)
@@ -165,7 +165,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("UpdateComment:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		commentId := new(models.CommentId)
 		commentService := mocks.NewMockCommentService(ctrl)
@@ -177,7 +177,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("UpdateComment:UpdateCommentError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		commentId := new(models.CommentId)
 		commentEntity := new(entities.CommentEntity)
@@ -219,7 +219,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("DeleteComment:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		commentId := new(models.CommentId)
 		commentService := mocks.NewMockCommentService(ctrl)
@@ -230,7 +230,7 @@ func TestCommentApi(t *testing.T) {
 	})
 
 	t.Run("DeleteComment:DeleteCommentError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		commentId := new(models.CommentId)
 		commentEntity := new(entities.CommentEntity)
 

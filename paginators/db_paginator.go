@@ -1,8 +1,8 @@
 package paginators
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/jinzhu/gorm"
 )
@@ -21,17 +21,17 @@ func (*dbPaginatorImpl) Paginate(
 	paginationQuery *models.PaginationQuery,
 	paginationData interface{},
 	paginationTotal *int,
-) (err common.Error) {
-	countRecords := func(db *gorm.DB, model interface{}, err chan common.Error, paginationTotal *int) {
+) (err errors.Error) {
+	countRecords := func(db *gorm.DB, model interface{}, err chan errors.Error, paginationTotal *int) {
 		if gormErr := db.Model(model).Count(paginationTotal).Error; nil != gormErr {
-			err <- common.NewSystemErrorFromBuiltin(gormErr)
+			err <- errors.NewSystemErrorFromBuiltin(gormErr)
 			return
 		}
 
 		err <- nil
 	}
 
-	countErr := make(chan common.Error, 1)
+	countErr := make(chan errors.Error, 1)
 	go countRecords(db, paginationData, countErr, paginationTotal)
 
 	paginationOffset := paginationQuery.Offset()
@@ -45,7 +45,7 @@ func (*dbPaginatorImpl) Paginate(
 	}
 
 	if nil != selectErr {
-		err = common.NewSystemErrorFromBuiltin(selectErr)
+		err = errors.NewSystemErrorFromBuiltin(selectErr)
 		return
 	}
 	return

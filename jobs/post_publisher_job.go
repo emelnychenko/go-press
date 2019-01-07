@@ -1,10 +1,10 @@
 package jobs
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
@@ -27,7 +27,7 @@ func NewPostPublisherJob(
 	}
 }
 
-func (p *postPublisherJobImpl) PublishPost(postEntity *entities.PostEntity) (err common.Error) {
+func (p *postPublisherJobImpl) PublishPost(postEntity *entities.PostEntity) (err errors.Error) {
 	postEntity.Status = enums.PostPublishedStatus
 	err = p.postRepository.SavePost(postEntity)
 

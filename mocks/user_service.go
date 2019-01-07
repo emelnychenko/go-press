@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 }
 
 // ListUsers mocks base method
-func (m *MockUserService) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockUserService) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListUsers", userPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockUserServiceMockRecorder) ListUsers(userPaginationQuery interface{}
 }
 
 // GetUser mocks base method
-func (m *MockUserService) GetUser(userId *models.UserId) (*entities.UserEntity, common.Error) {
+func (m *MockUserService) GetUser(userId *models.UserId) (*entities.UserEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUser", userId)
 	ret0, _ := ret[0].(*entities.UserEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockUserServiceMockRecorder) GetUser(userId interface{}) *gomock.Call 
 }
 
 // LookupUser mocks base method
-func (m *MockUserService) LookupUser(userIdentity string) (*entities.UserEntity, common.Error) {
+func (m *MockUserService) LookupUser(userIdentity string) (*entities.UserEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LookupUser", userIdentity)
 	ret0, _ := ret[0].(*entities.UserEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,10 +81,10 @@ func (mr *MockUserServiceMockRecorder) LookupUser(userIdentity interface{}) *gom
 }
 
 // ChallengeUser mocks base method
-func (m *MockUserService) ChallengeUser(userEntity *entities.UserEntity, password string) common.Error {
+func (m *MockUserService) ChallengeUser(userEntity *entities.UserEntity, password string) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChallengeUser", userEntity, password)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -95,11 +95,11 @@ func (mr *MockUserServiceMockRecorder) ChallengeUser(userEntity, password interf
 }
 
 // CreateUser mocks base method
-func (m *MockUserService) CreateUser(data *models.UserCreate) (*entities.UserEntity, common.Error) {
+func (m *MockUserService) CreateUser(data *models.UserCreate) (*entities.UserEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUser", data)
 	ret0, _ := ret[0].(*entities.UserEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -110,10 +110,10 @@ func (mr *MockUserServiceMockRecorder) CreateUser(data interface{}) *gomock.Call
 }
 
 // VerifyUser mocks base method
-func (m *MockUserService) VerifyUser(userEntity *entities.UserEntity) common.Error {
+func (m *MockUserService) VerifyUser(userEntity *entities.UserEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "VerifyUser", userEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -124,10 +124,10 @@ func (mr *MockUserServiceMockRecorder) VerifyUser(userEntity interface{}) *gomoc
 }
 
 // ChangeUserIdentity mocks base method
-func (m *MockUserService) ChangeUserIdentity(userEntity *entities.UserEntity, data *models.UserChangeIdentity) common.Error {
+func (m *MockUserService) ChangeUserIdentity(userEntity *entities.UserEntity, data *models.UserChangeIdentity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserIdentity", userEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -138,10 +138,10 @@ func (mr *MockUserServiceMockRecorder) ChangeUserIdentity(userEntity, data inter
 }
 
 // ChangeUserPassword mocks base method
-func (m *MockUserService) ChangeUserPassword(userEntity *entities.UserEntity, data *models.UserChangePassword) common.Error {
+func (m *MockUserService) ChangeUserPassword(userEntity *entities.UserEntity, data *models.UserChangePassword) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserPassword", userEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -152,10 +152,10 @@ func (mr *MockUserServiceMockRecorder) ChangeUserPassword(userEntity, data inter
 }
 
 // UpdateUser mocks base method
-func (m *MockUserService) UpdateUser(userEntity *entities.UserEntity, data *models.UserUpdate) common.Error {
+func (m *MockUserService) UpdateUser(userEntity *entities.UserEntity, data *models.UserUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateUser", userEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -166,10 +166,10 @@ func (mr *MockUserServiceMockRecorder) UpdateUser(userEntity, data interface{}) 
 }
 
 // DeleteUser mocks base method
-func (m *MockUserService) DeleteUser(userEntity *entities.UserEntity) common.Error {
+func (m *MockUserService) DeleteUser(userEntity *entities.UserEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteUser", userEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

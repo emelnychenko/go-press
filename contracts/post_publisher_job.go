@@ -1,12 +1,12 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
 	PostPublisherJob interface {
-		PublishPost(postEntity *entities.PostEntity) (err common.Error)
+		PublishPost(postEntity *entities.PostEntity) errors.Error
 	}
 )

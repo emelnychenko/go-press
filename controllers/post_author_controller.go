@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type postAuthorControllerImpl struct {
@@ -23,7 +23,7 @@ func NewPostAuthorController(
 	}
 }
 
-func (c *postAuthorControllerImpl) ChangePostAuthor(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postAuthorControllerImpl) ChangePostAuthor(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {

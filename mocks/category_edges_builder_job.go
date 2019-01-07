@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -34,10 +34,10 @@ func (m *MockCategoryEdgesBuilderJob) EXPECT() *MockCategoryEdgesBuilderJobMockR
 }
 
 // BuildCategoriesEdges mocks base method
-func (m *MockCategoryEdgesBuilderJob) BuildCategoriesEdges() common.Error {
+func (m *MockCategoryEdgesBuilderJob) BuildCategoriesEdges() errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildCategoriesEdges")
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

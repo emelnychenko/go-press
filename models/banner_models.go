@@ -1,12 +1,11 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"time"
 )
 
 type (
-	BannerId = common.ModelId
+	BannerId = ModelId
 
 	Banner struct {
 		Id      *BannerId  `json:"id" xml:"id"`

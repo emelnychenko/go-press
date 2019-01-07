@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -33,7 +33,7 @@ func NewCategoryApi(
 //ListCategories
 func (a *categoryApiImpl) ListCategories(
 	categoryPaginationQuery *models.CategoryPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.categoryService.ListCategories(categoryPaginationQuery)
 
 	if nil != err {
@@ -45,7 +45,7 @@ func (a *categoryApiImpl) ListCategories(
 }
 
 //GetCategoriesTree
-func (a *categoryApiImpl) GetCategoriesTree() (categoriesTree []*models.CategoryTree, err common.Error) {
+func (a *categoryApiImpl) GetCategoriesTree() (categoriesTree []*models.CategoryTree, err errors.Error) {
 	categoriesEntityTree, err := a.categoryService.GetCategoriesTree()
 
 	if nil != err {
@@ -57,7 +57,7 @@ func (a *categoryApiImpl) GetCategoriesTree() (categoriesTree []*models.Category
 }
 
 //GetCategory
-func (a *categoryApiImpl) GetCategory(categoryId *models.CategoryId) (category *models.Category, err common.Error) {
+func (a *categoryApiImpl) GetCategory(categoryId *models.CategoryId) (category *models.Category, err errors.Error) {
 	categoryEntity, err := a.categoryService.GetCategory(categoryId)
 
 	if nil != err {
@@ -70,7 +70,7 @@ func (a *categoryApiImpl) GetCategory(categoryId *models.CategoryId) (category *
 
 //GetCategoryTree
 func (a *categoryApiImpl) GetCategoryTree(categoryId *models.CategoryId) (
-	categoryTree *models.CategoryTree, err common.Error,
+	categoryTree *models.CategoryTree, err errors.Error,
 ) {
 	categoryEntityTree, err := a.categoryService.GetCategoryTree(categoryId)
 
@@ -83,7 +83,7 @@ func (a *categoryApiImpl) GetCategoryTree(categoryId *models.CategoryId) (
 }
 
 //CreateCategory
-func (a *categoryApiImpl) CreateCategory(data *models.CategoryCreate) (category *models.Category, err common.Error) {
+func (a *categoryApiImpl) CreateCategory(data *models.CategoryCreate) (category *models.Category, err errors.Error) {
 	categoryEntity, err := a.categoryService.CreateCategory(data)
 
 	if nil != err {
@@ -98,7 +98,7 @@ func (a *categoryApiImpl) CreateCategory(data *models.CategoryCreate) (category 
 }
 
 //UpdateCategory
-func (a *categoryApiImpl) UpdateCategory(categoryId *models.CategoryId, data *models.CategoryUpdate) (err common.Error) {
+func (a *categoryApiImpl) UpdateCategory(categoryId *models.CategoryId, data *models.CategoryUpdate) (err errors.Error) {
 	categoryService := a.categoryService
 	categoryEntity, err := categoryService.GetCategory(categoryId)
 
@@ -120,7 +120,7 @@ func (a *categoryApiImpl) UpdateCategory(categoryId *models.CategoryId, data *mo
 //ChangeCategoryParent
 func (a *categoryApiImpl) ChangeCategoryParent(
 	categoryId *models.CategoryId, parentCategoryId *models.CategoryId,
-) (err common.Error) {
+) (err errors.Error) {
 	categoryService := a.categoryService
 	categoryEntity, err := categoryService.GetCategory(categoryId)
 
@@ -146,7 +146,7 @@ func (a *categoryApiImpl) ChangeCategoryParent(
 }
 
 //RemoveCategoryParent
-func (a *categoryApiImpl) RemoveCategoryParent(categoryId *models.CategoryId) (err common.Error) {
+func (a *categoryApiImpl) RemoveCategoryParent(categoryId *models.CategoryId) (err errors.Error) {
 	categoryService := a.categoryService
 	categoryEntity, err := categoryService.GetCategory(categoryId)
 
@@ -166,7 +166,7 @@ func (a *categoryApiImpl) RemoveCategoryParent(categoryId *models.CategoryId) (e
 }
 
 //DeleteCategory
-func (a *categoryApiImpl) DeleteCategory(categoryId *models.CategoryId) (err common.Error) {
+func (a *categoryApiImpl) DeleteCategory(categoryId *models.CategoryId) (err errors.Error) {
 	categoryService := a.categoryService
 	categoryEntity, err := categoryService.GetCategory(categoryId)
 

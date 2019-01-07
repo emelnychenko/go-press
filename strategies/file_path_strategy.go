@@ -2,9 +2,9 @@ package strategies
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"mime"
 )
 
@@ -17,11 +17,11 @@ func NewFilePathStrategy() contracts.FilePathStrategy {
 	return &filePathStrategyImpl{}
 }
 
-func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePath string, err common.Error) {
+func (*filePathStrategyImpl) BuildPath(fileEntity *entities.FileEntity) (filePath string, err errors.Error) {
 	fileExtensions, mimeErr := mime.ExtensionsByType(fileEntity.Type)
 
 	if nil != mimeErr {
-		err = common.NewSystemErrorFromBuiltin(mimeErr)
+		err = errors.NewSystemErrorFromBuiltin(mimeErr)
 		return
 	}
 

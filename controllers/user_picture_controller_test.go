@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestUserPictureController(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:ParseUserIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
@@ -68,7 +68,7 @@ func TestUserPictureController(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:ParseFileIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userId := new(models.UserId)
@@ -88,7 +88,7 @@ func TestUserPictureController(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userId := new(models.UserId)
@@ -132,7 +132,7 @@ func TestUserPictureController(t *testing.T) {
 	})
 
 	t.Run("RemoveUserPicture:ParseUserIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
@@ -147,7 +147,7 @@ func TestUserPictureController(t *testing.T) {
 	})
 
 	t.Run("RemoveUserPicture:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userId := new(models.UserId)

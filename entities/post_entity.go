@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 	"time"
@@ -9,13 +8,14 @@ import (
 
 const (
 	PostTableName = "posts"
+	PostEntityObjectType models.ObjectType = "post"
 )
 
 type (
 	PostEntity struct {
 		Id          *models.PostId `gorm:"primary_key;type:char(36);column:id"`
-		AuthorId    *common.ModelId
-		AuthorType  enums.SubjectType
+		AuthorId    *models.SubjectId
+		AuthorType  models.SubjectType
 		Title       string
 		Description string `gorm:"type:text"`
 		Content     string
@@ -33,7 +33,7 @@ type (
 func NewPostEntity() *PostEntity {
 	created := time.Now().UTC()
 	return &PostEntity{
-		Id:      common.NewModelId(),
+		Id:      models.NewModelId(),
 		Status:  enums.PostDraftStatus,
 		Privacy: enums.PostPublicPrivacy,
 		Created: &created,
@@ -42,6 +42,16 @@ func NewPostEntity() *PostEntity {
 
 func (*PostEntity) TableName() string {
 	return PostTableName
+}
+
+//ObjectId
+func (e *PostEntity) ObjectId() *models.ObjectId {
+	return e.Id
+}
+
+//ObjectType
+func (*PostEntity) ObjectType() models.ObjectType {
+	return PostEntityObjectType
 }
 
 func (e *PostEntity) SetPicture(postPicture *FileEntity) {
@@ -60,7 +70,7 @@ func (e *PostEntity) RemoveVideo() {
 	e.VideoId = nil
 }
 
-func (e *PostEntity) SetAuthor(postAuthor common.Subject) {
+func (e *PostEntity) SetAuthor(postAuthor models.Subject) {
 	e.AuthorId = postAuthor.SubjectId()
 	e.AuthorType = postAuthor.SubjectType()
 }

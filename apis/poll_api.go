@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -31,7 +31,7 @@ func NewPollApi(
 
 func (a *pollApiImpl) ListPolls(
 	pollPaginationQuery *models.PollPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.pollService.ListPolls(pollPaginationQuery)
 
 	if nil != err {
@@ -42,7 +42,7 @@ func (a *pollApiImpl) ListPolls(
 	return
 }
 
-func (a *pollApiImpl) GetPoll(pollId *models.PollId) (poll *models.Poll, err common.Error) {
+func (a *pollApiImpl) GetPoll(pollId *models.PollId) (poll *models.Poll, err errors.Error) {
 	pollEntity, err := a.pollService.GetPoll(pollId)
 
 	if nil != err {
@@ -53,7 +53,7 @@ func (a *pollApiImpl) GetPoll(pollId *models.PollId) (poll *models.Poll, err com
 	return
 }
 
-func (a *pollApiImpl) CreatePoll(data *models.PollCreate) (poll *models.Poll, err common.Error) {
+func (a *pollApiImpl) CreatePoll(data *models.PollCreate) (poll *models.Poll, err errors.Error) {
 	pollEntity, err := a.pollService.CreatePoll(data)
 
 	if nil != err {
@@ -67,7 +67,7 @@ func (a *pollApiImpl) CreatePoll(data *models.PollCreate) (poll *models.Poll, er
 	return
 }
 
-func (a *pollApiImpl) UpdatePoll(pollId *models.PollId, data *models.PollUpdate) (err common.Error) {
+func (a *pollApiImpl) UpdatePoll(pollId *models.PollId, data *models.PollUpdate) (err errors.Error) {
 	pollService := a.pollService
 	pollEntity, err := pollService.GetPoll(pollId)
 
@@ -86,7 +86,7 @@ func (a *pollApiImpl) UpdatePoll(pollId *models.PollId, data *models.PollUpdate)
 	return
 }
 
-func (a *pollApiImpl) DeletePoll(pollId *models.PollId) (err common.Error) {
+func (a *pollApiImpl) DeletePoll(pollId *models.PollId) (err errors.Error) {
 	pollService := a.pollService
 	pollEntity, err := pollService.GetPoll(pollId)
 

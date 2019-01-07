@@ -17,4 +17,14 @@ func TestTagEntityFactory(t *testing.T) {
 		tagEntityFactory := new(tagEntityFactoryImpl)
 		assert.IsType(t, new(entities.TagEntity), tagEntityFactory.CreateTagEntity())
 	})
+
+	t.Run("CreateTagXrefEntity", func(t *testing.T) {
+		tagEntity := new(entities.TagEntity)
+		postEntity := new(entities.PostEntity)
+
+		tagEntityFactory := new(tagEntityFactoryImpl)
+		tagXrefEntity := tagEntityFactory.CreateTagXrefEntity(tagEntity, postEntity)
+
+		assert.IsType(t, new(entities.TagXrefEntity), tagXrefEntity)
+	})
 }

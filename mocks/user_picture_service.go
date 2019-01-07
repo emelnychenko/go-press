@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,10 +35,10 @@ func (m *MockUserPictureService) EXPECT() *MockUserPictureServiceMockRecorder {
 }
 
 // ChangeUserPicture mocks base method
-func (m *MockUserPictureService) ChangeUserPicture(userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity) common.Error {
+func (m *MockUserPictureService) ChangeUserPicture(userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserPicture", userEntity, userPictureEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -49,10 +49,10 @@ func (mr *MockUserPictureServiceMockRecorder) ChangeUserPicture(userEntity, user
 }
 
 // RemoveUserPicture mocks base method
-func (m *MockUserPictureService) RemoveUserPicture(userEntity *entities.UserEntity) common.Error {
+func (m *MockUserPictureService) RemoveUserPicture(userEntity *entities.UserEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveUserPicture", userEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

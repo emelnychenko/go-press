@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockChannelRepository) EXPECT() *MockChannelRepositoryMockRecorder {
 }
 
 // ListChannels mocks base method
-func (m *MockChannelRepository) ListChannels(channelPaginationQuery *models.ChannelPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockChannelRepository) ListChannels(channelPaginationQuery *models.ChannelPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListChannels", channelPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockChannelRepositoryMockRecorder) ListChannels(channelPaginationQuery
 }
 
 // GetChannel mocks base method
-func (m *MockChannelRepository) GetChannel(channelId *models.ChannelId) (*entities.ChannelEntity, common.Error) {
+func (m *MockChannelRepository) GetChannel(channelId *models.ChannelId) (*entities.ChannelEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChannel", channelId)
 	ret0, _ := ret[0].(*entities.ChannelEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,10 +66,10 @@ func (mr *MockChannelRepositoryMockRecorder) GetChannel(channelId interface{}) *
 }
 
 // SaveChannel mocks base method
-func (m *MockChannelRepository) SaveChannel(channelEntity *entities.ChannelEntity) common.Error {
+func (m *MockChannelRepository) SaveChannel(channelEntity *entities.ChannelEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveChannel", channelEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -80,10 +80,10 @@ func (mr *MockChannelRepositoryMockRecorder) SaveChannel(channelEntity interface
 }
 
 // RemoveChannel mocks base method
-func (m *MockChannelRepository) RemoveChannel(channelEntity *entities.ChannelEntity) common.Error {
+func (m *MockChannelRepository) RemoveChannel(channelEntity *entities.ChannelEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveChannel", channelEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

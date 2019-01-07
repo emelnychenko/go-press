@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockPostAuthorController) EXPECT() *MockPostAuthorControllerMockRecorde
 }
 
 // ChangePostAuthor mocks base method
-func (m *MockPostAuthorController) ChangePostAuthor(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostAuthorController) ChangePostAuthor(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostAuthor", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

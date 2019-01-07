@@ -1,10 +1,9 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -28,7 +27,7 @@ func TestUserRepository(t *testing.T) {
 	assert.Equal(t, db, userRepository.db)
 	assert.Equal(t, dbPaginator, userRepository.dbPaginator)
 
-	userId := common.NewModelId()
+	userId := models.NewModelId()
 	userIdString := userId.String()
 	commonReply := []map[string]interface{}{{
 		"id":        userIdString,
@@ -51,11 +50,11 @@ func TestUserRepository(t *testing.T) {
 	})
 
 	t.Run("ListUsers:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userPaginationQuery := &models.UserPaginationQuery{
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), userPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -86,7 +85,7 @@ func TestUserRepository(t *testing.T) {
 
 		userEntity, err := userRepository.GetUser(userId)
 		assert.NotNil(t, userEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("LookupUser", func(t *testing.T) {
@@ -110,7 +109,7 @@ func TestUserRepository(t *testing.T) {
 
 		userEntity, err := userRepository.LookupUser("")
 		assert.NotNil(t, userEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveUser", func(t *testing.T) {
@@ -121,7 +120,7 @@ func TestUserRepository(t *testing.T) {
 	})
 
 	t.Run("SaveUser:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		err := userRepository.SaveUser(entities.NewUserEntity())
 		assert.Error(t, err)
@@ -135,7 +134,7 @@ func TestUserRepository(t *testing.T) {
 	})
 
 	t.Run("RemoveUser:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		err := userRepository.RemoveUser(entities.NewUserEntity())
 		assert.Error(t, err)

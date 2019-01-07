@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -31,7 +31,7 @@ func NewChannelApi(
 
 func (a *channelApiImpl) ListChannels(
 	channelPaginationQuery *models.ChannelPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.channelService.ListChannels(channelPaginationQuery)
 
 	if nil != err {
@@ -42,7 +42,7 @@ func (a *channelApiImpl) ListChannels(
 	return
 }
 
-func (a *channelApiImpl) GetChannel(channelId *models.ChannelId) (channel *models.Channel, err common.Error) {
+func (a *channelApiImpl) GetChannel(channelId *models.ChannelId) (channel *models.Channel, err errors.Error) {
 	channelEntity, err := a.channelService.GetChannel(channelId)
 
 	if nil != err {
@@ -53,7 +53,7 @@ func (a *channelApiImpl) GetChannel(channelId *models.ChannelId) (channel *model
 	return
 }
 
-func (a *channelApiImpl) CreateChannel(data *models.ChannelCreate) (channel *models.Channel, err common.Error) {
+func (a *channelApiImpl) CreateChannel(data *models.ChannelCreate) (channel *models.Channel, err errors.Error) {
 	channelEntity, err := a.channelService.CreateChannel(data)
 
 	if nil != err {
@@ -67,7 +67,7 @@ func (a *channelApiImpl) CreateChannel(data *models.ChannelCreate) (channel *mod
 	return
 }
 
-func (a *channelApiImpl) UpdateChannel(channelId *models.ChannelId, data *models.ChannelUpdate) (err common.Error) {
+func (a *channelApiImpl) UpdateChannel(channelId *models.ChannelId, data *models.ChannelUpdate) (err errors.Error) {
 	channelService := a.channelService
 	channelEntity, err := channelService.GetChannel(channelId)
 
@@ -86,7 +86,7 @@ func (a *channelApiImpl) UpdateChannel(channelId *models.ChannelId, data *models
 	return
 }
 
-func (a *channelApiImpl) DeleteChannel(channelId *models.ChannelId) (err common.Error) {
+func (a *channelApiImpl) DeleteChannel(channelId *models.ChannelId) (err errors.Error) {
 	channelService := a.channelService
 	channelEntity, err := channelService.GetChannel(channelId)
 

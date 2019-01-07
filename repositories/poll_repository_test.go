@@ -1,10 +1,9 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -28,7 +27,7 @@ func TestPollRepository(t *testing.T) {
 	assert.Equal(t, db, pollRepository.db)
 	assert.Equal(t, dbPaginator, pollRepository.dbPaginator)
 
-	pollId := common.NewModelId()
+	pollId := models.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": pollId.String(),
 	}}
@@ -48,11 +47,11 @@ func TestPollRepository(t *testing.T) {
 	})
 
 	t.Run("ListPolls:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		pollPaginationQuery := &models.PollPaginationQuery{
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), pollPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -83,7 +82,7 @@ func TestPollRepository(t *testing.T) {
 
 		pollEntity, err := pollRepository.GetPoll(pollId)
 		assert.NotNil(t, pollEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SavePoll", func(t *testing.T) {
@@ -94,7 +93,7 @@ func TestPollRepository(t *testing.T) {
 	})
 
 	t.Run("SavePoll:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		pollEntity := new(entities.PollEntity)
 		assert.Error(t, pollRepository.SavePoll(pollEntity))
@@ -108,7 +107,7 @@ func TestPollRepository(t *testing.T) {
 	})
 
 	t.Run("RemovePoll:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		pollEntity := new(entities.PollEntity)
 		assert.Error(t, pollRepository.RemovePoll(pollEntity))

@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -31,7 +31,7 @@ func NewCommentApi(
 
 func (a *commentApiImpl) ListComments(
 	commentPaginationQuery *models.CommentPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.commentService.ListComments(commentPaginationQuery)
 
 	if nil != err {
@@ -42,7 +42,7 @@ func (a *commentApiImpl) ListComments(
 	return
 }
 
-func (a *commentApiImpl) GetComment(commentId *models.CommentId) (comment *models.Comment, err common.Error) {
+func (a *commentApiImpl) GetComment(commentId *models.CommentId) (comment *models.Comment, err errors.Error) {
 	commentEntity, err := a.commentService.GetComment(commentId)
 
 	if nil != err {
@@ -53,7 +53,7 @@ func (a *commentApiImpl) GetComment(commentId *models.CommentId) (comment *model
 	return
 }
 
-func (a *commentApiImpl) CreateComment(data *models.CommentCreate) (comment *models.Comment, err common.Error) {
+func (a *commentApiImpl) CreateComment(data *models.CommentCreate) (comment *models.Comment, err errors.Error) {
 	commentEntity, err := a.commentService.CreateComment(data)
 
 	if nil != err {
@@ -67,7 +67,7 @@ func (a *commentApiImpl) CreateComment(data *models.CommentCreate) (comment *mod
 	return
 }
 
-func (a *commentApiImpl) UpdateComment(commentId *models.CommentId, data *models.CommentUpdate) (err common.Error) {
+func (a *commentApiImpl) UpdateComment(commentId *models.CommentId, data *models.CommentUpdate) (err errors.Error) {
 	commentService := a.commentService
 	commentEntity, err := commentService.GetComment(commentId)
 
@@ -86,7 +86,7 @@ func (a *commentApiImpl) UpdateComment(commentId *models.CommentId, data *models
 	return
 }
 
-func (a *commentApiImpl) DeleteComment(commentId *models.CommentId) (err common.Error) {
+func (a *commentApiImpl) DeleteComment(commentId *models.CommentId) (err errors.Error) {
 	commentService := a.commentService
 	commentEntity, err := commentService.GetComment(commentId)
 

@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -27,15 +27,15 @@ func NewPollService(
 
 func (s *pollServiceImpl) ListPolls(
 	pollPaginationQuery *models.PollPaginationQuery,
-) (*models.PaginationResult, common.Error) {
+) (*models.PaginationResult, errors.Error) {
 	return s.pollRepository.ListPolls(pollPaginationQuery)
 }
 
-func (s *pollServiceImpl) GetPoll(pollId *models.PollId) (*entities.PollEntity, common.Error) {
+func (s *pollServiceImpl) GetPoll(pollId *models.PollId) (*entities.PollEntity, errors.Error) {
 	return s.pollRepository.GetPoll(pollId)
 }
 
-func (s *pollServiceImpl) CreatePoll(data *models.PollCreate) (pollEntity *entities.PollEntity, err common.Error) {
+func (s *pollServiceImpl) CreatePoll(data *models.PollCreate) (pollEntity *entities.PollEntity, err errors.Error) {
 	pollEntity = s.pollEntityFactory.CreatePollEntity()
 	pollEntity.Title = data.Title
 
@@ -43,7 +43,7 @@ func (s *pollServiceImpl) CreatePoll(data *models.PollCreate) (pollEntity *entit
 	return
 }
 
-func (s *pollServiceImpl) UpdatePoll(pollEntity *entities.PollEntity, data *models.PollUpdate) common.Error {
+func (s *pollServiceImpl) UpdatePoll(pollEntity *entities.PollEntity, data *models.PollUpdate) errors.Error {
 	pollEntity.Title = data.Title
 
 	updated := time.Now().UTC()
@@ -52,6 +52,6 @@ func (s *pollServiceImpl) UpdatePoll(pollEntity *entities.PollEntity, data *mode
 	return s.pollRepository.SavePoll(pollEntity)
 }
 
-func (s *pollServiceImpl) DeletePoll(pollEntity *entities.PollEntity) common.Error {
+func (s *pollServiceImpl) DeletePoll(pollEntity *entities.PollEntity) errors.Error {
 	return s.pollRepository.RemovePoll(pollEntity)
 }

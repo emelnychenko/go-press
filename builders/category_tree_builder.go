@@ -1,9 +1,9 @@
 package builders
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
@@ -20,7 +20,7 @@ func NewCategoryTreeBuilder() contracts.CategoryTreeBuilder {
 //BuildCategoryEntityTree
 func (b *categoryTreeBuilderImpl) BuildCategoryEntityTree(
 	categoryEntities []*entities.CategoryEntity,
-) (categoryEntityTree *entities.CategoryEntityTree, err common.Error) {
+) (categoryEntityTree *entities.CategoryEntityTree, err errors.Error) {
 	rootCategoryEntities, nodeCategoryEntities, err := b.prepareCategoryEntities(categoryEntities)
 
 	if nil != err {
@@ -62,7 +62,7 @@ func (*categoryTreeBuilderImpl) prepareCategoryEntities(
 ) (
 	rootCategoryEntities []*entities.CategoryEntity,
 	nodeCategoryEntities []*entities.CategoryEntity,
-	err common.Error,
+	err errors.Error,
 ) {
 	for _, categoryEntity := range categoryEntities {
 		if nil == categoryEntity.ParentCategoryId {
@@ -86,7 +86,7 @@ func (*categoryTreeBuilderImpl) prepareCategoryEntities(
 
 	// Prevent circular dependencies
 	if len(categoryEntities) > 0 && len(rootCategoryEntities) == 0 {
-		err = common.NewBadRequestError("Circular dependencies detected")
+		err = errors.NewBadRequestError("Circular dependencies detected")
 	}
 
 	return

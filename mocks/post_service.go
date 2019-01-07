@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockPostService) EXPECT() *MockPostServiceMockRecorder {
 }
 
 // ListPosts mocks base method
-func (m *MockPostService) ListPosts(postPaginationQuery *models.PostPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockPostService) ListPosts(postPaginationQuery *models.PostPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPosts", postPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockPostServiceMockRecorder) ListPosts(postPaginationQuery interface{}
 }
 
 // GetScheduledPosts mocks base method
-func (m *MockPostService) GetScheduledPosts() ([]*entities.PostEntity, common.Error) {
+func (m *MockPostService) GetScheduledPosts() ([]*entities.PostEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetScheduledPosts")
 	ret0, _ := ret[0].([]*entities.PostEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockPostServiceMockRecorder) GetScheduledPosts() *gomock.Call {
 }
 
 // GetPost mocks base method
-func (m *MockPostService) GetPost(postId *models.PostId) (*entities.PostEntity, common.Error) {
+func (m *MockPostService) GetPost(postId *models.PostId) (*entities.PostEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPost", postId)
 	ret0, _ := ret[0].(*entities.PostEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,11 +81,11 @@ func (mr *MockPostServiceMockRecorder) GetPost(postId interface{}) *gomock.Call 
 }
 
 // CreatePost mocks base method
-func (m *MockPostService) CreatePost(postAuthor common.Subject, data *models.PostCreate) (*entities.PostEntity, common.Error) {
+func (m *MockPostService) CreatePost(postAuthor models.Subject, data *models.PostCreate) (*entities.PostEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePost", postAuthor, data)
 	ret0, _ := ret[0].(*entities.PostEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -96,10 +96,10 @@ func (mr *MockPostServiceMockRecorder) CreatePost(postAuthor, data interface{}) 
 }
 
 // UpdatePost mocks base method
-func (m *MockPostService) UpdatePost(postEntity *entities.PostEntity, data *models.PostUpdate) common.Error {
+func (m *MockPostService) UpdatePost(postEntity *entities.PostEntity, data *models.PostUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePost", postEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -110,10 +110,10 @@ func (mr *MockPostServiceMockRecorder) UpdatePost(postEntity, data interface{}) 
 }
 
 // DeletePost mocks base method
-func (m *MockPostService) DeletePost(postEntity *entities.PostEntity) common.Error {
+func (m *MockPostService) DeletePost(postEntity *entities.PostEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeletePost", postEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

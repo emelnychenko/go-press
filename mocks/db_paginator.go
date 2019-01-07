@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	gorm "github.com/jinzhu/gorm"
@@ -36,10 +36,10 @@ func (m *MockDbPaginator) EXPECT() *MockDbPaginatorMockRecorder {
 }
 
 // Paginate mocks base method
-func (m *MockDbPaginator) Paginate(db *gorm.DB, paginationQuery *models.PaginationQuery, paginationData interface{}, paginationTotal *int) common.Error {
+func (m *MockDbPaginator) Paginate(db *gorm.DB, paginationQuery *models.PaginationQuery, paginationData interface{}, paginationTotal *int) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Paginate", db, paginationQuery, paginationData, paginationTotal)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

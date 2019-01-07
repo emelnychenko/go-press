@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -27,7 +27,7 @@ func NewPostController(
 	}
 }
 
-func (c *postControllerImpl) ListPosts(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *postControllerImpl) ListPosts(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	postPaginationQuery := c.postModelFactory.CreatePostPaginationQuery()
 
 	if err = httpContext.BindModel(postPaginationQuery.PaginationQuery); err != nil {
@@ -42,7 +42,7 @@ func (c *postControllerImpl) ListPosts(httpContext contracts.HttpContext) (pagin
 	return
 }
 
-func (c *postControllerImpl) GetPost(httpContext contracts.HttpContext) (post interface{}, err common.Error) {
+func (c *postControllerImpl) GetPost(httpContext contracts.HttpContext) (post interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {
@@ -53,7 +53,7 @@ func (c *postControllerImpl) GetPost(httpContext contracts.HttpContext) (post in
 	return
 }
 
-func (c *postControllerImpl) CreatePost(httpContext contracts.HttpContext) (post interface{}, err common.Error) {
+func (c *postControllerImpl) CreatePost(httpContext contracts.HttpContext) (post interface{}, err errors.Error) {
 	data := c.postModelFactory.CreatePostCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -69,7 +69,7 @@ func (c *postControllerImpl) CreatePost(httpContext contracts.HttpContext) (post
 	return
 }
 
-func (c *postControllerImpl) UpdatePost(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postControllerImpl) UpdatePost(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {
@@ -90,7 +90,7 @@ func (c *postControllerImpl) UpdatePost(httpContext contracts.HttpContext) (_ in
 	return
 }
 
-func (c *postControllerImpl) DeletePost(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postControllerImpl) DeletePost(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {

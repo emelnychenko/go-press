@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/models"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -17,7 +17,7 @@ func TestCommentErrors(t *testing.T) {
 	})
 
 	t.Run("CommentNotFoundByIdError", func(t *testing.T) {
-		commentId := new(models.CommentId)
+		commentId := new(uuid.UUID)
 		err := NewCommentByIdNotFoundError(commentId)
 		assert.Equal(t, fmt.Sprintf("The comment was not found on request: id = %s", commentId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())

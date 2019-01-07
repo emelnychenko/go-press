@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -73,7 +73,7 @@ func TestNewPostVideoApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostVideo:GetPostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -87,7 +87,7 @@ func TestNewPostVideoApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostVideo:GetFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -108,7 +108,7 @@ func TestNewPostVideoApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostVideo:ValidateVideoError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -135,7 +135,7 @@ func TestNewPostVideoApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostVideo:ChangePostVideoError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -191,7 +191,7 @@ func TestNewPostVideoApi(t *testing.T) {
 	})
 
 	t.Run("RemovePostVideo:GetPostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -203,7 +203,7 @@ func TestNewPostVideoApi(t *testing.T) {
 	})
 
 	t.Run("RemovePostVideo:RemovePostVideoError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)

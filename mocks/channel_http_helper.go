@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockChannelHttpHelper) EXPECT() *MockChannelHttpHelperMockRecorder {
 }
 
 // ParseChannelId mocks base method
-func (m *MockChannelHttpHelper) ParseChannelId(httpContext contracts.HttpContext) (*models.ChannelId, common.Error) {
+func (m *MockChannelHttpHelper) ParseChannelId(httpContext contracts.HttpContext) (*models.ChannelId, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ParseChannelId", httpContext)
 	ret0, _ := ret[0].(*models.ChannelId)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

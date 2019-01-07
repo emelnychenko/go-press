@@ -18,13 +18,13 @@ func TestChannelHttpHelper(t *testing.T) {
 	})
 
 	t.Run("ParseChannelId", func(t *testing.T) {
-		channel := new(models.ChannelId)
+		channelId := new(models.ChannelId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(ChannelIdParameterName).Return(channel.String())
+		httpContext.EXPECT().Parameter(ChannelIdParameterName).Return(channelId.String())
 
 		channelHttpHelper := &channelHttpHelperImpl{}
 		parsedChannelId, err := channelHttpHelper.ParseChannelId(httpContext)
-		assert.Equal(t, channel.String(), parsedChannelId.String())
+		assert.Equal(t, channelId.String(), parsedChannelId.String())
 		assert.Nil(t, err)
 	})
 }

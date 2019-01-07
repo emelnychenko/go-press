@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockPollRepository) EXPECT() *MockPollRepositoryMockRecorder {
 }
 
 // ListPolls mocks base method
-func (m *MockPollRepository) ListPolls(pollPaginationQuery *models.PollPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockPollRepository) ListPolls(pollPaginationQuery *models.PollPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPolls", pollPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockPollRepositoryMockRecorder) ListPolls(pollPaginationQuery interfac
 }
 
 // GetPoll mocks base method
-func (m *MockPollRepository) GetPoll(pollId *models.PollId) (*entities.PollEntity, common.Error) {
+func (m *MockPollRepository) GetPoll(pollId *models.PollId) (*entities.PollEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPoll", pollId)
 	ret0, _ := ret[0].(*entities.PollEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,10 +66,10 @@ func (mr *MockPollRepositoryMockRecorder) GetPoll(pollId interface{}) *gomock.Ca
 }
 
 // SavePoll mocks base method
-func (m *MockPollRepository) SavePoll(pollEntity *entities.PollEntity) common.Error {
+func (m *MockPollRepository) SavePoll(pollEntity *entities.PollEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SavePoll", pollEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -80,10 +80,10 @@ func (mr *MockPollRepositoryMockRecorder) SavePoll(pollEntity interface{}) *gomo
 }
 
 // RemovePoll mocks base method
-func (m *MockPollRepository) RemovePoll(pollEntity *entities.PollEntity) common.Error {
+func (m *MockPollRepository) RemovePoll(pollEntity *entities.PollEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemovePoll", pollEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

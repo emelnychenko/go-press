@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/models"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -17,7 +17,7 @@ func TestChannelErrors(t *testing.T) {
 	})
 
 	t.Run("ChannelNotFoundByIdError", func(t *testing.T) {
-		channelId := new(models.ChannelId)
+		channelId := new(uuid.UUID)
 		err := NewChannelByIdNotFoundError(channelId)
 		assert.Equal(t, fmt.Sprintf("The channel was not found on request: id = %s", channelId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())

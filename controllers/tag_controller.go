@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type tagControllerImpl struct {
@@ -23,7 +23,7 @@ func NewTagController(
 	}
 }
 
-func (c *tagControllerImpl) ListTags(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *tagControllerImpl) ListTags(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	tagPaginationQuery := c.tagModelFactory.CreateTagPaginationQuery()
 
 	if err = httpContext.BindModel(tagPaginationQuery.PaginationQuery); err != nil {
@@ -38,7 +38,7 @@ func (c *tagControllerImpl) ListTags(httpContext contracts.HttpContext) (paginat
 	return
 }
 
-func (c *tagControllerImpl) GetTag(httpContext contracts.HttpContext) (tag interface{}, err common.Error) {
+func (c *tagControllerImpl) GetTag(httpContext contracts.HttpContext) (tag interface{}, err errors.Error) {
 	tagId, err := c.tagHttpHelper.ParseTagId(httpContext)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *tagControllerImpl) GetTag(httpContext contracts.HttpContext) (tag inter
 	return
 }
 
-func (c *tagControllerImpl) CreateTag(httpContext contracts.HttpContext) (tag interface{}, err common.Error) {
+func (c *tagControllerImpl) CreateTag(httpContext contracts.HttpContext) (tag interface{}, err errors.Error) {
 	data := c.tagModelFactory.CreateTagCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -60,7 +60,7 @@ func (c *tagControllerImpl) CreateTag(httpContext contracts.HttpContext) (tag in
 	return
 }
 
-func (c *tagControllerImpl) UpdateTag(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *tagControllerImpl) UpdateTag(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	tagId, err := c.tagHttpHelper.ParseTagId(httpContext)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *tagControllerImpl) UpdateTag(httpContext contracts.HttpContext) (_ inte
 	return
 }
 
-func (c *tagControllerImpl) DeleteTag(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *tagControllerImpl) DeleteTag(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	tagId, err := c.tagHttpHelper.ParseTagId(httpContext)
 
 	if err != nil {

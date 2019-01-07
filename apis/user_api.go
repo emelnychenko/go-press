@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -31,7 +31,7 @@ func NewUserApi(
 
 func (a *userApiImpl) ListUsers(
 	userPaginationQuery *models.UserPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.userService.ListUsers(userPaginationQuery)
 
 	if nil != err {
@@ -42,7 +42,7 @@ func (a *userApiImpl) ListUsers(
 	return
 }
 
-func (a *userApiImpl) GetUser(userId *models.UserId) (user *models.User, err common.Error) {
+func (a *userApiImpl) GetUser(userId *models.UserId) (user *models.User, err errors.Error) {
 	userEntity, err := a.userService.GetUser(userId)
 
 	if nil != err {
@@ -53,7 +53,7 @@ func (a *userApiImpl) GetUser(userId *models.UserId) (user *models.User, err com
 	return
 }
 
-func (a *userApiImpl) CreateUser(data *models.UserCreate) (user *models.User, err common.Error) {
+func (a *userApiImpl) CreateUser(data *models.UserCreate) (user *models.User, err errors.Error) {
 	userEntity, err := a.userService.CreateUser(data)
 
 	if nil != err {
@@ -67,7 +67,7 @@ func (a *userApiImpl) CreateUser(data *models.UserCreate) (user *models.User, er
 	return
 }
 
-func (a *userApiImpl) UpdateUser(userId *models.UserId, data *models.UserUpdate) (err common.Error) {
+func (a *userApiImpl) UpdateUser(userId *models.UserId, data *models.UserUpdate) (err errors.Error) {
 	userService := a.userService
 	userEntity, err := userService.GetUser(userId)
 
@@ -87,7 +87,7 @@ func (a *userApiImpl) UpdateUser(userId *models.UserId, data *models.UserUpdate)
 	return
 }
 
-func (a *userApiImpl) VerifyUser(userId *models.UserId) (err common.Error) {
+func (a *userApiImpl) VerifyUser(userId *models.UserId) (err errors.Error) {
 	userService := a.userService
 	userEntity, err := userService.GetUser(userId)
 
@@ -107,7 +107,7 @@ func (a *userApiImpl) VerifyUser(userId *models.UserId) (err common.Error) {
 	return
 }
 
-func (a *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.UserChangeIdentity) (err common.Error) {
+func (a *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.UserChangeIdentity) (err errors.Error) {
 	userService := a.userService
 	userEntity, err := userService.GetUser(userId)
 
@@ -127,7 +127,7 @@ func (a *userApiImpl) ChangeUserIdentity(userId *models.UserId, data *models.Use
 	return
 }
 
-func (a *userApiImpl) ChangeUserPassword(userId *models.UserId, input *models.UserChangePassword) (err common.Error) {
+func (a *userApiImpl) ChangeUserPassword(userId *models.UserId, input *models.UserChangePassword) (err errors.Error) {
 	userService := a.userService
 	userEntity, err := userService.GetUser(userId)
 
@@ -153,7 +153,7 @@ func (a *userApiImpl) ChangeUserPassword(userId *models.UserId, input *models.Us
 	return
 }
 
-func (a *userApiImpl) DeleteUser(userId *models.UserId) (err common.Error) {
+func (a *userApiImpl) DeleteUser(userId *models.UserId) (err errors.Error) {
 	userService := a.userService
 	userEntity, err := userService.GetUser(userId)
 

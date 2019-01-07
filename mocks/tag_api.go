@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockTagApi) EXPECT() *MockTagApiMockRecorder {
 }
 
 // ListTags mocks base method
-func (m *MockTagApi) ListTags(tagPaginationQuery *models.TagPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockTagApi) ListTags(tagPaginationQuery *models.TagPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTags", tagPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockTagApiMockRecorder) ListTags(tagPaginationQuery interface{}) *gomo
 }
 
 // GetTag mocks base method
-func (m *MockTagApi) GetTag(tagId *models.TagId) (*models.Tag, common.Error) {
+func (m *MockTagApi) GetTag(tagId *models.TagId) (*models.Tag, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTag", tagId)
 	ret0, _ := ret[0].(*models.Tag)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockTagApiMockRecorder) GetTag(tagId interface{}) *gomock.Call {
 }
 
 // CreateTag mocks base method
-func (m *MockTagApi) CreateTag(data *models.TagCreate) (*models.Tag, common.Error) {
+func (m *MockTagApi) CreateTag(data *models.TagCreate) (*models.Tag, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTag", data)
 	ret0, _ := ret[0].(*models.Tag)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockTagApiMockRecorder) CreateTag(data interface{}) *gomock.Call {
 }
 
 // UpdateTag mocks base method
-func (m *MockTagApi) UpdateTag(tagId *models.TagId, data *models.TagUpdate) common.Error {
+func (m *MockTagApi) UpdateTag(tagId *models.TagId, data *models.TagUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTag", tagId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockTagApiMockRecorder) UpdateTag(tagId, data interface{}) *gomock.Cal
 }
 
 // DeleteTag mocks base method
-func (m *MockTagApi) DeleteTag(tagId *models.TagId) common.Error {
+func (m *MockTagApi) DeleteTag(tagId *models.TagId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteTag", tagId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

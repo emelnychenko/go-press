@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -19,6 +19,6 @@ func NewTagHttpHelper() contracts.TagHttpHelper {
 	return new(tagHttpHelperImpl)
 }
 
-func (*tagHttpHelperImpl) ParseTagId(httpContext contracts.HttpContext) (*models.TagId, common.Error) {
-	return common.ParseModelId(httpContext.Parameter(TagIdParameterName))
+func (*tagHttpHelperImpl) ParseTagId(httpContext contracts.HttpContext) (*models.TagId, errors.Error) {
+	return models.ParseModelId(httpContext.Parameter(TagIdParameterName))
 }

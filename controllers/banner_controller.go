@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type bannerControllerImpl struct {
@@ -23,7 +23,7 @@ func NewBannerController(
 	}
 }
 
-func (c *bannerControllerImpl) ListBanners(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *bannerControllerImpl) ListBanners(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	bannerPaginationQuery := c.bannerModelFactory.CreateBannerPaginationQuery()
 
 	if err = httpContext.BindModel(bannerPaginationQuery.PaginationQuery); err != nil {
@@ -38,7 +38,7 @@ func (c *bannerControllerImpl) ListBanners(httpContext contracts.HttpContext) (p
 	return
 }
 
-func (c *bannerControllerImpl) GetBanner(httpContext contracts.HttpContext) (banner interface{}, err common.Error) {
+func (c *bannerControllerImpl) GetBanner(httpContext contracts.HttpContext) (banner interface{}, err errors.Error) {
 	bannerId, err := c.bannerHttpHelper.ParseBannerId(httpContext)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *bannerControllerImpl) GetBanner(httpContext contracts.HttpContext) (ban
 	return
 }
 
-func (c *bannerControllerImpl) CreateBanner(httpContext contracts.HttpContext) (banner interface{}, err common.Error) {
+func (c *bannerControllerImpl) CreateBanner(httpContext contracts.HttpContext) (banner interface{}, err errors.Error) {
 	data := c.bannerModelFactory.CreateBannerCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -60,7 +60,7 @@ func (c *bannerControllerImpl) CreateBanner(httpContext contracts.HttpContext) (
 	return
 }
 
-func (c *bannerControllerImpl) UpdateBanner(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *bannerControllerImpl) UpdateBanner(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	bannerId, err := c.bannerHttpHelper.ParseBannerId(httpContext)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *bannerControllerImpl) UpdateBanner(httpContext contracts.HttpContext) (
 	return
 }
 
-func (c *bannerControllerImpl) DeleteBanner(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *bannerControllerImpl) DeleteBanner(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	bannerId, err := c.bannerHttpHelper.ParseBannerId(httpContext)
 
 	if err != nil {

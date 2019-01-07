@@ -1,12 +1,12 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
 	PostAuthorService interface {
-		ChangePostAuthor(postEntity *entities.PostEntity, postAuthorEntity *entities.UserEntity) common.Error
+		ChangePostAuthor(postEntity *entities.PostEntity, postAuthorEntity *entities.UserEntity) errors.Error
 	}
 )

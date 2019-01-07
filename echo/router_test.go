@@ -1,9 +1,8 @@
 package echo
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
-	"github.com/emelnychenko/go-press/echo_mocks"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
@@ -34,7 +33,7 @@ func TestRouter(t *testing.T) {
 		httpMethod := http.MethodGet
 		httpHandlerResponse := "test"
 		routePath := "/test"
-		router.AddRoute(httpMethod, routePath, func(httpContext contracts.HttpContext) (response interface{}, err common.Error) {
+		router.AddRoute(httpMethod, routePath, func(httpContext contracts.HttpContext) (response interface{}, err errors.Error) {
 			return httpHandlerResponse, nil
 		})
 
@@ -44,7 +43,7 @@ func TestRouter(t *testing.T) {
 		responseWriter := httptest.NewRecorder()
 		response := echo.NewResponse(responseWriter, instance)
 
-		mockContext := echo_mocks.NewMockContext(ctrl)
+		mockContext := mocks.NewMockContext(ctrl)
 		mockContext.EXPECT().Response().Return(response)
 		mockContext.EXPECT().JSON(http.StatusOK, httpHandlerResponse).Return(nil)
 
@@ -56,10 +55,10 @@ func TestRouter(t *testing.T) {
 		instance := echo.New()
 		router := &routerImpl{echo: instance}
 
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpMethod := http.MethodGet
 		routePath := "/test"
-		router.AddRoute(httpMethod, routePath, func(httpContext contracts.HttpContext) (response interface{}, err common.Error) {
+		router.AddRoute(httpMethod, routePath, func(httpContext contracts.HttpContext) (response interface{}, err errors.Error) {
 			return nil, systemErr
 		})
 
@@ -70,7 +69,7 @@ func TestRouter(t *testing.T) {
 		response := echo.NewResponse(responseWriter, instance)
 		response.Committed = true
 
-		mockContext := echo_mocks.NewMockContext(ctrl)
+		mockContext := mocks.NewMockContext(ctrl)
 		mockContext.EXPECT().Response().Return(response)
 
 		err := rootContext.Handler()(mockContext)
@@ -81,11 +80,11 @@ func TestRouter(t *testing.T) {
 		instance := echo.New()
 		router := &routerImpl{echo: instance}
 
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpMethod := http.MethodGet
 		httpHandlerResponse := "test"
 		routePath := "/test"
-		router.AddRoute(httpMethod, routePath, func(httpContext contracts.HttpContext) (response interface{}, err common.Error) {
+		router.AddRoute(httpMethod, routePath, func(httpContext contracts.HttpContext) (response interface{}, err errors.Error) {
 			return httpHandlerResponse, systemErr
 		})
 
@@ -95,7 +94,7 @@ func TestRouter(t *testing.T) {
 		responseWriter := httptest.NewRecorder()
 		response := echo.NewResponse(responseWriter, instance)
 
-		mockContext := echo_mocks.NewMockContext(ctrl)
+		mockContext := mocks.NewMockContext(ctrl)
 		mockContext.EXPECT().Response().Return(response)
 		mockContext.EXPECT().JSON(systemErr.Code(), systemErr.Error()).Return(nil)
 

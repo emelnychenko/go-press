@@ -18,13 +18,13 @@ func TestCommentHttpHelper(t *testing.T) {
 	})
 
 	t.Run("ParseCommentId", func(t *testing.T) {
-		comment := new(models.CommentId)
+		commentId := new(models.CommentId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(CommentIdParameterName).Return(comment.String())
+		httpContext.EXPECT().Parameter(CommentIdParameterName).Return(commentId.String())
 
 		commentHttpHelper := &commentHttpHelperImpl{}
 		parsedCommentId, err := commentHttpHelper.ParseCommentId(httpContext)
-		assert.Equal(t, comment.String(), parsedCommentId.String())
+		assert.Equal(t, commentId.String(), parsedCommentId.String())
 		assert.Nil(t, err)
 	})
 }

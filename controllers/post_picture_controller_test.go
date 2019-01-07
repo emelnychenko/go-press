@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestPostPictureController(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:ParsePostIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
@@ -68,7 +68,7 @@ func TestPostPictureController(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:ParseFileIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postId := new(models.PostId)
@@ -88,7 +88,7 @@ func TestPostPictureController(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postId := new(models.PostId)
@@ -132,7 +132,7 @@ func TestPostPictureController(t *testing.T) {
 	})
 
 	t.Run("RemovePostPicture:ParsePostIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
@@ -147,7 +147,7 @@ func TestPostPictureController(t *testing.T) {
 	})
 
 	t.Run("RemovePostPicture:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postId := new(models.PostId)

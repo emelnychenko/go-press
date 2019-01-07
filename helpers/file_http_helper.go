@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/labstack/echo"
 	"io"
@@ -25,19 +25,19 @@ func NewFileHttpHelper() contracts.FileHttpHelper {
 	return new(fileHttpHelperImpl)
 }
 
-func (*fileHttpHelperImpl) ParseFileId(httpContext contracts.HttpContext) (*models.FileId, common.Error) {
-	return common.ParseModelId(httpContext.Parameter(FileIdParameterName))
+func (*fileHttpHelperImpl) ParseFileId(httpContext contracts.HttpContext) (*models.FileId, errors.Error) {
+	return models.ParseModelId(httpContext.Parameter(FileIdParameterName))
 }
 
-func (*fileHttpHelperImpl) GetFileHeader(httpContext contracts.HttpContext) (*multipart.FileHeader, common.Error) {
+func (*fileHttpHelperImpl) GetFileHeader(httpContext contracts.HttpContext) (*multipart.FileHeader, errors.Error) {
 	return httpContext.FormFile(FileFormFileName)
 }
 
-func (*fileHttpHelperImpl) OpenFormFile(formHeader *multipart.FileHeader) (file multipart.File, err common.Error) {
+func (*fileHttpHelperImpl) OpenFormFile(formHeader *multipart.FileHeader) (file multipart.File, err errors.Error) {
 	file, formHeaderErr := formHeader.Open()
 
 	if nil != formHeaderErr {
-		err = common.NewSystemErrorFromBuiltin(formHeaderErr)
+		err = errors.NewSystemErrorFromBuiltin(formHeaderErr)
 	}
 
 	return

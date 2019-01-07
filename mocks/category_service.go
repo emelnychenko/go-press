@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockCategoryService) EXPECT() *MockCategoryServiceMockRecorder {
 }
 
 // ListCategories mocks base method
-func (m *MockCategoryService) ListCategories(categoryPaginationQuery *models.CategoryPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockCategoryService) ListCategories(categoryPaginationQuery *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListCategories", categoryPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockCategoryServiceMockRecorder) ListCategories(categoryPaginationQuer
 }
 
 // GetCategoriesTree mocks base method
-func (m *MockCategoryService) GetCategoriesTree() (*entities.CategoryEntityTree, common.Error) {
+func (m *MockCategoryService) GetCategoriesTree() (*entities.CategoryEntityTree, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategoriesTree")
 	ret0, _ := ret[0].(*entities.CategoryEntityTree)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockCategoryServiceMockRecorder) GetCategoriesTree() *gomock.Call {
 }
 
 // GetCategory mocks base method
-func (m *MockCategoryService) GetCategory(categoryId *models.CategoryId) (*entities.CategoryEntity, common.Error) {
+func (m *MockCategoryService) GetCategory(categoryId *models.CategoryId) (*entities.CategoryEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategory", categoryId)
 	ret0, _ := ret[0].(*entities.CategoryEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,11 +81,11 @@ func (mr *MockCategoryServiceMockRecorder) GetCategory(categoryId interface{}) *
 }
 
 // GetCategoryTree mocks base method
-func (m *MockCategoryService) GetCategoryTree(categoryId *models.CategoryId) (*entities.CategoryEntityTree, common.Error) {
+func (m *MockCategoryService) GetCategoryTree(categoryId *models.CategoryId) (*entities.CategoryEntityTree, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategoryTree", categoryId)
 	ret0, _ := ret[0].(*entities.CategoryEntityTree)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -96,11 +96,11 @@ func (mr *MockCategoryServiceMockRecorder) GetCategoryTree(categoryId interface{
 }
 
 // CreateCategory mocks base method
-func (m *MockCategoryService) CreateCategory(data *models.CategoryCreate) (*entities.CategoryEntity, common.Error) {
+func (m *MockCategoryService) CreateCategory(data *models.CategoryCreate) (*entities.CategoryEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateCategory", data)
 	ret0, _ := ret[0].(*entities.CategoryEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -111,10 +111,10 @@ func (mr *MockCategoryServiceMockRecorder) CreateCategory(data interface{}) *gom
 }
 
 // UpdateCategory mocks base method
-func (m *MockCategoryService) UpdateCategory(categoryEntity *entities.CategoryEntity, data *models.CategoryUpdate) common.Error {
+func (m *MockCategoryService) UpdateCategory(categoryEntity *entities.CategoryEntity, data *models.CategoryUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateCategory", categoryEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -125,10 +125,10 @@ func (mr *MockCategoryServiceMockRecorder) UpdateCategory(categoryEntity, data i
 }
 
 // ChangeCategoryParent mocks base method
-func (m *MockCategoryService) ChangeCategoryParent(categoryEntity, parentCategoryEntity *entities.CategoryEntity) common.Error {
+func (m *MockCategoryService) ChangeCategoryParent(categoryEntity, parentCategoryEntity *entities.CategoryEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeCategoryParent", categoryEntity, parentCategoryEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -139,10 +139,10 @@ func (mr *MockCategoryServiceMockRecorder) ChangeCategoryParent(categoryEntity, 
 }
 
 // RemoveCategoryParent mocks base method
-func (m *MockCategoryService) RemoveCategoryParent(categoryEntity *entities.CategoryEntity) common.Error {
+func (m *MockCategoryService) RemoveCategoryParent(categoryEntity *entities.CategoryEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveCategoryParent", categoryEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -153,10 +153,10 @@ func (mr *MockCategoryServiceMockRecorder) RemoveCategoryParent(categoryEntity i
 }
 
 // DeleteCategory mocks base method
-func (m *MockCategoryService) DeleteCategory(categoryEntity *entities.CategoryEntity) common.Error {
+func (m *MockCategoryService) DeleteCategory(categoryEntity *entities.CategoryEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteCategory", categoryEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -164,4 +164,78 @@ func (m *MockCategoryService) DeleteCategory(categoryEntity *entities.CategoryEn
 func (mr *MockCategoryServiceMockRecorder) DeleteCategory(categoryEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCategory", reflect.TypeOf((*MockCategoryService)(nil).DeleteCategory), categoryEntity)
+}
+
+// GetCategoryXrefs mocks base method
+func (m *MockCategoryService) GetCategoryXrefs(arg0 *entities.CategoryEntity) ([]*entities.CategoryXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoryXrefs", arg0)
+	ret0, _ := ret[0].([]*entities.CategoryXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetCategoryXrefs indicates an expected call of GetCategoryXrefs
+func (mr *MockCategoryServiceMockRecorder) GetCategoryXrefs(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoryXrefs", reflect.TypeOf((*MockCategoryService)(nil).GetCategoryXrefs), arg0)
+}
+
+// GetCategoryObjectXrefs mocks base method
+func (m *MockCategoryService) GetCategoryObjectXrefs(arg0 models.Object) ([]*entities.CategoryXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoryObjectXrefs", arg0)
+	ret0, _ := ret[0].([]*entities.CategoryXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetCategoryObjectXrefs indicates an expected call of GetCategoryObjectXrefs
+func (mr *MockCategoryServiceMockRecorder) GetCategoryObjectXrefs(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoryObjectXrefs", reflect.TypeOf((*MockCategoryService)(nil).GetCategoryObjectXrefs), arg0)
+}
+
+// GetCategoryXref mocks base method
+func (m *MockCategoryService) GetCategoryXref(arg0 *entities.CategoryEntity, arg1 models.Object) (*entities.CategoryXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoryXref", arg0, arg1)
+	ret0, _ := ret[0].(*entities.CategoryXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetCategoryXref indicates an expected call of GetCategoryXref
+func (mr *MockCategoryServiceMockRecorder) GetCategoryXref(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoryXref", reflect.TypeOf((*MockCategoryService)(nil).GetCategoryXref), arg0, arg1)
+}
+
+// CreateCategoryXref mocks base method
+func (m *MockCategoryService) CreateCategoryXref(arg0 *entities.CategoryEntity, arg1 models.Object) (*entities.CategoryXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateCategoryXref", arg0, arg1)
+	ret0, _ := ret[0].(*entities.CategoryXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// CreateCategoryXref indicates an expected call of CreateCategoryXref
+func (mr *MockCategoryServiceMockRecorder) CreateCategoryXref(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryXref", reflect.TypeOf((*MockCategoryService)(nil).CreateCategoryXref), arg0, arg1)
+}
+
+// DeleteCategoryXref mocks base method
+func (m *MockCategoryService) DeleteCategoryXref(arg0 *entities.CategoryXrefEntity) errors.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteCategoryXref", arg0)
+	ret0, _ := ret[0].(errors.Error)
+	return ret0
+}
+
+// DeleteCategoryXref indicates an expected call of DeleteCategoryXref
+func (mr *MockCategoryServiceMockRecorder) DeleteCategoryXref(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCategoryXref", reflect.TypeOf((*MockCategoryService)(nil).DeleteCategoryXref), arg0)
 }

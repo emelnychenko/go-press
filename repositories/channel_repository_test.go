@@ -1,10 +1,9 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -28,7 +27,7 @@ func TestChannelRepository(t *testing.T) {
 	assert.Equal(t, db, channelRepository.db)
 	assert.Equal(t, dbPaginator, channelRepository.dbPaginator)
 
-	channelId := common.NewModelId()
+	channelId := models.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": channelId.String(),
 	}}
@@ -48,11 +47,11 @@ func TestChannelRepository(t *testing.T) {
 	})
 
 	t.Run("ListChannels:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		channelPaginationQuery := &models.ChannelPaginationQuery{
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), channelPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -83,7 +82,7 @@ func TestChannelRepository(t *testing.T) {
 
 		channelEntity, err := channelRepository.GetChannel(channelId)
 		assert.NotNil(t, channelEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveChannel", func(t *testing.T) {
@@ -94,7 +93,7 @@ func TestChannelRepository(t *testing.T) {
 	})
 
 	t.Run("SaveChannel:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		channelEntity := new(entities.ChannelEntity)
 		assert.Error(t, channelRepository.SaveChannel(channelEntity))
@@ -108,7 +107,7 @@ func TestChannelRepository(t *testing.T) {
 	})
 
 	t.Run("RemoveChannel:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		channelEntity := new(entities.ChannelEntity)
 		assert.Error(t, channelRepository.RemoveChannel(channelEntity))

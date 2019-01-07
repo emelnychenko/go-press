@@ -1,12 +1,11 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"time"
 )
 
 type (
-	PollId = common.ModelId
+	PollId = ModelId
 
 	Poll struct {
 		Id      *PollId    `json:"id" xml:"id"`

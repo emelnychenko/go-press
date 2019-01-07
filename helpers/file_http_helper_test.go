@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -18,7 +17,7 @@ func TestFileHttpHelper(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	var fileId = common.NewModelId()
+	var fileId = new(models.FileId)
 
 	t.Run("NewFileHttpHelper", func(t *testing.T) {
 		_, isFileParamParser := NewFileHttpHelper().(*fileHttpHelperImpl)

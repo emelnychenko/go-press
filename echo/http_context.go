@@ -1,8 +1,8 @@
 package echo
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/labstack/echo"
 	"mime/multipart"
 	"net/http"
@@ -31,11 +31,11 @@ func (c *httpContextImpl) Parameter(parameterName string) string {
 	return c.context.Param(parameterName)
 }
 
-func (c *httpContextImpl) BindModel(data interface{}) (err common.Error) {
+func (c *httpContextImpl) BindModel(data interface{}) (err errors.Error) {
 	echoErr := c.context.Bind(data)
 
 	if nil != echoErr {
-		err = common.NewBadRequestErrorFromBuiltin(echoErr)
+		err = errors.NewBadRequestErrorFromBuiltin(echoErr)
 		return
 	}
 
@@ -43,11 +43,11 @@ func (c *httpContextImpl) BindModel(data interface{}) (err common.Error) {
 	return
 }
 
-func (c *httpContextImpl) FormFile(formFileName string) (fileHeader *multipart.FileHeader, err common.Error) {
+func (c *httpContextImpl) FormFile(formFileName string) (fileHeader *multipart.FileHeader, err errors.Error) {
 	fileHeader, echoErr := c.context.FormFile(formFileName)
 
 	if nil != echoErr {
-		err = common.NewBadRequestErrorFromBuiltin(echoErr)
+		err = errors.NewBadRequestErrorFromBuiltin(echoErr)
 	}
 
 	return

@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -62,7 +62,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("CreateUser:SaveError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userEntity := new(entities.UserEntity)
 		userEntityFactory := mocks.NewMockUserEntityFactory(ctrl)
 		userEntityFactory.EXPECT().CreateUserEntity().Return(userEntity)
@@ -103,7 +103,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("CreateUser:HasherError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		password := "pass0"
 		hasher := mocks.NewMockHasher(ctrl)
 		hasher.EXPECT().Make(password).Return("", systemErr)
@@ -224,7 +224,7 @@ func TestUserService(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		password := "pass0"
 		hasher := mocks.NewMockHasher(ctrl)

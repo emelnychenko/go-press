@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockPostController) EXPECT() *MockPostControllerMockRecorder {
 }
 
 // ListPosts mocks base method
-func (m *MockPostController) ListPosts(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostController) ListPosts(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPosts", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockPostControllerMockRecorder) ListPosts(httpContext interface{}) *go
 }
 
 // GetPost mocks base method
-func (m *MockPostController) GetPost(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostController) GetPost(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPost", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockPostControllerMockRecorder) GetPost(httpContext interface{}) *gomo
 }
 
 // CreatePost mocks base method
-func (m *MockPostController) CreatePost(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostController) CreatePost(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePost", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockPostControllerMockRecorder) CreatePost(httpContext interface{}) *g
 }
 
 // UpdatePost mocks base method
-func (m *MockPostController) UpdatePost(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostController) UpdatePost(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePost", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockPostControllerMockRecorder) UpdatePost(httpContext interface{}) *g
 }
 
 // DeletePost mocks base method
-func (m *MockPostController) DeletePost(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostController) DeletePost(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeletePost", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

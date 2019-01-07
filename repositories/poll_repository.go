@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -22,7 +21,7 @@ func NewPollRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contracts
 
 func (r *pollRepositoryImpl) ListPolls(
 	pollPaginationQuery *models.PollPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	paginationTotal, pollEntities := 0, make([]*entities.PollEntity, pollPaginationQuery.Limit)
 	db := r.db.Model(&pollEntities).Order("created desc")
 	err = r.dbPaginator.Paginate(db, pollPaginationQuery.PaginationQuery, &pollEntities, &paginationTotal)
@@ -35,31 +34,31 @@ func (r *pollRepositoryImpl) ListPolls(
 	return
 }
 
-func (r *pollRepositoryImpl) GetPoll(pollId *models.PollId) (pollEntity *entities.PollEntity, err common.Error) {
+func (r *pollRepositoryImpl) GetPoll(pollId *models.PollId) (pollEntity *entities.PollEntity, err errors.Error) {
 	pollEntity = new(entities.PollEntity)
 
 	if gormErr := r.db.First(pollEntity, "id = ?", pollId).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewPollByIdNotFoundError(pollId)
 		} else {
-			err = common.NewSystemErrorFromBuiltin(gormErr)
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
 	return
 }
 
-func (r *pollRepositoryImpl) SavePoll(pollEntity *entities.PollEntity) (err common.Error) {
+func (r *pollRepositoryImpl) SavePoll(pollEntity *entities.PollEntity) (err errors.Error) {
 	if gormErr := r.db.Save(pollEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (r *pollRepositoryImpl) RemovePoll(pollEntity *entities.PollEntity) (err common.Error) {
+func (r *pollRepositoryImpl) RemovePoll(pollEntity *entities.PollEntity) (err errors.Error) {
 	if gormErr := r.db.Delete(pollEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

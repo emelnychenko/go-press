@@ -1,10 +1,10 @@
 package contracts
 
-import "github.com/emelnychenko/go-press/common"
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	Hasher interface {
-		Make(password string) (string, common.Error)
-		Check(hashedPassword, password string) common.Error
+		Make(password string) (string, errors.Error)
+		Check(hashedPassword, password string) errors.Error
 	}
 )

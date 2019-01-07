@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("ListBanners:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.BannerPaginationQuery)
 
 		bannerService := mocks.NewMockBannerService(ctrl)
@@ -83,7 +83,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("GetBanner:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		bannerId := new(models.BannerId)
 		bannerService := mocks.NewMockBannerService(ctrl)
@@ -127,7 +127,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("CreateBanner:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.BannerCreate)
 		bannerService := mocks.NewMockBannerService(ctrl)
@@ -165,7 +165,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("UpdateBanner:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		bannerId := new(models.BannerId)
 		bannerService := mocks.NewMockBannerService(ctrl)
@@ -177,7 +177,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("UpdateBanner:UpdateBannerError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		bannerId := new(models.BannerId)
 		bannerEntity := new(entities.BannerEntity)
@@ -219,7 +219,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("DeleteBanner:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		bannerId := new(models.BannerId)
 		bannerService := mocks.NewMockBannerService(ctrl)
@@ -230,7 +230,7 @@ func TestBannerApi(t *testing.T) {
 	})
 
 	t.Run("DeleteBanner:DeleteBannerError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		bannerId := new(models.BannerId)
 		bannerEntity := new(entities.BannerEntity)
 

@@ -1,7 +1,7 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"mime/multipart"
 	"net/http"
 )
@@ -11,7 +11,7 @@ type (
 		Request() *http.Request
 		Response() http.ResponseWriter
 		Parameter(parameterName string) string
-		FormFile(formFileName string) (*multipart.FileHeader, common.Error)
-		BindModel(data interface{}) common.Error
+		FormFile(formFileName string) (*multipart.FileHeader, errors.Error)
+		BindModel(data interface{}) errors.Error
 	}
 )

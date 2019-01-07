@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/labstack/echo"
 )
 
@@ -24,7 +24,7 @@ func NewFileController(
 	}
 }
 
-func (c *fileControllerImpl) ListFiles(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *fileControllerImpl) ListFiles(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	filePaginationQuery := c.fileModelFactory.CreateFilePaginationQuery()
 
 	if err = httpContext.BindModel(filePaginationQuery.PaginationQuery); err != nil {
@@ -39,7 +39,7 @@ func (c *fileControllerImpl) ListFiles(httpContext contracts.HttpContext) (pagin
 	return
 }
 
-func (c *fileControllerImpl) GetFile(httpContext contracts.HttpContext) (file interface{}, err common.Error) {
+func (c *fileControllerImpl) GetFile(httpContext contracts.HttpContext) (file interface{}, err errors.Error) {
 	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
@@ -50,7 +50,7 @@ func (c *fileControllerImpl) GetFile(httpContext contracts.HttpContext) (file in
 	return
 }
 
-func (c *fileControllerImpl) UploadFile(httpContext contracts.HttpContext) (file interface{}, err common.Error) {
+func (c *fileControllerImpl) UploadFile(httpContext contracts.HttpContext) (file interface{}, err errors.Error) {
 	fileHeader, err := c.fileHttpHelper.GetFileHeader(httpContext)
 
 	if err != nil {
@@ -74,7 +74,7 @@ func (c *fileControllerImpl) UploadFile(httpContext contracts.HttpContext) (file
 	return
 }
 
-func (c *fileControllerImpl) DownloadFile(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *fileControllerImpl) DownloadFile(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
@@ -85,7 +85,7 @@ func (c *fileControllerImpl) DownloadFile(httpContext contracts.HttpContext) (_ 
 	return
 }
 
-func (c *fileControllerImpl) UpdateFile(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *fileControllerImpl) UpdateFile(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {
@@ -102,7 +102,7 @@ func (c *fileControllerImpl) UpdateFile(httpContext contracts.HttpContext) (_ in
 	return
 }
 
-func (c *fileControllerImpl) DeleteFile(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *fileControllerImpl) DeleteFile(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	fileId, err := c.fileHttpHelper.ParseFileId(httpContext)
 
 	if err != nil {

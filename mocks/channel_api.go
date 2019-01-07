@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockChannelApi) EXPECT() *MockChannelApiMockRecorder {
 }
 
 // ListChannels mocks base method
-func (m *MockChannelApi) ListChannels(channelPaginationQuery *models.ChannelPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockChannelApi) ListChannels(channelPaginationQuery *models.ChannelPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListChannels", channelPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockChannelApiMockRecorder) ListChannels(channelPaginationQuery interf
 }
 
 // GetChannel mocks base method
-func (m *MockChannelApi) GetChannel(channelId *models.ChannelId) (*models.Channel, common.Error) {
+func (m *MockChannelApi) GetChannel(channelId *models.ChannelId) (*models.Channel, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChannel", channelId)
 	ret0, _ := ret[0].(*models.Channel)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockChannelApiMockRecorder) GetChannel(channelId interface{}) *gomock.
 }
 
 // CreateChannel mocks base method
-func (m *MockChannelApi) CreateChannel(data *models.ChannelCreate) (*models.Channel, common.Error) {
+func (m *MockChannelApi) CreateChannel(data *models.ChannelCreate) (*models.Channel, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateChannel", data)
 	ret0, _ := ret[0].(*models.Channel)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockChannelApiMockRecorder) CreateChannel(data interface{}) *gomock.Ca
 }
 
 // UpdateChannel mocks base method
-func (m *MockChannelApi) UpdateChannel(channelId *models.ChannelId, data *models.ChannelUpdate) common.Error {
+func (m *MockChannelApi) UpdateChannel(channelId *models.ChannelId, data *models.ChannelUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateChannel", channelId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockChannelApiMockRecorder) UpdateChannel(channelId, data interface{})
 }
 
 // DeleteChannel mocks base method
-func (m *MockChannelApi) DeleteChannel(channelId *models.ChannelId) common.Error {
+func (m *MockChannelApi) DeleteChannel(channelId *models.ChannelId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteChannel", channelId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

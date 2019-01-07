@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -22,7 +21,7 @@ type (
 func NewPollEntity() *PollEntity {
 	created := time.Now().UTC()
 	return &PollEntity{
-		Id:      common.NewModelId(),
+		Id:      models.NewModelId(),
 		Created: &created,
 	}
 }

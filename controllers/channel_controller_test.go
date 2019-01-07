@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("ListChannels:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		channelPaginationQuery := new(models.ChannelPaginationQuery)
 		channelModelFactory := mocks.NewMockChannelModelFactory(ctrl)
@@ -72,7 +72,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("ListChannels:BindChannelPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		channelPaginationQuery := new(models.ChannelPaginationQuery)
 		channelModelFactory := mocks.NewMockChannelModelFactory(ctrl)
@@ -110,7 +110,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("GetChannel:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		channelHttpHelper := mocks.NewMockChannelHttpHelper(ctrl)
@@ -125,7 +125,7 @@ func TestChannelController(t *testing.T) {
 
 	t.Run("GetChannel:ApiError", func(t *testing.T) {
 		channelId := new(models.ChannelId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		channelApi := mocks.NewMockChannelApi(ctrl)
@@ -164,7 +164,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("CreateChannel:BindChannelUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.ChannelCreate)
 
 		channelModelFactory := mocks.NewMockChannelModelFactory(ctrl)
@@ -182,7 +182,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("CreateChannel:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.ChannelCreate)
 
 		channelModelFactory := mocks.NewMockChannelModelFactory(ctrl)
@@ -229,7 +229,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("UpdateChannel:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		channelHttpHelper := mocks.NewMockChannelHttpHelper(ctrl)
@@ -243,7 +243,7 @@ func TestChannelController(t *testing.T) {
 
 	t.Run("UpdateChannel:BindChannelUpdateError", func(t *testing.T) {
 		channelId := new(models.ChannelId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.ChannelUpdate)
 		channelModelFactory := mocks.NewMockChannelModelFactory(ctrl)
 		channelModelFactory.EXPECT().CreateChannelUpdate().Return(data)
@@ -265,7 +265,7 @@ func TestChannelController(t *testing.T) {
 
 	t.Run("UpdateChannel:ApiError", func(t *testing.T) {
 		channelId := new(models.ChannelId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.ChannelUpdate)
 		channelModelFactory := mocks.NewMockChannelModelFactory(ctrl)
@@ -308,7 +308,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("DeleteChannel:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -322,7 +322,7 @@ func TestChannelController(t *testing.T) {
 	})
 
 	t.Run("DeleteChannel:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		channelId := new(models.ChannelId)
 
 		channelApi := mocks.NewMockChannelApi(ctrl)

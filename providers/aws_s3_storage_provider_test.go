@@ -3,7 +3,6 @@ package providers
 import (
 	"bytes"
 	"errors"
-	"github.com/emelnychenko/go-press/aws_mocks"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
@@ -27,15 +26,15 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3WriterProxyFactory := mocks.NewMockAwsS3WriterProxyFactory(ctrl)
 
 		awsS3Factory := mocks.NewMockAwsS3Factory(ctrl)
-		awsSdkS3 := aws_mocks.NewMockS3API(ctrl)
+		awsSdkS3 :=  mocks.NewMockS3API(ctrl)
 		awsS3Factory.EXPECT().Create(gomock.Any()).Return(awsSdkS3)
 
 		awsS3UploaderFactory := mocks.NewMockAwsS3UploaderFactory(ctrl)
-		awsSdkS3Uploader := aws_mocks.NewMockUploaderAPI(ctrl)
+		awsSdkS3Uploader :=  mocks.NewMockUploaderAPI(ctrl)
 		awsS3UploaderFactory.EXPECT().Create(gomock.Any()).Return(awsSdkS3Uploader)
 
 		awsS3DownloaderFactory := mocks.NewMockAwsS3DownloaderFactory(ctrl)
-		awsSdkS3Downloader := aws_mocks.NewMockDownloaderAPI(ctrl)
+		awsSdkS3Downloader :=  mocks.NewMockDownloaderAPI(ctrl)
 		awsS3DownloaderFactory.EXPECT().Create(gomock.Any()).Return(awsSdkS3Downloader)
 
 		var awsS3StorageProvider *awsS3StorageProviderImpl
@@ -59,7 +58,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
 		awsS3Parameters.EXPECT().Bucket().Return("")
 
-		awsSdkS3Uploader := aws_mocks.NewMockUploaderAPI(ctrl)
+		awsSdkS3Uploader :=  mocks.NewMockUploaderAPI(ctrl)
 		awsSdkS3Uploader.EXPECT().Upload(gomock.Any()).Return(nil, nil)
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
@@ -75,7 +74,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
 		awsS3Parameters.EXPECT().Bucket().Return("")
 
-		awsSdkS3Uploader := aws_mocks.NewMockUploaderAPI(ctrl)
+		awsSdkS3Uploader :=  mocks.NewMockUploaderAPI(ctrl)
 		awsSdkS3Uploader.EXPECT().Upload(gomock.Any()).Return(nil, errors.New(""))
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
@@ -97,7 +96,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3WriterProxyFactory := mocks.NewMockAwsS3WriterProxyFactory(ctrl)
 		awsS3WriterProxyFactory.EXPECT().Create(fileDestination).Return(awsS3WriterProxy)
 
-		awsSdkS3Downloader := aws_mocks.NewMockDownloaderAPI(ctrl)
+		awsSdkS3Downloader :=  mocks.NewMockDownloaderAPI(ctrl)
 		awsSdkS3Downloader.EXPECT().Download(awsS3WriterProxy, gomock.Any()).Return(int64(0), nil)
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
@@ -120,7 +119,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3WriterProxyFactory := mocks.NewMockAwsS3WriterProxyFactory(ctrl)
 		awsS3WriterProxyFactory.EXPECT().Create(fileDestination).Return(awsS3WriterProxy)
 
-		awsSdkS3Downloader := aws_mocks.NewMockDownloaderAPI(ctrl)
+		awsSdkS3Downloader :=  mocks.NewMockDownloaderAPI(ctrl)
 		awsSdkS3Downloader.EXPECT().Download(awsS3WriterProxy, gomock.Any()).Return(int64(0), errors.New(""))
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
@@ -137,7 +136,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
 		awsS3Parameters.EXPECT().Bucket().Return("")
 
-		awsSdkS3 := aws_mocks.NewMockS3API(ctrl)
+		awsSdkS3 :=  mocks.NewMockS3API(ctrl)
 		awsSdkS3.EXPECT().DeleteObject(gomock.Any()).Return(nil, nil)
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{
@@ -153,7 +152,7 @@ func TestAwsS3StorageProvider(t *testing.T) {
 		awsS3Parameters := mocks.NewMockAwsS3Parameters(ctrl)
 		awsS3Parameters.EXPECT().Bucket().Return("")
 
-		awsSdkS3 := aws_mocks.NewMockS3API(ctrl)
+		awsSdkS3 :=  mocks.NewMockS3API(ctrl)
 		awsSdkS3.EXPECT().DeleteObject(gomock.Any()).Return(nil, errors.New(""))
 
 		awsS3StorageProvider := &awsS3StorageProviderImpl{

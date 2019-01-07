@@ -1,25 +1,27 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/enums"
 	"github.com/google/uuid"
+)
+
+const (
+	SystemSubjectType SubjectType = "system"
 )
 
 type (
 	SystemUser struct {
-		Id *common.ModelId `json:"id" xml:"id"`
+		Id *SubjectId `json:"id" xml:"id"`
 	}
 )
 
 func NewSystemUser() *SystemUser {
-	return &SystemUser{Id: &common.ModelId{uuid.Nil}}
+	return &SystemUser{Id: &ModelId{uuid.Nil}}
 }
 
-func (c *SystemUser) SubjectId() *common.ModelId {
+func (c *SystemUser) SubjectId() *SubjectId {
 	return c.Id
 }
 
-func (*SystemUser) SubjectType() enums.SubjectType {
-	return enums.SystemSubjectType
+func (*SystemUser) SubjectType() SubjectType {
+	return SystemSubjectType
 }

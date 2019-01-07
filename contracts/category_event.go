@@ -1,8 +1,6 @@
 package contracts
 
-import (
-	"github.com/emelnychenko/go-press/entities"
-)
+import "github.com/emelnychenko/go-press/entities"
 
 type (
 	CategoryEvent interface {

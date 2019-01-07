@@ -1,8 +1,8 @@
 package jobs
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -57,7 +57,7 @@ func TestCategoryEdgesBuilderJob(t *testing.T) {
 	})
 
 	t.Run("BuildCategoriesEdges:GetCategoriesError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryEntity := &entities.CategoryEntity{Left: 1, Right: 2}
 		categoryEntities := []*entities.CategoryEntity{categoryEntity}
@@ -74,7 +74,7 @@ func TestCategoryEdgesBuilderJob(t *testing.T) {
 	})
 
 	t.Run("BuildCategoriesEdges:BuildCategoryEntityNestedSetError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryEntity := &entities.CategoryEntity{Left: 1, Right: 2}
 		categoryEntities := []*entities.CategoryEntity{categoryEntity}
@@ -95,7 +95,7 @@ func TestCategoryEdgesBuilderJob(t *testing.T) {
 	})
 
 	t.Run("BuildCategoriesEdges:SaveCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryEntity := &entities.CategoryEntity{Left: 1, Right: 2}
 		categoryEntities := []*entities.CategoryEntity{categoryEntity}

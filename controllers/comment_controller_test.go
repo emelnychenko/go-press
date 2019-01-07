@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("ListComments:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		commentPaginationQuery := new(models.CommentPaginationQuery)
 		commentModelFactory := mocks.NewMockCommentModelFactory(ctrl)
@@ -72,7 +72,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("ListComments:BindCommentPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		commentPaginationQuery := new(models.CommentPaginationQuery)
 		commentModelFactory := mocks.NewMockCommentModelFactory(ctrl)
@@ -110,7 +110,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("GetComment:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		commentHttpHelper := mocks.NewMockCommentHttpHelper(ctrl)
@@ -125,7 +125,7 @@ func TestCommentController(t *testing.T) {
 
 	t.Run("GetComment:ApiError", func(t *testing.T) {
 		commentId := new(models.CommentId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		commentApi := mocks.NewMockCommentApi(ctrl)
@@ -164,7 +164,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("CreateComment:BindCommentUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.CommentCreate)
 
 		commentModelFactory := mocks.NewMockCommentModelFactory(ctrl)
@@ -182,7 +182,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("CreateComment:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.CommentCreate)
 
 		commentModelFactory := mocks.NewMockCommentModelFactory(ctrl)
@@ -229,7 +229,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("UpdateComment:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		commentHttpHelper := mocks.NewMockCommentHttpHelper(ctrl)
@@ -243,7 +243,7 @@ func TestCommentController(t *testing.T) {
 
 	t.Run("UpdateComment:BindCommentUpdateError", func(t *testing.T) {
 		commentId := new(models.CommentId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.CommentUpdate)
 		commentModelFactory := mocks.NewMockCommentModelFactory(ctrl)
 		commentModelFactory.EXPECT().CreateCommentUpdate().Return(data)
@@ -265,7 +265,7 @@ func TestCommentController(t *testing.T) {
 
 	t.Run("UpdateComment:ApiError", func(t *testing.T) {
 		commentId := new(models.CommentId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.CommentUpdate)
 		commentModelFactory := mocks.NewMockCommentModelFactory(ctrl)
@@ -308,7 +308,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("DeleteComment:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -322,7 +322,7 @@ func TestCommentController(t *testing.T) {
 	})
 
 	t.Run("DeleteComment:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		commentId := new(models.CommentId)
 
 		commentApi := mocks.NewMockCommentApi(ctrl)

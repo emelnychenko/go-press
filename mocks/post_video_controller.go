@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockPostVideoController) EXPECT() *MockPostVideoControllerMockRecorder 
 }
 
 // ChangePostVideo mocks base method
-func (m *MockPostVideoController) ChangePostVideo(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostVideoController) ChangePostVideo(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostVideo", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockPostVideoControllerMockRecorder) ChangePostVideo(httpContext inter
 }
 
 // RemovePostVideo mocks base method
-func (m *MockPostVideoController) RemovePostVideo(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPostVideoController) RemovePostVideo(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemovePostVideo", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

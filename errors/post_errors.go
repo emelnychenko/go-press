@@ -2,16 +2,14 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/models"
 )
 
-func NewPostNotFoundError(request string) common.Error {
+func NewPostNotFoundError(request string) Error {
 	message := fmt.Sprintf("The post was not found on request: %s", request)
-	return common.NewNotFoundError(message)
+	return NewNotFoundError(message)
 }
 
-func NewPostByIdNotFoundError(fileId *models.PostId) common.Error {
-	request := fmt.Sprintf("id = %s", fileId)
+func NewPostByIdNotFoundError(postId fmt.Stringer) Error {
+	request := fmt.Sprintf("id = %s", postId)
 	return NewPostNotFoundError(request)
 }

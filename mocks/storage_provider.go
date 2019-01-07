@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	io "io"
 	reflect "reflect"
@@ -36,10 +36,10 @@ func (m *MockStorageProvider) EXPECT() *MockStorageProviderMockRecorder {
 }
 
 // UploadFile mocks base method
-func (m *MockStorageProvider) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) common.Error {
+func (m *MockStorageProvider) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadFile", fileEntity, fileSource)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -50,10 +50,10 @@ func (mr *MockStorageProviderMockRecorder) UploadFile(fileEntity, fileSource int
 }
 
 // DownloadFile mocks base method
-func (m *MockStorageProvider) DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) common.Error {
+func (m *MockStorageProvider) DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownloadFile", fileEntity, fileDestination)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -64,10 +64,10 @@ func (mr *MockStorageProviderMockRecorder) DownloadFile(fileEntity, fileDestinat
 }
 
 // DeleteFile mocks base method
-func (m *MockStorageProvider) DeleteFile(fileEntity *entities.FileEntity) common.Error {
+func (m *MockStorageProvider) DeleteFile(fileEntity *entities.FileEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteFile", fileEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

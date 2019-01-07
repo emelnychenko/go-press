@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -49,7 +49,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("ListUsers:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userPaginationQuery := new(models.UserPaginationQuery)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
@@ -68,7 +68,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("ListUsers:BindUserPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userPaginationQuery := new(models.UserPaginationQuery)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
@@ -106,7 +106,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("GetUser:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
@@ -121,7 +121,7 @@ func TestUserController(t *testing.T) {
 
 	t.Run("GetUser:ApiError", func(t *testing.T) {
 		userId := new(models.UserId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userApi := mocks.NewMockUserApi(ctrl)
@@ -160,7 +160,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("CreateUser:BindUserUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.UserCreate)
 
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
@@ -178,7 +178,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("CreateUser:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.UserCreate)
 
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
@@ -225,7 +225,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("UpdateUser:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
@@ -239,7 +239,7 @@ func TestUserController(t *testing.T) {
 
 	t.Run("UpdateUser:BindUserUpdateError", func(t *testing.T) {
 		userId := new(models.UserId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.UserUpdate)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
 		userModelFactory.EXPECT().CreateUserUpdate().Return(data)
@@ -285,7 +285,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("ChangeUserIdentity:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
@@ -299,7 +299,7 @@ func TestUserController(t *testing.T) {
 
 	t.Run("ChangeUserIdentity:BindUserUpdateError", func(t *testing.T) {
 		userId := new(models.UserId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.UserChangeIdentity)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
 		userModelFactory.EXPECT().CreateUserChangeIdentity().Return(data)
@@ -321,7 +321,7 @@ func TestUserController(t *testing.T) {
 
 	t.Run("ChangeUserIdentity:ApiError", func(t *testing.T) {
 		userId := new(models.UserId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.UserChangeIdentity)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
@@ -372,7 +372,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		userHttpHelper := mocks.NewMockUserHttpHelper(ctrl)
@@ -386,7 +386,7 @@ func TestUserController(t *testing.T) {
 
 	t.Run("ChangeUserPassword:BindUserUpdateError", func(t *testing.T) {
 		userId := new(models.UserId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.UserChangePassword)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
 		userModelFactory.EXPECT().CreateUserChangePassword().Return(data)
@@ -408,7 +408,7 @@ func TestUserController(t *testing.T) {
 
 	t.Run("ChangeUserPassword:ApiError", func(t *testing.T) {
 		userId := new(models.UserId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.UserChangePassword)
 		userModelFactory := mocks.NewMockUserModelFactory(ctrl)
@@ -451,7 +451,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("DeleteUser:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -465,7 +465,7 @@ func TestUserController(t *testing.T) {
 	})
 
 	t.Run("DeleteUser:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userApi := mocks.NewMockUserApi(ctrl)

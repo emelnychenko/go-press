@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("ListPolls:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		pollPaginationQuery := new(models.PollPaginationQuery)
 		pollModelFactory := mocks.NewMockPollModelFactory(ctrl)
@@ -72,7 +72,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("ListPolls:BindPollPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		pollPaginationQuery := new(models.PollPaginationQuery)
 		pollModelFactory := mocks.NewMockPollModelFactory(ctrl)
@@ -110,7 +110,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("GetPoll:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		pollHttpHelper := mocks.NewMockPollHttpHelper(ctrl)
@@ -125,7 +125,7 @@ func TestPollController(t *testing.T) {
 
 	t.Run("GetPoll:ApiError", func(t *testing.T) {
 		pollId := new(models.PollId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		pollApi := mocks.NewMockPollApi(ctrl)
@@ -164,7 +164,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("CreatePoll:BindPollUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PollCreate)
 
 		pollModelFactory := mocks.NewMockPollModelFactory(ctrl)
@@ -182,7 +182,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("CreatePoll:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PollCreate)
 
 		pollModelFactory := mocks.NewMockPollModelFactory(ctrl)
@@ -229,7 +229,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("UpdatePoll:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		pollHttpHelper := mocks.NewMockPollHttpHelper(ctrl)
@@ -243,7 +243,7 @@ func TestPollController(t *testing.T) {
 
 	t.Run("UpdatePoll:BindPollUpdateError", func(t *testing.T) {
 		pollId := new(models.PollId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PollUpdate)
 		pollModelFactory := mocks.NewMockPollModelFactory(ctrl)
 		pollModelFactory.EXPECT().CreatePollUpdate().Return(data)
@@ -265,7 +265,7 @@ func TestPollController(t *testing.T) {
 
 	t.Run("UpdatePoll:ApiError", func(t *testing.T) {
 		pollId := new(models.PollId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.PollUpdate)
 		pollModelFactory := mocks.NewMockPollModelFactory(ctrl)
@@ -308,7 +308,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("DeletePoll:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -322,7 +322,7 @@ func TestPollController(t *testing.T) {
 	})
 
 	t.Run("DeletePoll:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		pollId := new(models.PollId)
 
 		pollApi := mocks.NewMockPollApi(ctrl)

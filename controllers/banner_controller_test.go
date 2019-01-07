@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("ListBanners:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		bannerPaginationQuery := new(models.BannerPaginationQuery)
 		bannerModelFactory := mocks.NewMockBannerModelFactory(ctrl)
@@ -72,7 +72,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("ListBanners:BindBannerPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		bannerPaginationQuery := new(models.BannerPaginationQuery)
 		bannerModelFactory := mocks.NewMockBannerModelFactory(ctrl)
@@ -110,7 +110,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("GetBanner:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		bannerHttpHelper := mocks.NewMockBannerHttpHelper(ctrl)
@@ -125,7 +125,7 @@ func TestBannerController(t *testing.T) {
 
 	t.Run("GetBanner:ApiError", func(t *testing.T) {
 		bannerId := new(models.BannerId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		bannerApi := mocks.NewMockBannerApi(ctrl)
@@ -164,7 +164,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("CreateBanner:BindBannerUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.BannerCreate)
 
 		bannerModelFactory := mocks.NewMockBannerModelFactory(ctrl)
@@ -182,7 +182,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("CreateBanner:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.BannerCreate)
 
 		bannerModelFactory := mocks.NewMockBannerModelFactory(ctrl)
@@ -229,7 +229,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("UpdateBanner:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		bannerHttpHelper := mocks.NewMockBannerHttpHelper(ctrl)
@@ -243,7 +243,7 @@ func TestBannerController(t *testing.T) {
 
 	t.Run("UpdateBanner:BindBannerUpdateError", func(t *testing.T) {
 		bannerId := new(models.BannerId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.BannerUpdate)
 		bannerModelFactory := mocks.NewMockBannerModelFactory(ctrl)
 		bannerModelFactory.EXPECT().CreateBannerUpdate().Return(data)
@@ -265,7 +265,7 @@ func TestBannerController(t *testing.T) {
 
 	t.Run("UpdateBanner:ApiError", func(t *testing.T) {
 		bannerId := new(models.BannerId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.BannerUpdate)
 		bannerModelFactory := mocks.NewMockBannerModelFactory(ctrl)
@@ -308,7 +308,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("DeleteBanner:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -322,7 +322,7 @@ func TestBannerController(t *testing.T) {
 	})
 
 	t.Run("DeleteBanner:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		bannerId := new(models.BannerId)
 
 		bannerApi := mocks.NewMockBannerApi(ctrl)

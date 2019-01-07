@@ -1,9 +1,10 @@
 package builders
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
+	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -23,18 +24,18 @@ func TestCategoryNestedSetBuilder(t *testing.T) {
 	})
 
 	t.Run("BuildCategoryEntityNestedSet", func(t *testing.T) {
-		categoryEntityRoot0 := &entities.CategoryEntity{Id: common.NewModelId()}
+		categoryEntityRoot0 := &entities.CategoryEntity{Id: models.NewModelId()}
 		categoryEntityRoot0Node0 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
 		categoryEntityRoot0Node1 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
 		categoryEntityRoot0Node1Node0 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
 		categoryEntityRoot0Node1Node1 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
-		categoryEntityRoot1 := &entities.CategoryEntity{Id: common.NewModelId()}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
+		categoryEntityRoot1 := &entities.CategoryEntity{Id: models.NewModelId()}
 		categoryEntityRoot1Node0 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot1.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot1.Id}
 
 		categoryEntities := []*entities.CategoryEntity{
 			categoryEntityRoot0,
@@ -49,7 +50,7 @@ func TestCategoryNestedSetBuilder(t *testing.T) {
 		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
 		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(categoryEntities).DoAndReturn(func(
 			categoryEntities []*entities.CategoryEntity,
-		) (*entities.CategoryEntityTree, common.Error) {
+		) (*entities.CategoryEntityTree, errors.Error) {
 			return new(categoryTreeBuilderImpl).BuildCategoryEntityTree(categoryEntities)
 		})
 
@@ -83,7 +84,7 @@ func TestCategoryNestedSetBuilder(t *testing.T) {
 	})
 
 	t.Run("BuildCategoryEntityNestedSet:BuildCategoryEntityTreeError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		var categoryEntities []*entities.CategoryEntity
 
 		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)

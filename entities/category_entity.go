@@ -1,13 +1,13 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
 
 const (
-	CategoryTableName = "categories"
+	CategoryTableName     = "categories"
+	CategoryXrefTableName = "category_xref"
 )
 
 type (
@@ -19,6 +19,13 @@ type (
 		Right            int
 		Created          *time.Time
 		Updated          *time.Time
+	}
+
+	CategoryXrefEntity struct {
+		CategoryId *models.CategoryId `gorm:"primary_key;type:char(36)"`
+		ObjectType models.ObjectType  `gorm:"primary_key"`
+		ObjectId   *models.ObjectId   `gorm:"primary_key;type:char(36)"`
+		Created    *time.Time
 	}
 
 	CategoryEntityTree struct {
@@ -45,7 +52,7 @@ type (
 func NewCategoryEntity() *CategoryEntity {
 	created := time.Now().UTC()
 	return &CategoryEntity{
-		Id:      common.NewModelId(),
+		Id:      models.NewModelId(),
 		Created: &created,
 	}
 }
@@ -58,6 +65,33 @@ func (*CategoryEntity) TableName() string {
 //SetParentCategory
 func (e *CategoryEntity) SetParentCategory(categoryEntity *CategoryEntity) {
 	e.ParentCategoryId = categoryEntity.Id
+}
+
+//NewCategoryXrefEntity
+func NewCategoryXrefEntity(categoryEntity *CategoryEntity, categoryObject models.Object) *CategoryXrefEntity {
+	created := time.Now().UTC()
+	return &CategoryXrefEntity{
+		CategoryId: categoryEntity.Id,
+		ObjectType: categoryObject.ObjectType(),
+		ObjectId: categoryObject.ObjectId(),
+		Created: &created,
+	}
+}
+
+//TableName
+func (*CategoryXrefEntity) TableName() string {
+	return CategoryXrefTableName
+}
+
+//SetCategory
+func (e *CategoryXrefEntity) SetCategory(categoryEntity *CategoryEntity) {
+	e.CategoryId = categoryEntity.Id
+}
+
+//SetObject
+func (e *CategoryXrefEntity) SetObject(categoryObject models.Object) {
+	e.ObjectId = categoryObject.ObjectId()
+	e.ObjectType = categoryObject.ObjectType()
 }
 
 //RemoveParentCategory

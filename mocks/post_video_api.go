@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,10 +35,10 @@ func (m *MockPostVideoApi) EXPECT() *MockPostVideoApiMockRecorder {
 }
 
 // ChangePostVideo mocks base method
-func (m *MockPostVideoApi) ChangePostVideo(postId *models.PostId, postVideoId *models.FileId) common.Error {
+func (m *MockPostVideoApi) ChangePostVideo(postId *models.PostId, postVideoId *models.FileId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostVideo", postId, postVideoId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -49,10 +49,10 @@ func (mr *MockPostVideoApiMockRecorder) ChangePostVideo(postId, postVideoId inte
 }
 
 // RemovePostVideo mocks base method
-func (m *MockPostVideoApi) RemovePostVideo(postId *models.PostId) common.Error {
+func (m *MockPostVideoApi) RemovePostVideo(postId *models.PostId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemovePostVideo", postId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

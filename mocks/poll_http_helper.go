@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockPollHttpHelper) EXPECT() *MockPollHttpHelperMockRecorder {
 }
 
 // ParsePollId mocks base method
-func (m *MockPollHttpHelper) ParsePollId(httpContext contracts.HttpContext) (*models.PollId, common.Error) {
+func (m *MockPollHttpHelper) ParsePollId(httpContext contracts.HttpContext) (*models.PollId, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ParsePollId", httpContext)
 	ret0, _ := ret[0].(*models.PollId)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

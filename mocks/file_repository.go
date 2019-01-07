@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockFileRepository) EXPECT() *MockFileRepositoryMockRecorder {
 }
 
 // ListFiles mocks base method
-func (m *MockFileRepository) ListFiles(filePaginationQuery *models.FilePaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockFileRepository) ListFiles(filePaginationQuery *models.FilePaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListFiles", filePaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockFileRepositoryMockRecorder) ListFiles(filePaginationQuery interfac
 }
 
 // GetFile mocks base method
-func (m *MockFileRepository) GetFile(fileId *models.FileId) (*entities.FileEntity, common.Error) {
+func (m *MockFileRepository) GetFile(fileId *models.FileId) (*entities.FileEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFile", fileId)
 	ret0, _ := ret[0].(*entities.FileEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,10 +66,10 @@ func (mr *MockFileRepositoryMockRecorder) GetFile(fileId interface{}) *gomock.Ca
 }
 
 // SaveFile mocks base method
-func (m *MockFileRepository) SaveFile(fileEntity *entities.FileEntity) common.Error {
+func (m *MockFileRepository) SaveFile(fileEntity *entities.FileEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveFile", fileEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -80,10 +80,10 @@ func (mr *MockFileRepositoryMockRecorder) SaveFile(fileEntity interface{}) *gomo
 }
 
 // RemoveFile mocks base method
-func (m *MockFileRepository) RemoveFile(fileEntity *entities.FileEntity) common.Error {
+func (m *MockFileRepository) RemoveFile(fileEntity *entities.FileEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveFile", fileEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

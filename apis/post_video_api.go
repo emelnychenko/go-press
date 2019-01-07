@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -35,7 +35,7 @@ func NewPostVideoApi(
 	}
 }
 
-func (a *postVideoApiImpl) ChangePostVideo(postId *models.PostId, postVideoId *models.FileId) (err common.Error) {
+func (a *postVideoApiImpl) ChangePostVideo(postId *models.PostId, postVideoId *models.FileId) (err errors.Error) {
 	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {
@@ -66,7 +66,7 @@ func (a *postVideoApiImpl) ChangePostVideo(postId *models.PostId, postVideoId *m
 	return
 }
 
-func (a *postVideoApiImpl) RemovePostVideo(postId *models.PostId) (err common.Error) {
+func (a *postVideoApiImpl) RemovePostVideo(postId *models.PostId) (err errors.Error) {
 	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {

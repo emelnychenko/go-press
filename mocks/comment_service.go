@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockCommentService) EXPECT() *MockCommentServiceMockRecorder {
 }
 
 // ListComments mocks base method
-func (m *MockCommentService) ListComments(commentPaginationQuery *models.CommentPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockCommentService) ListComments(commentPaginationQuery *models.CommentPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListComments", commentPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockCommentServiceMockRecorder) ListComments(commentPaginationQuery in
 }
 
 // GetComment mocks base method
-func (m *MockCommentService) GetComment(commentId *models.CommentId) (*entities.CommentEntity, common.Error) {
+func (m *MockCommentService) GetComment(commentId *models.CommentId) (*entities.CommentEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetComment", commentId)
 	ret0, _ := ret[0].(*entities.CommentEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockCommentServiceMockRecorder) GetComment(commentId interface{}) *gom
 }
 
 // CreateComment mocks base method
-func (m *MockCommentService) CreateComment(data *models.CommentCreate) (*entities.CommentEntity, common.Error) {
+func (m *MockCommentService) CreateComment(data *models.CommentCreate) (*entities.CommentEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateComment", data)
 	ret0, _ := ret[0].(*entities.CommentEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,10 +81,10 @@ func (mr *MockCommentServiceMockRecorder) CreateComment(data interface{}) *gomoc
 }
 
 // UpdateComment mocks base method
-func (m *MockCommentService) UpdateComment(commentEntity *entities.CommentEntity, data *models.CommentUpdate) common.Error {
+func (m *MockCommentService) UpdateComment(commentEntity *entities.CommentEntity, data *models.CommentUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateComment", commentEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -95,10 +95,10 @@ func (mr *MockCommentServiceMockRecorder) UpdateComment(commentEntity, data inte
 }
 
 // DeleteComment mocks base method
-func (m *MockCommentService) DeleteComment(commentEntity *entities.CommentEntity) common.Error {
+func (m *MockCommentService) DeleteComment(commentEntity *entities.CommentEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteComment", commentEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,10 +35,10 @@ func (m *MockPostAuthorApi) EXPECT() *MockPostAuthorApiMockRecorder {
 }
 
 // ChangePostAuthor mocks base method
-func (m *MockPostAuthorApi) ChangePostAuthor(postId *models.PostId, postAuthorId *models.UserId) common.Error {
+func (m *MockPostAuthorApi) ChangePostAuthor(postId *models.PostId, postAuthorId *models.UserId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostAuthor", postId, postAuthorId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

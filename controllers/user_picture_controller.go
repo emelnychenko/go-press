@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type userPictureControllerImpl struct {
@@ -23,7 +23,7 @@ func NewUserPictureController(
 	}
 }
 
-func (c *userPictureControllerImpl) ChangeUserPicture(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *userPictureControllerImpl) ChangeUserPicture(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
@@ -41,7 +41,7 @@ func (c *userPictureControllerImpl) ChangeUserPicture(httpContext contracts.Http
 	return
 }
 
-func (c *userPictureControllerImpl) RemoveUserPicture(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *userPictureControllerImpl) RemoveUserPicture(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {

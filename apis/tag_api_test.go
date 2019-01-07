@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("ListTags:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.TagPaginationQuery)
 
 		tagService := mocks.NewMockTagService(ctrl)
@@ -83,7 +83,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("GetTag:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		tagId := new(models.TagId)
 		tagService := mocks.NewMockTagService(ctrl)
@@ -127,7 +127,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("CreateTag:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.TagCreate)
 		tagService := mocks.NewMockTagService(ctrl)
@@ -165,7 +165,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("UpdateTag:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		tagId := new(models.TagId)
 		tagService := mocks.NewMockTagService(ctrl)
@@ -177,7 +177,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("UpdateTag:UpdateTagError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		tagId := new(models.TagId)
 		tagEntity := new(entities.TagEntity)
@@ -219,7 +219,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("DeleteTag:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		tagId := new(models.TagId)
 		tagService := mocks.NewMockTagService(ctrl)
@@ -230,7 +230,7 @@ func TestTagApi(t *testing.T) {
 	})
 
 	t.Run("DeleteTag:DeleteTagError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		tagId := new(models.TagId)
 		tagEntity := new(entities.TagEntity)
 

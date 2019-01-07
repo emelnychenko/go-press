@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -66,7 +66,7 @@ func TestNewPostAuthorApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostAuthor:GetPostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -79,7 +79,7 @@ func TestNewPostAuthorApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostAuthor:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -99,7 +99,7 @@ func TestNewPostAuthorApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostAuthor:ChangePostAuthorError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)

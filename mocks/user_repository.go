@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockUserRepository) EXPECT() *MockUserRepositoryMockRecorder {
 }
 
 // ListUsers mocks base method
-func (m *MockUserRepository) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockUserRepository) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListUsers", userPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockUserRepositoryMockRecorder) ListUsers(userPaginationQuery interfac
 }
 
 // GetUser mocks base method
-func (m *MockUserRepository) GetUser(userId *models.UserId) (*entities.UserEntity, common.Error) {
+func (m *MockUserRepository) GetUser(userId *models.UserId) (*entities.UserEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUser", userId)
 	ret0, _ := ret[0].(*entities.UserEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockUserRepositoryMockRecorder) GetUser(userId interface{}) *gomock.Ca
 }
 
 // LookupUser mocks base method
-func (m *MockUserRepository) LookupUser(userIdentity string) (*entities.UserEntity, common.Error) {
+func (m *MockUserRepository) LookupUser(userIdentity string) (*entities.UserEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LookupUser", userIdentity)
 	ret0, _ := ret[0].(*entities.UserEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,10 +81,10 @@ func (mr *MockUserRepositoryMockRecorder) LookupUser(userIdentity interface{}) *
 }
 
 // SaveUser mocks base method
-func (m *MockUserRepository) SaveUser(userEntity *entities.UserEntity) common.Error {
+func (m *MockUserRepository) SaveUser(userEntity *entities.UserEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveUser", userEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -95,10 +95,10 @@ func (mr *MockUserRepositoryMockRecorder) SaveUser(userEntity interface{}) *gomo
 }
 
 // RemoveUser mocks base method
-func (m *MockUserRepository) RemoveUser(userEntity *entities.UserEntity) common.Error {
+func (m *MockUserRepository) RemoveUser(userEntity *entities.UserEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveUser", userEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

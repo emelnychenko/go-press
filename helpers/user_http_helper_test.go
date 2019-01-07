@@ -18,13 +18,13 @@ func TestUserEchoHelper(t *testing.T) {
 	})
 
 	t.Run("ParseUserId", func(t *testing.T) {
-		user := new(models.UserId)
+		userId := new(models.UserId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(UserIdParameterName).Return(user.String())
+		httpContext.EXPECT().Parameter(UserIdParameterName).Return(userId.String())
 
 		userEchoHelper := &userEchoHelperImpl{}
 		parsedUserId, err := userEchoHelper.ParseUserId(httpContext)
-		assert.Equal(t, user.String(), parsedUserId.String())
+		assert.Equal(t, userId.String(), parsedUserId.String())
 		assert.Nil(t, err)
 	})
 }

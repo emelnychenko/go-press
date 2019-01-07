@@ -1,15 +1,13 @@
 package contracts
 
-import (
-	"github.com/emelnychenko/go-press/common"
-)
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	PollController interface {
-		ListPolls(httpContext HttpContext) (response interface{}, err common.Error)
-		GetPoll(httpContext HttpContext) (response interface{}, err common.Error)
-		CreatePoll(httpContext HttpContext) (response interface{}, err common.Error)
-		UpdatePoll(httpContext HttpContext) (_ interface{}, err common.Error)
-		DeletePoll(httpContext HttpContext) (_ interface{}, err common.Error)
+		ListPolls(httpContext HttpContext) (response interface{}, err errors.Error)
+		GetPoll(httpContext HttpContext) (response interface{}, err errors.Error)
+		CreatePoll(httpContext HttpContext) (response interface{}, err errors.Error)
+		UpdatePoll(httpContext HttpContext) (_ interface{}, err errors.Error)
+		DeletePoll(httpContext HttpContext) (_ interface{}, err errors.Error)
 	}
 )

@@ -4,10 +4,10 @@ import "github.com/emelnychenko/go-press/entities"
 
 type (
 	CategoryEventFactory interface {
-		CreateCategoryCreatedEvent(categoryEntity *entities.CategoryEntity) CategoryEvent
-		CreateCategoryUpdatedEvent(categoryEntity *entities.CategoryEntity) CategoryEvent
-		CreateCategoryDeletedEvent(categoryEntity *entities.CategoryEntity) CategoryEvent
-		CreateCategoryParentChangedEvent(categoryEntity *entities.CategoryEntity) CategoryEvent
-		CreateCategoryParentRemovedEvent(categoryEntity *entities.CategoryEntity) CategoryEvent
+		CreateCategoryCreatedEvent(*entities.CategoryEntity) CategoryEvent
+		CreateCategoryUpdatedEvent(*entities.CategoryEntity) CategoryEvent
+		CreateCategoryDeletedEvent(*entities.CategoryEntity) CategoryEvent
+		CreateCategoryParentChangedEvent(*entities.CategoryEntity) CategoryEvent
+		CreateCategoryParentRemovedEvent(*entities.CategoryEntity) CategoryEvent
 	}
 )

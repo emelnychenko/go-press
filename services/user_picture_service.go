@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
@@ -18,13 +18,13 @@ func NewUserPictureService(userRepository contracts.UserRepository) contracts.Us
 
 func (s *userPictureServiceImpl) ChangeUserPicture(
 	userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity,
-) common.Error {
+) errors.Error {
 	userEntity.SetPicture(userPictureEntity)
 
 	return s.userRepository.SaveUser(userEntity)
 }
 
-func (s *userPictureServiceImpl) RemoveUserPicture(userEntity *entities.UserEntity) common.Error {
+func (s *userPictureServiceImpl) RemoveUserPicture(userEntity *entities.UserEntity) errors.Error {
 	userEntity.RemovePicture()
 
 	return s.userRepository.SaveUser(userEntity)

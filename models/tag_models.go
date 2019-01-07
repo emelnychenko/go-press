@@ -1,12 +1,11 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"time"
 )
 
 type (
-	TagId = common.ModelId
+	TagId = ModelId
 
 	Tag struct {
 		Id      *TagId     `json:"id" xml:"id"`

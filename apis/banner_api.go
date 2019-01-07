@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -31,7 +31,7 @@ func NewBannerApi(
 
 func (a *bannerApiImpl) ListBanners(
 	bannerPaginationQuery *models.BannerPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.bannerService.ListBanners(bannerPaginationQuery)
 
 	if nil != err {
@@ -42,7 +42,7 @@ func (a *bannerApiImpl) ListBanners(
 	return
 }
 
-func (a *bannerApiImpl) GetBanner(bannerId *models.BannerId) (banner *models.Banner, err common.Error) {
+func (a *bannerApiImpl) GetBanner(bannerId *models.BannerId) (banner *models.Banner, err errors.Error) {
 	bannerEntity, err := a.bannerService.GetBanner(bannerId)
 
 	if nil != err {
@@ -53,7 +53,7 @@ func (a *bannerApiImpl) GetBanner(bannerId *models.BannerId) (banner *models.Ban
 	return
 }
 
-func (a *bannerApiImpl) CreateBanner(data *models.BannerCreate) (banner *models.Banner, err common.Error) {
+func (a *bannerApiImpl) CreateBanner(data *models.BannerCreate) (banner *models.Banner, err errors.Error) {
 	bannerEntity, err := a.bannerService.CreateBanner(data)
 
 	if nil != err {
@@ -67,7 +67,7 @@ func (a *bannerApiImpl) CreateBanner(data *models.BannerCreate) (banner *models.
 	return
 }
 
-func (a *bannerApiImpl) UpdateBanner(bannerId *models.BannerId, data *models.BannerUpdate) (err common.Error) {
+func (a *bannerApiImpl) UpdateBanner(bannerId *models.BannerId, data *models.BannerUpdate) (err errors.Error) {
 	bannerService := a.bannerService
 	bannerEntity, err := bannerService.GetBanner(bannerId)
 
@@ -86,7 +86,7 @@ func (a *bannerApiImpl) UpdateBanner(bannerId *models.BannerId, data *models.Ban
 	return
 }
 
-func (a *bannerApiImpl) DeleteBanner(bannerId *models.BannerId) (err common.Error) {
+func (a *bannerApiImpl) DeleteBanner(bannerId *models.BannerId) (err errors.Error) {
 	bannerService := a.bannerService
 	bannerEntity, err := bannerService.GetBanner(bannerId)
 

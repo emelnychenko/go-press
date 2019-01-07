@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,10 +35,10 @@ func (m *MockPostStatusValidator) EXPECT() *MockPostStatusValidatorMockRecorder 
 }
 
 // ValidatePostCreate mocks base method
-func (m *MockPostStatusValidator) ValidatePostCreate(data *models.PostCreate) common.Error {
+func (m *MockPostStatusValidator) ValidatePostCreate(data *models.PostCreate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidatePostCreate", data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -49,10 +49,10 @@ func (mr *MockPostStatusValidatorMockRecorder) ValidatePostCreate(data interface
 }
 
 // ValidatePostUpdate mocks base method
-func (m *MockPostStatusValidator) ValidatePostUpdate(data *models.PostUpdate) common.Error {
+func (m *MockPostStatusValidator) ValidatePostUpdate(data *models.PostUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidatePostUpdate", data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

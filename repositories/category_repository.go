@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -34,7 +33,7 @@ func NewCategoryRepository(
 //ListCategories
 func (r *categoryRepositoryImpl) ListCategories(
 	categoryPaginationQuery *models.CategoryPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	paginationTotal, categoryEntities := 0, make([]*entities.CategoryEntity, categoryPaginationQuery.Limit)
 
 	db := r.db.Model(&categoryEntities).Order("created desc")
@@ -49,9 +48,9 @@ func (r *categoryRepositoryImpl) ListCategories(
 }
 
 //GetCategories
-func (r *categoryRepositoryImpl) GetCategories() (categoryEntities []*entities.CategoryEntity, err common.Error) {
+func (r *categoryRepositoryImpl) GetCategories() (categoryEntities []*entities.CategoryEntity, err errors.Error) {
 	if gormErr := r.db.Order("created asc").Find(&categoryEntities).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -59,12 +58,12 @@ func (r *categoryRepositoryImpl) GetCategories() (categoryEntities []*entities.C
 
 //GetCategoriesExcept
 func (r *categoryRepositoryImpl) GetCategoriesExcept(categoryEntity *entities.CategoryEntity) (
-	categoryEntities []*entities.CategoryEntity, err common.Error,
+	categoryEntities []*entities.CategoryEntity, err errors.Error,
 ) {
 	gormErr := r.db.Where("id != ?", categoryEntity.Id).Order("created asc").Find(&categoryEntities).Error
 
 	if gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
@@ -72,12 +71,12 @@ func (r *categoryRepositoryImpl) GetCategoriesExcept(categoryEntity *entities.Ca
 
 //GetCategoriesTree
 func (r *categoryRepositoryImpl) GetCategoriesTree() (
-	categoryEntityTree *entities.CategoryEntityTree, err common.Error,
+	categoryEntityTree *entities.CategoryEntityTree, err errors.Error,
 ) {
 	var categoryEntities []*entities.CategoryEntity
 
 	if gormErr := r.db.Order("created asc").Find(&categoryEntities).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 		return
 	}
 
@@ -86,14 +85,14 @@ func (r *categoryRepositoryImpl) GetCategoriesTree() (
 }
 
 //GetCategory
-func (r *categoryRepositoryImpl) GetCategory(categoryId *models.CategoryId) (categoryEntity *entities.CategoryEntity, err common.Error) {
+func (r *categoryRepositoryImpl) GetCategory(categoryId *models.CategoryId) (categoryEntity *entities.CategoryEntity, err errors.Error) {
 	categoryEntity = new(entities.CategoryEntity)
 
 	if gormErr := r.db.First(categoryEntity, "id = ?", categoryId).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewCategoryByIdNotFoundError(categoryId)
 		} else {
-			err = common.NewSystemErrorFromBuiltin(gormErr)
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
@@ -102,7 +101,7 @@ func (r *categoryRepositoryImpl) GetCategory(categoryId *models.CategoryId) (cat
 
 //GetCategoryTree
 func (r *categoryRepositoryImpl) GetCategoryTree(categoryId *models.CategoryId) (
-	categoryEntityTree *entities.CategoryEntityTree, err common.Error,
+	categoryEntityTree *entities.CategoryEntityTree, err errors.Error,
 ) {
 	categoryEntity, err := r.GetCategory(categoryId)
 
@@ -118,7 +117,7 @@ func (r *categoryRepositoryImpl) GetCategoryTree(categoryId *models.CategoryId) 
 		Find(&categoryEntities).Error
 
 	if gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 		return
 	}
 
@@ -127,18 +126,91 @@ func (r *categoryRepositoryImpl) GetCategoryTree(categoryId *models.CategoryId) 
 }
 
 //SaveCategory
-func (r *categoryRepositoryImpl) SaveCategory(categoryEntity *entities.CategoryEntity) (err common.Error) {
+func (r *categoryRepositoryImpl) SaveCategory(categoryEntity *entities.CategoryEntity) (err errors.Error) {
 	if gormErr := r.db.Save(categoryEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
 //RemoveCategory
-func (r *categoryRepositoryImpl) RemoveCategory(categoryEntity *entities.CategoryEntity) (err common.Error) {
+func (r *categoryRepositoryImpl) RemoveCategory(categoryEntity *entities.CategoryEntity) (err errors.Error) {
 	if gormErr := r.db.Delete(categoryEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
+	}
+
+	return
+}
+
+//GetCategoryXrefs
+func (r *categoryRepositoryImpl) GetCategoryXrefs(categoryEntity *entities.CategoryEntity) (
+	categoryXrefEntities []*entities.CategoryXrefEntity, err errors.Error,
+) {
+	gormErr := r.db.Where("category_id = ?", categoryEntity.Id).
+		Order("created asc").
+		Find(&categoryXrefEntities).Error
+
+	if gormErr != nil {
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
+	}
+
+	return
+}
+
+//GetCategoryObjectXrefs
+func (r *categoryRepositoryImpl) GetCategoryObjectXrefs(categoryObject models.Object) (
+	categoryXrefEntities []*entities.CategoryXrefEntity, err errors.Error,
+) {
+	gormErr := r.db.Where("object_type = ?", categoryObject.ObjectType()).
+		Where("object_id = ?", categoryObject.ObjectId()).
+		Order("created asc").
+		Find(&categoryXrefEntities).Error
+
+	if gormErr != nil {
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
+	}
+
+	return
+}
+
+//GetCategoryXref
+func (r *categoryRepositoryImpl) GetCategoryXref(
+	categoryEntity *entities.CategoryEntity, categoryObject models.Object,
+) (categoryXrefEntity *entities.CategoryXrefEntity, err errors.Error) {
+	categoryXrefEntity = new(entities.CategoryXrefEntity)
+
+	gormErr := r.db.Where("category_id = ?", categoryEntity.Id).
+		Where("object_type = ?", categoryObject.ObjectType()).
+		Where("object_id = ?", categoryObject.ObjectId()).
+		First(categoryXrefEntity).Error
+
+	if gormErr != nil {
+		if gorm.IsRecordNotFoundError(gormErr) {
+			categoryObjectType := string(categoryObject.ObjectType())
+			err = errors.NewCategoryXrefNotFoundByReferenceError(
+				categoryEntity.Id, categoryObjectType, categoryObject.ObjectId())
+		} else {
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
+		}
+	}
+
+	return
+}
+
+//SaveCategoryXref
+func (r *categoryRepositoryImpl) SaveCategoryXref(categoryXrefEntity *entities.CategoryXrefEntity) (err errors.Error) {
+	if gormErr := r.db.Save(categoryXrefEntity).Error; gormErr != nil {
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
+	}
+
+	return
+}
+
+//RemoveCategoryXref
+func (r *categoryRepositoryImpl) RemoveCategoryXref(categoryXrefEntity *entities.CategoryXrefEntity) (err errors.Error) {
+	if gormErr := r.db.Delete(categoryXrefEntity).Error; gormErr != nil {
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

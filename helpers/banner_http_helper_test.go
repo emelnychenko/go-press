@@ -18,13 +18,13 @@ func TestBannerHttpHelper(t *testing.T) {
 	})
 
 	t.Run("ParseBannerId", func(t *testing.T) {
-		banner := new(models.BannerId)
+		bannerId := new(models.BannerId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(BannerIdParameterName).Return(banner.String())
+		httpContext.EXPECT().Parameter(BannerIdParameterName).Return(bannerId.String())
 
 		bannerHttpHelper := &bannerHttpHelperImpl{}
 		parsedBannerId, err := bannerHttpHelper.ParseBannerId(httpContext)
-		assert.Equal(t, banner.String(), parsedBannerId.String())
+		assert.Equal(t, bannerId.String(), parsedBannerId.String())
 		assert.Nil(t, err)
 	})
 }

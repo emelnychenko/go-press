@@ -1,12 +1,12 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
 	FilePathStrategy interface {
-		BuildPath(fileEntity *entities.FileEntity) (filePath string, err common.Error)
+		BuildPath(fileEntity *entities.FileEntity) (filePath string, err errors.Error)
 	}
 )

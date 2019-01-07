@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
@@ -18,7 +18,7 @@ func NewPostAuthorService(postRepository contracts.PostRepository) contracts.Pos
 
 func (s *postAuthorServiceImpl) ChangePostAuthor(
 	postEntity *entities.PostEntity, postAuthorEntity *entities.UserEntity,
-) common.Error {
+) errors.Error {
 	postEntity.SetAuthor(postAuthorEntity)
 
 	return s.postRepository.SavePost(postEntity)

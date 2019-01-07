@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -35,7 +35,7 @@ func NewUserPictureApi(
 	}
 }
 
-func (a *userPictureApiImpl) ChangeUserPicture(userId *models.UserId, userPictureId *models.FileId) (err common.Error) {
+func (a *userPictureApiImpl) ChangeUserPicture(userId *models.UserId, userPictureId *models.FileId) (err errors.Error) {
 	userEntity, err := a.userService.GetUser(userId)
 
 	if nil != err {
@@ -66,7 +66,7 @@ func (a *userPictureApiImpl) ChangeUserPicture(userId *models.UserId, userPictur
 	return
 }
 
-func (a *userPictureApiImpl) RemoveUserPicture(userId *models.UserId) (err common.Error) {
+func (a *userPictureApiImpl) RemoveUserPicture(userId *models.UserId) (err errors.Error) {
 	userEntity, err := a.userService.GetUser(userId)
 
 	if nil != err {

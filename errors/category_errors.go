@@ -2,16 +2,28 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/models"
 )
 
-func NewCategoryNotFoundError(request string) common.Error {
+//NewCategoryNotFoundError
+func NewCategoryNotFoundError(request string) Error {
 	message := fmt.Sprintf("The category was not found on request: %s", request)
-	return common.NewNotFoundError(message)
+	return NewNotFoundError(message)
 }
 
-func NewCategoryByIdNotFoundError(categoryId *models.CategoryId) common.Error {
+//NewCategoryByIdNotFoundError
+func NewCategoryByIdNotFoundError(categoryId fmt.Stringer) Error {
 	request := fmt.Sprintf("id = %s", categoryId)
 	return NewCategoryNotFoundError(request)
+}
+
+//NewCategoryXrefNotFoundError
+func NewCategoryXrefNotFoundError(request string) Error {
+	message := fmt.Sprintf("The category reference was not found on request: %s", request)
+	return NewNotFoundError(message)
+}
+
+//NewCategoryXrefNotFoundByReferenceError
+func NewCategoryXrefNotFoundByReferenceError(categoryId fmt.Stringer, objectType string, objectId fmt.Stringer) Error {
+	request := fmt.Sprintf("categoryId = %s, objectType = %s, objectId = %s", categoryId, objectType, objectId)
+	return NewCategoryXrefNotFoundError(request)
 }

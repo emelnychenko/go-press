@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -35,7 +35,7 @@ func NewPostPictureApi(
 	}
 }
 
-func (a *postPictureApiImpl) ChangePostPicture(postId *models.PostId, postPictureId *models.FileId) (err common.Error) {
+func (a *postPictureApiImpl) ChangePostPicture(postId *models.PostId, postPictureId *models.FileId) (err errors.Error) {
 	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {
@@ -66,7 +66,7 @@ func (a *postPictureApiImpl) ChangePostPicture(postId *models.PostId, postPictur
 	return
 }
 
-func (a *postPictureApiImpl) RemovePostPicture(postId *models.PostId) (err common.Error) {
+func (a *postPictureApiImpl) RemovePostPicture(postId *models.PostId) (err errors.Error) {
 	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {

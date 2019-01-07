@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,10 +35,10 @@ func (m *MockPostVideoService) EXPECT() *MockPostVideoServiceMockRecorder {
 }
 
 // ChangePostVideo mocks base method
-func (m *MockPostVideoService) ChangePostVideo(postEntity *entities.PostEntity, postVideoEntity *entities.FileEntity) common.Error {
+func (m *MockPostVideoService) ChangePostVideo(postEntity *entities.PostEntity, postVideoEntity *entities.FileEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangePostVideo", postEntity, postVideoEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -49,10 +49,10 @@ func (mr *MockPostVideoServiceMockRecorder) ChangePostVideo(postEntity, postVide
 }
 
 // RemovePostVideo mocks base method
-func (m *MockPostVideoService) RemovePostVideo(postEntity *entities.PostEntity) common.Error {
+func (m *MockPostVideoService) RemovePostVideo(postEntity *entities.PostEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemovePostVideo", postEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

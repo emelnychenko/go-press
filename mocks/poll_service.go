@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockPollService) EXPECT() *MockPollServiceMockRecorder {
 }
 
 // ListPolls mocks base method
-func (m *MockPollService) ListPolls(pollPaginationQuery *models.PollPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockPollService) ListPolls(pollPaginationQuery *models.PollPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPolls", pollPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockPollServiceMockRecorder) ListPolls(pollPaginationQuery interface{}
 }
 
 // GetPoll mocks base method
-func (m *MockPollService) GetPoll(pollId *models.PollId) (*entities.PollEntity, common.Error) {
+func (m *MockPollService) GetPoll(pollId *models.PollId) (*entities.PollEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPoll", pollId)
 	ret0, _ := ret[0].(*entities.PollEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockPollServiceMockRecorder) GetPoll(pollId interface{}) *gomock.Call 
 }
 
 // CreatePoll mocks base method
-func (m *MockPollService) CreatePoll(data *models.PollCreate) (*entities.PollEntity, common.Error) {
+func (m *MockPollService) CreatePoll(data *models.PollCreate) (*entities.PollEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePoll", data)
 	ret0, _ := ret[0].(*entities.PollEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,10 +81,10 @@ func (mr *MockPollServiceMockRecorder) CreatePoll(data interface{}) *gomock.Call
 }
 
 // UpdatePoll mocks base method
-func (m *MockPollService) UpdatePoll(pollEntity *entities.PollEntity, data *models.PollUpdate) common.Error {
+func (m *MockPollService) UpdatePoll(pollEntity *entities.PollEntity, data *models.PollUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePoll", pollEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -95,10 +95,10 @@ func (mr *MockPollServiceMockRecorder) UpdatePoll(pollEntity, data interface{}) 
 }
 
 // DeletePoll mocks base method
-func (m *MockPollService) DeletePoll(pollEntity *entities.PollEntity) common.Error {
+func (m *MockPollService) DeletePoll(pollEntity *entities.PollEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeletePoll", pollEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("ListPolls:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.PollPaginationQuery)
 
 		pollService := mocks.NewMockPollService(ctrl)
@@ -83,7 +83,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("GetPoll:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		pollId := new(models.PollId)
 		pollService := mocks.NewMockPollService(ctrl)
@@ -127,7 +127,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("CreatePoll:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.PollCreate)
 		pollService := mocks.NewMockPollService(ctrl)
@@ -165,7 +165,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("UpdatePoll:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		pollId := new(models.PollId)
 		pollService := mocks.NewMockPollService(ctrl)
@@ -177,7 +177,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("UpdatePoll:UpdatePollError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		pollId := new(models.PollId)
 		pollEntity := new(entities.PollEntity)
@@ -219,7 +219,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("DeletePoll:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		pollId := new(models.PollId)
 		pollService := mocks.NewMockPollService(ctrl)
@@ -230,7 +230,7 @@ func TestPollApi(t *testing.T) {
 	})
 
 	t.Run("DeletePoll:DeletePollError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		pollId := new(models.PollId)
 		pollEntity := new(entities.PollEntity)
 

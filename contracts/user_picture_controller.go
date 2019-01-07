@@ -1,12 +1,10 @@
 package contracts
 
-import (
-	"github.com/emelnychenko/go-press/common"
-)
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	UserPictureController interface {
-		ChangeUserPicture(httpContext HttpContext) (_ interface{}, err common.Error)
-		RemoveUserPicture(httpContext HttpContext) (_ interface{}, err common.Error)
+		ChangeUserPicture(httpContext HttpContext) (_ interface{}, err errors.Error)
+		RemoveUserPicture(httpContext HttpContext) (_ interface{}, err errors.Error)
 	}
 )

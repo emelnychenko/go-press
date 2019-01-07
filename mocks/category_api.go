@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockCategoryApi) EXPECT() *MockCategoryApiMockRecorder {
 }
 
 // ListCategories mocks base method
-func (m *MockCategoryApi) ListCategories(categoryPaginationQuery *models.CategoryPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockCategoryApi) ListCategories(categoryPaginationQuery *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListCategories", categoryPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockCategoryApiMockRecorder) ListCategories(categoryPaginationQuery in
 }
 
 // GetCategoriesTree mocks base method
-func (m *MockCategoryApi) GetCategoriesTree() ([]*models.CategoryTree, common.Error) {
+func (m *MockCategoryApi) GetCategoriesTree() ([]*models.CategoryTree, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategoriesTree")
 	ret0, _ := ret[0].([]*models.CategoryTree)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockCategoryApiMockRecorder) GetCategoriesTree() *gomock.Call {
 }
 
 // GetCategory mocks base method
-func (m *MockCategoryApi) GetCategory(categoryId *models.CategoryId) (*models.Category, common.Error) {
+func (m *MockCategoryApi) GetCategory(categoryId *models.CategoryId) (*models.Category, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategory", categoryId)
 	ret0, _ := ret[0].(*models.Category)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockCategoryApiMockRecorder) GetCategory(categoryId interface{}) *gomo
 }
 
 // GetCategoryTree mocks base method
-func (m *MockCategoryApi) GetCategoryTree(categoryId *models.CategoryId) (*models.CategoryTree, common.Error) {
+func (m *MockCategoryApi) GetCategoryTree(categoryId *models.CategoryId) (*models.CategoryTree, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategoryTree", categoryId)
 	ret0, _ := ret[0].(*models.CategoryTree)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockCategoryApiMockRecorder) GetCategoryTree(categoryId interface{}) *
 }
 
 // CreateCategory mocks base method
-func (m *MockCategoryApi) CreateCategory(data *models.CategoryCreate) (*models.Category, common.Error) {
+func (m *MockCategoryApi) CreateCategory(data *models.CategoryCreate) (*models.Category, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateCategory", data)
 	ret0, _ := ret[0].(*models.Category)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -110,10 +110,10 @@ func (mr *MockCategoryApiMockRecorder) CreateCategory(data interface{}) *gomock.
 }
 
 // UpdateCategory mocks base method
-func (m *MockCategoryApi) UpdateCategory(categoryId *models.CategoryId, data *models.CategoryUpdate) common.Error {
+func (m *MockCategoryApi) UpdateCategory(categoryId *models.CategoryId, data *models.CategoryUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateCategory", categoryId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -124,10 +124,10 @@ func (mr *MockCategoryApiMockRecorder) UpdateCategory(categoryId, data interface
 }
 
 // ChangeCategoryParent mocks base method
-func (m *MockCategoryApi) ChangeCategoryParent(categoryId, parentCategoryId *models.CategoryId) common.Error {
+func (m *MockCategoryApi) ChangeCategoryParent(categoryId, parentCategoryId *models.CategoryId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeCategoryParent", categoryId, parentCategoryId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -138,10 +138,10 @@ func (mr *MockCategoryApiMockRecorder) ChangeCategoryParent(categoryId, parentCa
 }
 
 // RemoveCategoryParent mocks base method
-func (m *MockCategoryApi) RemoveCategoryParent(categoryId *models.CategoryId) common.Error {
+func (m *MockCategoryApi) RemoveCategoryParent(categoryId *models.CategoryId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveCategoryParent", categoryId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -152,10 +152,10 @@ func (mr *MockCategoryApiMockRecorder) RemoveCategoryParent(categoryId interface
 }
 
 // DeleteCategory mocks base method
-func (m *MockCategoryApi) DeleteCategory(categoryId *models.CategoryId) common.Error {
+func (m *MockCategoryApi) DeleteCategory(categoryId *models.CategoryId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteCategory", categoryId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

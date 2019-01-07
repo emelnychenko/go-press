@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockChannelController) EXPECT() *MockChannelControllerMockRecorder {
 }
 
 // ListChannels mocks base method
-func (m *MockChannelController) ListChannels(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockChannelController) ListChannels(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListChannels", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockChannelControllerMockRecorder) ListChannels(httpContext interface{
 }
 
 // GetChannel mocks base method
-func (m *MockChannelController) GetChannel(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockChannelController) GetChannel(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChannel", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockChannelControllerMockRecorder) GetChannel(httpContext interface{})
 }
 
 // CreateChannel mocks base method
-func (m *MockChannelController) CreateChannel(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockChannelController) CreateChannel(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateChannel", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockChannelControllerMockRecorder) CreateChannel(httpContext interface
 }
 
 // UpdateChannel mocks base method
-func (m *MockChannelController) UpdateChannel(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockChannelController) UpdateChannel(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateChannel", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockChannelControllerMockRecorder) UpdateChannel(httpContext interface
 }
 
 // DeleteChannel mocks base method
-func (m *MockChannelController) DeleteChannel(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockChannelController) DeleteChannel(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteChannel", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

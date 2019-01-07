@@ -1,17 +1,15 @@
 package contracts
 
-import (
-	"github.com/emelnychenko/go-press/common"
-)
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	UserController interface {
-		ListUsers(httpContext HttpContext) (response interface{}, err common.Error)
-		GetUser(httpContext HttpContext) (response interface{}, err common.Error)
-		CreateUser(httpContext HttpContext) (response interface{}, err common.Error)
-		UpdateUser(httpContext HttpContext) (_ interface{}, err common.Error)
-		ChangeUserIdentity(httpContext HttpContext) (_ interface{}, err common.Error)
-		ChangeUserPassword(httpContext HttpContext) (_ interface{}, err common.Error)
-		DeleteUser(httpContext HttpContext) (_ interface{}, err common.Error)
+		ListUsers(httpContext HttpContext) (response interface{}, err errors.Error)
+		GetUser(httpContext HttpContext) (response interface{}, err errors.Error)
+		CreateUser(httpContext HttpContext) (response interface{}, err errors.Error)
+		UpdateUser(httpContext HttpContext) (_ interface{}, err errors.Error)
+		ChangeUserIdentity(httpContext HttpContext) (_ interface{}, err errors.Error)
+		ChangeUserPassword(httpContext HttpContext) (_ interface{}, err errors.Error)
+		DeleteUser(httpContext HttpContext) (_ interface{}, err errors.Error)
 	}
 )

@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -22,11 +22,11 @@ func NewCategoryHttpHelper() contracts.CategoryHttpHelper {
 }
 
 //ParseCategoryId
-func (*categoryHttpHelperImpl) ParseCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, common.Error) {
-	return common.ParseModelId(httpContext.Parameter(CategoryIdParameterName))
+func (*categoryHttpHelperImpl) ParseCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, errors.Error) {
+	return models.ParseModelId(httpContext.Parameter(CategoryIdParameterName))
 }
 
 //ParseParentCategoryId
-func (*categoryHttpHelperImpl) ParseParentCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, common.Error) {
-	return common.ParseModelId(httpContext.Parameter(ParentCategoryIdParameterName))
+func (*categoryHttpHelperImpl) ParseParentCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, errors.Error) {
+	return models.ParseModelId(httpContext.Parameter(ParentCategoryIdParameterName))
 }

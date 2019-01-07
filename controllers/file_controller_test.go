@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"bytes"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -55,7 +55,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("ListFiles:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		filePaginationQuery := new(models.FilePaginationQuery)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
@@ -74,7 +74,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("ListFiles:BindFilePaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		filePaginationQuery := new(models.FilePaginationQuery)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
@@ -112,7 +112,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("GetFile:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
@@ -127,7 +127,7 @@ func TestFileController(t *testing.T) {
 
 	t.Run("GetFile:ApiError", func(t *testing.T) {
 		fileId := new(models.FileId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileApi := mocks.NewMockFileApi(ctrl)
@@ -185,7 +185,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("UploadFile:FileHeaderError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
@@ -201,7 +201,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("UploadFile:FormFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHeader := &multipart.FileHeader{
@@ -227,7 +227,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("UploadFile:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHeader := &multipart.FileHeader{
@@ -282,7 +282,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("DownloadFile:ParseFileIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
@@ -297,7 +297,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("DownloadFile:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		fileId := new(models.FileId)
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
@@ -345,7 +345,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("UpdateFile:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		fileHttpHelper := mocks.NewMockFileHttpHelper(ctrl)
@@ -359,7 +359,7 @@ func TestFileController(t *testing.T) {
 
 	t.Run("UpdateFile:BindFileUpdateError", func(t *testing.T) {
 		fileId := new(models.FileId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.FileUpdate)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
 		fileModelFactory.EXPECT().CreateFileUpdate().Return(data)
@@ -381,7 +381,7 @@ func TestFileController(t *testing.T) {
 
 	t.Run("UpdateFile:ApiError", func(t *testing.T) {
 		fileId := new(models.FileId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.FileUpdate)
 		fileModelFactory := mocks.NewMockFileModelFactory(ctrl)
@@ -424,7 +424,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -438,7 +438,7 @@ func TestFileController(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		fileId := new(models.FileId)
 
 		fileApi := mocks.NewMockFileApi(ctrl)

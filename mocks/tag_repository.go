@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockTagRepository) EXPECT() *MockTagRepositoryMockRecorder {
 }
 
 // ListTags mocks base method
-func (m *MockTagRepository) ListTags(tagPaginationQuery *models.TagPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockTagRepository) ListTags(tagPaginationQuery *models.TagPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTags", tagPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockTagRepositoryMockRecorder) ListTags(tagPaginationQuery interface{}
 }
 
 // GetTag mocks base method
-func (m *MockTagRepository) GetTag(tagId *models.TagId) (*entities.TagEntity, common.Error) {
+func (m *MockTagRepository) GetTag(tagId *models.TagId) (*entities.TagEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTag", tagId)
 	ret0, _ := ret[0].(*entities.TagEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,10 +66,10 @@ func (mr *MockTagRepositoryMockRecorder) GetTag(tagId interface{}) *gomock.Call 
 }
 
 // SaveTag mocks base method
-func (m *MockTagRepository) SaveTag(tagEntity *entities.TagEntity) common.Error {
+func (m *MockTagRepository) SaveTag(tagEntity *entities.TagEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveTag", tagEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -80,10 +80,10 @@ func (mr *MockTagRepositoryMockRecorder) SaveTag(tagEntity interface{}) *gomock.
 }
 
 // RemoveTag mocks base method
-func (m *MockTagRepository) RemoveTag(tagEntity *entities.TagEntity) common.Error {
+func (m *MockTagRepository) RemoveTag(tagEntity *entities.TagEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveTag", tagEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -91,4 +91,77 @@ func (m *MockTagRepository) RemoveTag(tagEntity *entities.TagEntity) common.Erro
 func (mr *MockTagRepositoryMockRecorder) RemoveTag(tagEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveTag", reflect.TypeOf((*MockTagRepository)(nil).RemoveTag), tagEntity)
+}
+
+// GetTagXrefs mocks base method
+func (m *MockTagRepository) GetTagXrefs(arg0 *entities.TagEntity) ([]*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTagXrefs", arg0)
+	ret0, _ := ret[0].([]*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetTagXrefs indicates an expected call of GetTagXrefs
+func (mr *MockTagRepositoryMockRecorder) GetTagXrefs(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagXrefs", reflect.TypeOf((*MockTagRepository)(nil).GetTagXrefs), arg0)
+}
+
+// GetTagObjectXrefs mocks base method
+func (m *MockTagRepository) GetTagObjectXrefs(arg0 models.Object) ([]*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTagObjectXrefs", arg0)
+	ret0, _ := ret[0].([]*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetTagObjectXrefs indicates an expected call of GetTagObjectXrefs
+func (mr *MockTagRepositoryMockRecorder) GetTagObjectXrefs(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagObjectXrefs", reflect.TypeOf((*MockTagRepository)(nil).GetTagObjectXrefs), arg0)
+}
+
+// GetTagXref mocks base method
+func (m *MockTagRepository) GetTagXref(arg0 *entities.TagEntity, arg1 models.Object) (*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTagXref", arg0, arg1)
+	ret0, _ := ret[0].(*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetTagXref indicates an expected call of GetTagXref
+func (mr *MockTagRepositoryMockRecorder) GetTagXref(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagXref", reflect.TypeOf((*MockTagRepository)(nil).GetTagXref), arg0, arg1)
+}
+
+// SaveTagXref mocks base method
+func (m *MockTagRepository) SaveTagXref(arg0 *entities.TagXrefEntity) errors.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveTagXref", arg0)
+	ret0, _ := ret[0].(errors.Error)
+	return ret0
+}
+
+// SaveTagXref indicates an expected call of SaveTagXref
+func (mr *MockTagRepositoryMockRecorder) SaveTagXref(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveTagXref", reflect.TypeOf((*MockTagRepository)(nil).SaveTagXref), arg0)
+}
+
+// RemoveTagXref mocks base method
+func (m *MockTagRepository) RemoveTagXref(arg0 *entities.TagXrefEntity) errors.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveTagXref", arg0)
+	ret0, _ := ret[0].(errors.Error)
+	return ret0
+}
+
+// RemoveTagXref indicates an expected call of RemoveTagXref
+func (mr *MockTagRepositoryMockRecorder) RemoveTagXref(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveTagXref", reflect.TypeOf((*MockTagRepository)(nil).RemoveTagXref), arg0)
 }

@@ -2,8 +2,8 @@ package services
 
 import (
 	"bytes"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -95,7 +95,7 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("UploadFile:BuildPathError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		fileEntity := new(entities.FileEntity)
 
 		filePathStrategy := mocks.NewMockFilePathStrategy(ctrl)
@@ -118,7 +118,7 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("UploadFile:StorageError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		filePath := "path/to/file"
 		fileEntity := new(entities.FileEntity)
 
@@ -182,7 +182,7 @@ func TestFileService(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:RemoveError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		fileEntity := new(entities.FileEntity)
 		fileRepository := mocks.NewMockFileRepository(ctrl)
 		fileRepository.EXPECT().RemoveFile(fileEntity).Return(systemErr)

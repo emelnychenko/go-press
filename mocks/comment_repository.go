@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockCommentRepository) EXPECT() *MockCommentRepositoryMockRecorder {
 }
 
 // ListComments mocks base method
-func (m *MockCommentRepository) ListComments(commentPaginationQuery *models.CommentPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockCommentRepository) ListComments(commentPaginationQuery *models.CommentPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListComments", commentPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockCommentRepositoryMockRecorder) ListComments(commentPaginationQuery
 }
 
 // GetComment mocks base method
-func (m *MockCommentRepository) GetComment(commentId *models.CommentId) (*entities.CommentEntity, common.Error) {
+func (m *MockCommentRepository) GetComment(commentId *models.CommentId) (*entities.CommentEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetComment", commentId)
 	ret0, _ := ret[0].(*entities.CommentEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,10 +66,10 @@ func (mr *MockCommentRepositoryMockRecorder) GetComment(commentId interface{}) *
 }
 
 // SaveComment mocks base method
-func (m *MockCommentRepository) SaveComment(commentEntity *entities.CommentEntity) common.Error {
+func (m *MockCommentRepository) SaveComment(commentEntity *entities.CommentEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveComment", commentEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -80,10 +80,10 @@ func (mr *MockCommentRepositoryMockRecorder) SaveComment(commentEntity interface
 }
 
 // RemoveComment mocks base method
-func (m *MockCommentRepository) RemoveComment(commentEntity *entities.CommentEntity) common.Error {
+func (m *MockCommentRepository) RemoveComment(commentEntity *entities.CommentEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveComment", commentEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

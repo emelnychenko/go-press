@@ -1,10 +1,9 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -28,7 +27,7 @@ func TestFileRepository(t *testing.T) {
 	assert.Equal(t, db, fileRepository.db)
 	assert.Equal(t, dbPaginator, fileRepository.dbPaginator)
 
-	fileId := common.NewModelId()
+	fileId := models.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": fileId.String(),
 	}}
@@ -48,11 +47,11 @@ func TestFileRepository(t *testing.T) {
 	})
 
 	t.Run("ListFiles:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		filePaginationQuery := &models.FilePaginationQuery{
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), filePaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -83,7 +82,7 @@ func TestFileRepository(t *testing.T) {
 
 		fileEntity, err := fileRepository.GetFile(fileId)
 		assert.NotNil(t, fileEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveFile", func(t *testing.T) {
@@ -94,7 +93,7 @@ func TestFileRepository(t *testing.T) {
 	})
 
 	t.Run("SaveFile:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		fileEntity := new(entities.FileEntity)
 		assert.Error(t, fileRepository.SaveFile(fileEntity))
@@ -108,7 +107,7 @@ func TestFileRepository(t *testing.T) {
 	})
 
 	t.Run("RemoveFile:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		fileEntity := new(entities.FileEntity)
 		assert.Error(t, fileRepository.RemoveFile(fileEntity))

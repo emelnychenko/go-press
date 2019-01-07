@@ -2,8 +2,8 @@ package apis
 
 import (
 	"bytes"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -17,7 +17,7 @@ func TestFileApi(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	fileId := common.NewModelId()
+	fileId := models.NewModelId()
 
 	t.Run("NewFileApi", func(t *testing.T) {
 		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
@@ -55,7 +55,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("ListFiles:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.FilePaginationQuery)
 
 		fileService := mocks.NewMockFileService(ctrl)
@@ -84,7 +84,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("GetFile:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
@@ -127,7 +127,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UploadFile:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
@@ -161,7 +161,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("DownloadFile:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileApi := &fileApiImpl{fileService: fileService}
@@ -217,7 +217,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UpdateFile:GetFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileService.EXPECT().GetFile(fileId).Return(nil, systemErr)
@@ -228,7 +228,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("UpdateFile:UpdateFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		fileEntity := new(entities.FileEntity)
 		data := new(models.FileUpdate)
@@ -270,7 +270,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:GetFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		fileService := mocks.NewMockFileService(ctrl)
 		fileService.EXPECT().GetFile(fileId).Return(nil, systemErr)
@@ -280,7 +280,7 @@ func TestFileApi(t *testing.T) {
 	})
 
 	t.Run("DeleteFile:DeleteFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		fileEntity := new(entities.FileEntity)
 
 		fileService := mocks.NewMockFileService(ctrl)

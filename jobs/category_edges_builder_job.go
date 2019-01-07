@@ -1,8 +1,8 @@
 package jobs
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
@@ -24,7 +24,7 @@ func NewCategoryEdgesBuilderJob(
 }
 
 //BuildCategoriesEdges
-func (j *categoryEdgesBuilderJobImpl) BuildCategoriesEdges() (err common.Error) {
+func (j *categoryEdgesBuilderJobImpl) BuildCategoriesEdges() (err errors.Error) {
 	categoryEntities, err := j.categoryRepository.GetCategories()
 
 	if nil != err {

@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -22,7 +21,7 @@ func NewCommentRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contra
 
 func (r *commentRepositoryImpl) ListComments(
 	commentPaginationQuery *models.CommentPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	paginationTotal, commentEntities := 0, make([]*entities.CommentEntity, commentPaginationQuery.Limit)
 	db := r.db.Model(&commentEntities).Order("created desc")
 	err = r.dbPaginator.Paginate(db, commentPaginationQuery.PaginationQuery, &commentEntities, &paginationTotal)
@@ -36,7 +35,7 @@ func (r *commentRepositoryImpl) ListComments(
 }
 
 func (r *commentRepositoryImpl) GetComment(commentId *models.CommentId) (
-	commentEntity *entities.CommentEntity, err common.Error,
+	commentEntity *entities.CommentEntity, err errors.Error,
 ) {
 	commentEntity = new(entities.CommentEntity)
 
@@ -44,24 +43,24 @@ func (r *commentRepositoryImpl) GetComment(commentId *models.CommentId) (
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewCommentByIdNotFoundError(commentId)
 		} else {
-			err = common.NewSystemErrorFromBuiltin(gormErr)
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
 	return
 }
 
-func (r *commentRepositoryImpl) SaveComment(commentEntity *entities.CommentEntity) (err common.Error) {
+func (r *commentRepositoryImpl) SaveComment(commentEntity *entities.CommentEntity) (err errors.Error) {
 	if gormErr := r.db.Save(commentEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (r *commentRepositoryImpl) RemoveComment(commentEntity *entities.CommentEntity) (err common.Error) {
+func (r *commentRepositoryImpl) RemoveComment(commentEntity *entities.CommentEntity) (err errors.Error) {
 	if gormErr := r.db.Delete(commentEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

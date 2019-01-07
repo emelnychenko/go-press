@@ -1,13 +1,13 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
 type (
 	CategoryHttpHelper interface {
-		ParseCategoryId(httpContext HttpContext) (*models.CategoryId, common.Error)
-		ParseParentCategoryId(httpContext HttpContext) (*models.CategoryId, common.Error)
+		ParseCategoryId(HttpContext) (*models.CategoryId, errors.Error)
+		ParseParentCategoryId(HttpContext) (*models.CategoryId, errors.Error)
 	}
 )

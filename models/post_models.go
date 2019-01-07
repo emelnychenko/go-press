@@ -1,13 +1,12 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
 	"time"
 )
 
 type (
-	PostId = common.ModelId
+	PostId = ModelId
 
 	Post struct {
 		Id          *PostId           `json:"id" xml:"id"`

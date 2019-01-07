@@ -2,16 +2,14 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/models"
 )
 
-func NewChannelNotFoundError(request string) common.Error {
+func NewChannelNotFoundError(request string) Error {
 	message := fmt.Sprintf("The channel was not found on request: %s", request)
-	return common.NewNotFoundError(message)
+	return NewNotFoundError(message)
 }
 
-func NewChannelByIdNotFoundError(categoryId *models.ChannelId) common.Error {
-	request := fmt.Sprintf("id = %s", categoryId)
+func NewChannelByIdNotFoundError(channelId fmt.Stringer) Error {
+	request := fmt.Sprintf("id = %s", channelId)
 	return NewChannelNotFoundError(request)
 }

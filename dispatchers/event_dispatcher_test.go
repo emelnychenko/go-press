@@ -1,10 +1,10 @@
 package dispatchers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
-	"github.com/emelnychenko/go-press/events_mocks"
+	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	eventsLib "github.com/liuggio/events"
 	"github.com/stretchr/testify/assert"
@@ -25,7 +25,7 @@ func TestEventDispatcher(t *testing.T) {
 	t.Run("Dispatch", func(t *testing.T) {
 		event := new(events.Event)
 
-		dispatcher := events_mocks.NewMockDispatcher(ctrl)
+		dispatcher := mocks.NewMockDispatcher(ctrl)
 		dispatcher.EXPECT().Raise(event.Name(), event)
 
 		eventDispatcher := &eventDispatcherImpl{dispatcher: dispatcher}
@@ -35,12 +35,12 @@ func TestEventDispatcher(t *testing.T) {
 	t.Run("Subscribe", func(t *testing.T) {
 		event := new(events.Event)
 
-		var eventSubscriberFunc contracts.EventSubscriberFunc = func(_event contracts.Event) (err common.Error) {
+		var eventSubscriberFunc contracts.EventSubscriberFunc = func(_event contracts.Event) (err errors.Error) {
 			assert.Equal(t, _event, event)
 			return
 		}
 
-		dispatcher := events_mocks.NewMockDispatcher(ctrl)
+		dispatcher := mocks.NewMockDispatcher(ctrl)
 		dispatcher.EXPECT().On(event.Name(), gomock.Any())
 
 		eventDispatcher := &eventDispatcherImpl{dispatcher: dispatcher}
@@ -50,7 +50,7 @@ func TestEventDispatcher(t *testing.T) {
 	t.Run("Subscribe:Dispatch", func(t *testing.T) {
 		event := new(events.Event)
 
-		var eventSubscriberFunc contracts.EventSubscriberFunc = func(_event contracts.Event) (err common.Error) {
+		var eventSubscriberFunc contracts.EventSubscriberFunc = func(_event contracts.Event) (err errors.Error) {
 			assert.Equal(t, _event, event)
 			return
 		}

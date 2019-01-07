@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/models"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -17,9 +17,9 @@ func TestUserErrors(t *testing.T) {
 	})
 
 	t.Run("UserNotFoundByIdError", func(t *testing.T) {
-		fileId := new(models.UserId)
-		err := NewUserByIdNotFoundError(fileId)
-		assert.Equal(t, fmt.Sprintf("The user was not found on request: id = %s", fileId), err.Error())
+		userId := new(uuid.UUID)
+		err := NewUserByIdNotFoundError(userId)
+		assert.Equal(t, fmt.Sprintf("The user was not found on request: id = %s", userId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())
 	})
 }

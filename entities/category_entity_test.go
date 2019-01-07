@@ -41,4 +41,52 @@ func TestCategoryEntity(t *testing.T) {
 		categoryEntityNestedSetNode := CategoryEntityNestedSetNode{CategoryEntity: categoryEntity, Left: 1, Right: 4}
 		assert.True(t, categoryEntityNestedSetNode.EdgesDifferent())
 	})
+
+	t.Run("NewCategoryXrefEntity", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		categoryEntity := &CategoryEntity{Id: categoryId}
+		postId := new(models.PostId)
+		postEntity := &PostEntity{Id: postId}
+
+		categoryXrefEntity := NewCategoryXrefEntity(categoryEntity, postEntity)
+
+		assert.Equal(t, categoryId, categoryXrefEntity.CategoryId)
+		assert.Equal(t, postEntity.ObjectType(), categoryXrefEntity.ObjectType)
+		assert.Equal(t, postId, categoryXrefEntity.ObjectId)
+		assert.NotNil(t, categoryXrefEntity.Created)
+	})
+
+	t.Run("XrefTableName", func(t *testing.T) {
+		categoryXrefEntity := new(CategoryXrefEntity)
+
+		assert.Equal(t, CategoryXrefTableName, categoryXrefEntity.TableName())
+	})
+
+	t.Run("XrefSetCategory", func(t *testing.T) {
+		categoryXrefEntity := new(CategoryXrefEntity)
+		categoryId := new(models.CategoryId)
+		categoryEntity := &CategoryEntity{Id: categoryId}
+
+		categoryXrefEntity.SetCategory(categoryEntity)
+		assert.Equal(t, categoryId, categoryXrefEntity.CategoryId)
+	})
+
+	t.Run("XrefSetObject", func(t *testing.T) {
+		postEntity := &PostEntity{Id: new(models.PostId)}
+
+		categoryXrefEntity := new(CategoryXrefEntity)
+		categoryXrefEntity.SetObject(postEntity)
+
+		assert.Equal(t, postEntity.ObjectType(), categoryXrefEntity.ObjectType)
+		assert.Equal(t, postEntity.ObjectId(), categoryXrefEntity.ObjectId)
+	})
+
+	t.Run("SetEntityEdges", func(t *testing.T) {
+		categoryEntity := new(CategoryEntity)
+		categoryEntityNestedSetNode := CategoryEntityNestedSetNode{CategoryEntity: categoryEntity, Left: 1, Right: 2}
+
+		categoryEntityNestedSetNode.SetEntityEdges()
+		assert.Equal(t, 1, categoryEntity.Left)
+		assert.Equal(t, 2, categoryEntity.Right)
+	})
 }

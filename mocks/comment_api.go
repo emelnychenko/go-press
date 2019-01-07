@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockCommentApi) EXPECT() *MockCommentApiMockRecorder {
 }
 
 // ListComments mocks base method
-func (m *MockCommentApi) ListComments(commentPaginationQuery *models.CommentPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockCommentApi) ListComments(commentPaginationQuery *models.CommentPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListComments", commentPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockCommentApiMockRecorder) ListComments(commentPaginationQuery interf
 }
 
 // GetComment mocks base method
-func (m *MockCommentApi) GetComment(commentId *models.CommentId) (*models.Comment, common.Error) {
+func (m *MockCommentApi) GetComment(commentId *models.CommentId) (*models.Comment, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetComment", commentId)
 	ret0, _ := ret[0].(*models.Comment)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockCommentApiMockRecorder) GetComment(commentId interface{}) *gomock.
 }
 
 // CreateComment mocks base method
-func (m *MockCommentApi) CreateComment(data *models.CommentCreate) (*models.Comment, common.Error) {
+func (m *MockCommentApi) CreateComment(data *models.CommentCreate) (*models.Comment, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateComment", data)
 	ret0, _ := ret[0].(*models.Comment)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockCommentApiMockRecorder) CreateComment(data interface{}) *gomock.Ca
 }
 
 // UpdateComment mocks base method
-func (m *MockCommentApi) UpdateComment(commentId *models.CommentId, data *models.CommentUpdate) common.Error {
+func (m *MockCommentApi) UpdateComment(commentId *models.CommentId, data *models.CommentUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateComment", commentId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockCommentApiMockRecorder) UpdateComment(commentId, data interface{})
 }
 
 // DeleteComment mocks base method
-func (m *MockCommentApi) DeleteComment(commentId *models.CommentId) common.Error {
+func (m *MockCommentApi) DeleteComment(commentId *models.CommentId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteComment", commentId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

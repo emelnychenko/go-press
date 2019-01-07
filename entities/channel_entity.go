@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -22,7 +21,7 @@ type (
 func NewChannelEntity() *ChannelEntity {
 	created := time.Now().UTC()
 	return &ChannelEntity{
-		Id:      common.NewModelId(),
+		Id:      models.NewModelId(),
 		Created: &created,
 	}
 }

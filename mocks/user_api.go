@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockUserApi) EXPECT() *MockUserApiMockRecorder {
 }
 
 // ListUsers mocks base method
-func (m *MockUserApi) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockUserApi) ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListUsers", userPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockUserApiMockRecorder) ListUsers(userPaginationQuery interface{}) *g
 }
 
 // GetUser mocks base method
-func (m *MockUserApi) GetUser(userId *models.UserId) (*models.User, common.Error) {
+func (m *MockUserApi) GetUser(userId *models.UserId) (*models.User, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUser", userId)
 	ret0, _ := ret[0].(*models.User)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockUserApiMockRecorder) GetUser(userId interface{}) *gomock.Call {
 }
 
 // CreateUser mocks base method
-func (m *MockUserApi) CreateUser(data *models.UserCreate) (*models.User, common.Error) {
+func (m *MockUserApi) CreateUser(data *models.UserCreate) (*models.User, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUser", data)
 	ret0, _ := ret[0].(*models.User)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockUserApiMockRecorder) CreateUser(data interface{}) *gomock.Call {
 }
 
 // UpdateUser mocks base method
-func (m *MockUserApi) UpdateUser(userId *models.UserId, data *models.UserUpdate) common.Error {
+func (m *MockUserApi) UpdateUser(userId *models.UserId, data *models.UserUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateUser", userId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockUserApiMockRecorder) UpdateUser(userId, data interface{}) *gomock.
 }
 
 // VerifyUser mocks base method
-func (m *MockUserApi) VerifyUser(userId *models.UserId) common.Error {
+func (m *MockUserApi) VerifyUser(userId *models.UserId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "VerifyUser", userId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -108,10 +108,10 @@ func (mr *MockUserApiMockRecorder) VerifyUser(userId interface{}) *gomock.Call {
 }
 
 // ChangeUserIdentity mocks base method
-func (m *MockUserApi) ChangeUserIdentity(userId *models.UserId, data *models.UserChangeIdentity) common.Error {
+func (m *MockUserApi) ChangeUserIdentity(userId *models.UserId, data *models.UserChangeIdentity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserIdentity", userId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -122,10 +122,10 @@ func (mr *MockUserApiMockRecorder) ChangeUserIdentity(userId, data interface{}) 
 }
 
 // ChangeUserPassword mocks base method
-func (m *MockUserApi) ChangeUserPassword(userId *models.UserId, data *models.UserChangePassword) common.Error {
+func (m *MockUserApi) ChangeUserPassword(userId *models.UserId, data *models.UserChangePassword) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserPassword", userId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -136,10 +136,10 @@ func (mr *MockUserApiMockRecorder) ChangeUserPassword(userId, data interface{}) 
 }
 
 // DeleteUser mocks base method
-func (m *MockUserApi) DeleteUser(userId *models.UserId) common.Error {
+func (m *MockUserApi) DeleteUser(userId *models.UserId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteUser", userId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

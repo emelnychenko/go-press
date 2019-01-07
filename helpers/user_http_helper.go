@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -19,6 +19,6 @@ func NewUserEchoHelper() contracts.UserHttpHelper {
 	return new(userEchoHelperImpl)
 }
 
-func (*userEchoHelperImpl) ParseUserId(httpContext contracts.HttpContext) (*models.UserId, common.Error) {
-	return common.ParseModelId(httpContext.Parameter(UserIdParameterName))
+func (*userEchoHelperImpl) ParseUserId(httpContext contracts.HttpContext) (*models.UserId, errors.Error) {
+	return models.ParseModelId(httpContext.Parameter(UserIdParameterName))
 }

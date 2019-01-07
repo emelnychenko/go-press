@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/models"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -17,9 +17,9 @@ func TestPostErrors(t *testing.T) {
 	})
 
 	t.Run("PostNotFoundByIdError", func(t *testing.T) {
-		fileId := new(models.PostId)
-		err := NewPostByIdNotFoundError(fileId)
-		assert.Equal(t, fmt.Sprintf("The post was not found on request: id = %s", fileId), err.Error())
+		postId := new(uuid.UUID)
+		err := NewPostByIdNotFoundError(postId)
+		assert.Equal(t, fmt.Sprintf("The post was not found on request: id = %s", postId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())
 	})
 }

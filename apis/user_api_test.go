@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ListUsers:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.UserPaginationQuery)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -83,7 +83,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("GetUser:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -127,7 +127,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("CreateUser:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.UserCreate)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -165,7 +165,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("UpdateUser:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -177,7 +177,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("UpdateUser:UpdateUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
 		data := new(models.UserUpdate)
@@ -218,7 +218,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("VerifyUser:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -230,7 +230,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("VerifyUser:VerifyUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
 
@@ -271,7 +271,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserIdentity:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -283,7 +283,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserIdentity:ChangeUserIdentityError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
 		data := new(models.UserChangeIdentity)
@@ -351,7 +351,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -363,7 +363,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:CheckError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		password := "pass0"
@@ -380,7 +380,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPassword:ChangeUserPasswordError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		password := "pass0"
@@ -424,7 +424,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("DeleteUser:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 
 		userService := mocks.NewMockUserService(ctrl)
@@ -436,7 +436,7 @@ func TestUserApi(t *testing.T) {
 	})
 
 	t.Run("DeleteUser:DeleteUserUser", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
 

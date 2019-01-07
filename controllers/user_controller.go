@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type userControllerImpl struct {
@@ -19,7 +19,7 @@ func NewUserController(
 	return &userControllerImpl{userHttpHelper, userModelFactory, userApi}
 }
 
-func (c *userControllerImpl) ListUsers(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *userControllerImpl) ListUsers(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	userPaginationQuery := c.userModelFactory.CreateUserPaginationQuery()
 
 	if err = httpContext.BindModel(userPaginationQuery.PaginationQuery); err != nil {
@@ -34,7 +34,7 @@ func (c *userControllerImpl) ListUsers(httpContext contracts.HttpContext) (pagin
 	return
 }
 
-func (c *userControllerImpl) GetUser(httpContext contracts.HttpContext) (user interface{}, err common.Error) {
+func (c *userControllerImpl) GetUser(httpContext contracts.HttpContext) (user interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
@@ -45,7 +45,7 @@ func (c *userControllerImpl) GetUser(httpContext contracts.HttpContext) (user in
 	return
 }
 
-func (c *userControllerImpl) CreateUser(httpContext contracts.HttpContext) (user interface{}, err common.Error) {
+func (c *userControllerImpl) CreateUser(httpContext contracts.HttpContext) (user interface{}, err errors.Error) {
 	data := c.userModelFactory.CreateUserCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -56,7 +56,7 @@ func (c *userControllerImpl) CreateUser(httpContext contracts.HttpContext) (user
 	return
 }
 
-func (c *userControllerImpl) UpdateUser(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *userControllerImpl) UpdateUser(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
@@ -73,7 +73,7 @@ func (c *userControllerImpl) UpdateUser(httpContext contracts.HttpContext) (_ in
 	return
 }
 
-func (c *userControllerImpl) ChangeUserIdentity(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *userControllerImpl) ChangeUserIdentity(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
@@ -90,7 +90,7 @@ func (c *userControllerImpl) ChangeUserIdentity(httpContext contracts.HttpContex
 	return
 }
 
-func (c *userControllerImpl) ChangeUserPassword(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *userControllerImpl) ChangeUserPassword(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *userControllerImpl) ChangeUserPassword(httpContext contracts.HttpContex
 	return
 }
 
-func (c *userControllerImpl) DeleteUser(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *userControllerImpl) DeleteUser(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	userId, err := c.userHttpHelper.ParseUserId(httpContext)
 
 	if err != nil {

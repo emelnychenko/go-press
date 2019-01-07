@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockFileController) EXPECT() *MockFileControllerMockRecorder {
 }
 
 // ListFiles mocks base method
-func (m *MockFileController) ListFiles(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockFileController) ListFiles(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListFiles", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockFileControllerMockRecorder) ListFiles(httpContext interface{}) *go
 }
 
 // GetFile mocks base method
-func (m *MockFileController) GetFile(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockFileController) GetFile(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFile", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockFileControllerMockRecorder) GetFile(httpContext interface{}) *gomo
 }
 
 // UploadFile mocks base method
-func (m *MockFileController) UploadFile(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockFileController) UploadFile(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadFile", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockFileControllerMockRecorder) UploadFile(httpContext interface{}) *g
 }
 
 // DownloadFile mocks base method
-func (m *MockFileController) DownloadFile(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockFileController) DownloadFile(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownloadFile", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockFileControllerMockRecorder) DownloadFile(httpContext interface{}) 
 }
 
 // UpdateFile mocks base method
-func (m *MockFileController) UpdateFile(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockFileController) UpdateFile(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateFile", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -110,11 +110,11 @@ func (mr *MockFileControllerMockRecorder) UpdateFile(httpContext interface{}) *g
 }
 
 // DeleteFile mocks base method
-func (m *MockFileController) DeleteFile(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockFileController) DeleteFile(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteFile", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

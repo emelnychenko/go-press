@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/models"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -17,7 +17,7 @@ func TestPollErrors(t *testing.T) {
 	})
 
 	t.Run("PollNotFoundByIdError", func(t *testing.T) {
-		pollId := new(models.PollId)
+		pollId := new(uuid.UUID)
 		err := NewPollByIdNotFoundError(pollId)
 		assert.Equal(t, fmt.Sprintf("The poll was not found on request: id = %s", pollId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())

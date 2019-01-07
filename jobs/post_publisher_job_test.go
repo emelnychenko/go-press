@@ -1,8 +1,8 @@
 package jobs
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
@@ -58,7 +58,7 @@ func TestPostPublisherJob(t *testing.T) {
 	})
 
 	t.Run("PublishPost:SavePostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		postEntity := new(entities.PostEntity)
 
 		postRepository := mocks.NewMockPostRepository(ctrl)

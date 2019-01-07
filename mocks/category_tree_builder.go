@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockCategoryTreeBuilder) EXPECT() *MockCategoryTreeBuilderMockRecorder 
 }
 
 // BuildCategoryEntityTree mocks base method
-func (m *MockCategoryTreeBuilder) BuildCategoryEntityTree(categoryEntities []*entities.CategoryEntity) (*entities.CategoryEntityTree, common.Error) {
+func (m *MockCategoryTreeBuilder) BuildCategoryEntityTree(categoryEntities []*entities.CategoryEntity) (*entities.CategoryEntityTree, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildCategoryEntityTree", categoryEntities)
 	ret0, _ := ret[0].(*entities.CategoryEntityTree)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

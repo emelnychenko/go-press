@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockUserController) EXPECT() *MockUserControllerMockRecorder {
 }
 
 // ListUsers mocks base method
-func (m *MockUserController) ListUsers(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) ListUsers(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListUsers", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockUserControllerMockRecorder) ListUsers(httpContext interface{}) *go
 }
 
 // GetUser mocks base method
-func (m *MockUserController) GetUser(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) GetUser(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUser", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockUserControllerMockRecorder) GetUser(httpContext interface{}) *gomo
 }
 
 // CreateUser mocks base method
-func (m *MockUserController) CreateUser(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) CreateUser(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUser", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockUserControllerMockRecorder) CreateUser(httpContext interface{}) *g
 }
 
 // UpdateUser mocks base method
-func (m *MockUserController) UpdateUser(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) UpdateUser(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateUser", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockUserControllerMockRecorder) UpdateUser(httpContext interface{}) *g
 }
 
 // ChangeUserIdentity mocks base method
-func (m *MockUserController) ChangeUserIdentity(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) ChangeUserIdentity(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserIdentity", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -110,11 +110,11 @@ func (mr *MockUserControllerMockRecorder) ChangeUserIdentity(httpContext interfa
 }
 
 // ChangeUserPassword mocks base method
-func (m *MockUserController) ChangeUserPassword(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) ChangeUserPassword(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeUserPassword", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -125,11 +125,11 @@ func (mr *MockUserControllerMockRecorder) ChangeUserPassword(httpContext interfa
 }
 
 // DeleteUser mocks base method
-func (m *MockUserController) DeleteUser(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockUserController) DeleteUser(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteUser", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -22,7 +21,7 @@ func NewChannelRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contra
 
 func (r *channelRepositoryImpl) ListChannels(
 	channelPaginationQuery *models.ChannelPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	paginationTotal, channelEntities := 0, make([]*entities.ChannelEntity, channelPaginationQuery.Limit)
 	db := r.db.Model(&channelEntities).Order("created desc")
 	err = r.dbPaginator.Paginate(db, channelPaginationQuery.PaginationQuery, &channelEntities, &paginationTotal)
@@ -35,31 +34,31 @@ func (r *channelRepositoryImpl) ListChannels(
 	return
 }
 
-func (r *channelRepositoryImpl) GetChannel(channelId *models.ChannelId) (channelEntity *entities.ChannelEntity, err common.Error) {
+func (r *channelRepositoryImpl) GetChannel(channelId *models.ChannelId) (channelEntity *entities.ChannelEntity, err errors.Error) {
 	channelEntity = new(entities.ChannelEntity)
 
 	if gormErr := r.db.First(channelEntity, "id = ?", channelId).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewChannelByIdNotFoundError(channelId)
 		} else {
-			err = common.NewSystemErrorFromBuiltin(gormErr)
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
 	return
 }
 
-func (r *channelRepositoryImpl) SaveChannel(channelEntity *entities.ChannelEntity) (err common.Error) {
+func (r *channelRepositoryImpl) SaveChannel(channelEntity *entities.ChannelEntity) (err errors.Error) {
 	if gormErr := r.db.Save(channelEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (r *channelRepositoryImpl) RemoveChannel(channelEntity *entities.ChannelEntity) (err common.Error) {
+func (r *channelRepositoryImpl) RemoveChannel(channelEntity *entities.ChannelEntity) (err errors.Error) {
 	if gormErr := r.db.Delete(channelEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockCategoryController) EXPECT() *MockCategoryControllerMockRecorder {
 }
 
 // ListCategories mocks base method
-func (m *MockCategoryController) ListCategories(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) ListCategories(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListCategories", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockCategoryControllerMockRecorder) ListCategories(httpContext interfa
 }
 
 // GetCategoriesTree mocks base method
-func (m *MockCategoryController) GetCategoriesTree(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) GetCategoriesTree(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategoriesTree", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockCategoryControllerMockRecorder) GetCategoriesTree(httpContext inte
 }
 
 // GetCategory mocks base method
-func (m *MockCategoryController) GetCategory(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) GetCategory(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategory", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockCategoryControllerMockRecorder) GetCategory(httpContext interface{
 }
 
 // GetCategoryTree mocks base method
-func (m *MockCategoryController) GetCategoryTree(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) GetCategoryTree(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategoryTree", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockCategoryControllerMockRecorder) GetCategoryTree(httpContext interf
 }
 
 // CreateCategory mocks base method
-func (m *MockCategoryController) CreateCategory(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) CreateCategory(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateCategory", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -110,11 +110,11 @@ func (mr *MockCategoryControllerMockRecorder) CreateCategory(httpContext interfa
 }
 
 // UpdateCategory mocks base method
-func (m *MockCategoryController) UpdateCategory(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) UpdateCategory(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateCategory", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -125,11 +125,11 @@ func (mr *MockCategoryControllerMockRecorder) UpdateCategory(httpContext interfa
 }
 
 // ChangeCategoryParent mocks base method
-func (m *MockCategoryController) ChangeCategoryParent(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) ChangeCategoryParent(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChangeCategoryParent", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -140,11 +140,11 @@ func (mr *MockCategoryControllerMockRecorder) ChangeCategoryParent(httpContext i
 }
 
 // RemoveCategoryParent mocks base method
-func (m *MockCategoryController) RemoveCategoryParent(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) RemoveCategoryParent(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveCategoryParent", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -155,11 +155,11 @@ func (mr *MockCategoryControllerMockRecorder) RemoveCategoryParent(httpContext i
 }
 
 // DeleteCategory mocks base method
-func (m *MockCategoryController) DeleteCategory(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockCategoryController) DeleteCategory(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteCategory", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

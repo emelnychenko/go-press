@@ -1,7 +1,7 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/jinzhu/gorm"
 )
@@ -13,6 +13,6 @@ type (
 			paginationQuery *models.PaginationQuery,
 			paginationData interface{},
 			paginationTotal *int,
-		) (err common.Error)
+		) (err errors.Error)
 	}
 )

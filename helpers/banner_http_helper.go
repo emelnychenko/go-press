@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -19,6 +19,6 @@ func NewBannerHttpHelper() contracts.BannerHttpHelper {
 	return new(bannerHttpHelperImpl)
 }
 
-func (*bannerHttpHelperImpl) ParseBannerId(httpContext contracts.HttpContext) (*models.BannerId, common.Error) {
-	return common.ParseModelId(httpContext.Parameter(BannerIdParameterName))
+func (*bannerHttpHelperImpl) ParseBannerId(httpContext contracts.HttpContext) (*models.BannerId, errors.Error) {
+	return models.ParseModelId(httpContext.Parameter(BannerIdParameterName))
 }

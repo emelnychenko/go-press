@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockTagService) EXPECT() *MockTagServiceMockRecorder {
 }
 
 // ListTags mocks base method
-func (m *MockTagService) ListTags(tagPaginationQuery *models.TagPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockTagService) ListTags(tagPaginationQuery *models.TagPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTags", tagPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockTagServiceMockRecorder) ListTags(tagPaginationQuery interface{}) *
 }
 
 // GetTag mocks base method
-func (m *MockTagService) GetTag(tagId *models.TagId) (*entities.TagEntity, common.Error) {
+func (m *MockTagService) GetTag(tagId *models.TagId) (*entities.TagEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTag", tagId)
 	ret0, _ := ret[0].(*entities.TagEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockTagServiceMockRecorder) GetTag(tagId interface{}) *gomock.Call {
 }
 
 // CreateTag mocks base method
-func (m *MockTagService) CreateTag(data *models.TagCreate) (*entities.TagEntity, common.Error) {
+func (m *MockTagService) CreateTag(data *models.TagCreate) (*entities.TagEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTag", data)
 	ret0, _ := ret[0].(*entities.TagEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,10 +81,10 @@ func (mr *MockTagServiceMockRecorder) CreateTag(data interface{}) *gomock.Call {
 }
 
 // UpdateTag mocks base method
-func (m *MockTagService) UpdateTag(tagEntity *entities.TagEntity, data *models.TagUpdate) common.Error {
+func (m *MockTagService) UpdateTag(tagEntity *entities.TagEntity, data *models.TagUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTag", tagEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -95,10 +95,10 @@ func (mr *MockTagServiceMockRecorder) UpdateTag(tagEntity, data interface{}) *go
 }
 
 // DeleteTag mocks base method
-func (m *MockTagService) DeleteTag(tagEntity *entities.TagEntity) common.Error {
+func (m *MockTagService) DeleteTag(tagEntity *entities.TagEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteTag", tagEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -106,4 +106,78 @@ func (m *MockTagService) DeleteTag(tagEntity *entities.TagEntity) common.Error {
 func (mr *MockTagServiceMockRecorder) DeleteTag(tagEntity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTag", reflect.TypeOf((*MockTagService)(nil).DeleteTag), tagEntity)
+}
+
+// GetTagXrefs mocks base method
+func (m *MockTagService) GetTagXrefs(arg0 *entities.TagEntity) ([]*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTagXrefs", arg0)
+	ret0, _ := ret[0].([]*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetTagXrefs indicates an expected call of GetTagXrefs
+func (mr *MockTagServiceMockRecorder) GetTagXrefs(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagXrefs", reflect.TypeOf((*MockTagService)(nil).GetTagXrefs), arg0)
+}
+
+// GetTagObjectXrefs mocks base method
+func (m *MockTagService) GetTagObjectXrefs(arg0 models.Object) ([]*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTagObjectXrefs", arg0)
+	ret0, _ := ret[0].([]*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetTagObjectXrefs indicates an expected call of GetTagObjectXrefs
+func (mr *MockTagServiceMockRecorder) GetTagObjectXrefs(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagObjectXrefs", reflect.TypeOf((*MockTagService)(nil).GetTagObjectXrefs), arg0)
+}
+
+// GetTagXref mocks base method
+func (m *MockTagService) GetTagXref(arg0 *entities.TagEntity, arg1 models.Object) (*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTagXref", arg0, arg1)
+	ret0, _ := ret[0].(*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// GetTagXref indicates an expected call of GetTagXref
+func (mr *MockTagServiceMockRecorder) GetTagXref(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTagXref", reflect.TypeOf((*MockTagService)(nil).GetTagXref), arg0, arg1)
+}
+
+// CreateTagXref mocks base method
+func (m *MockTagService) CreateTagXref(arg0 *entities.TagEntity, arg1 models.Object) (*entities.TagXrefEntity, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTagXref", arg0, arg1)
+	ret0, _ := ret[0].(*entities.TagXrefEntity)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// CreateTagXref indicates an expected call of CreateTagXref
+func (mr *MockTagServiceMockRecorder) CreateTagXref(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTagXref", reflect.TypeOf((*MockTagService)(nil).CreateTagXref), arg0, arg1)
+}
+
+// DeleteTagXref mocks base method
+func (m *MockTagService) DeleteTagXref(arg0 *entities.TagXrefEntity) errors.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteTagXref", arg0)
+	ret0, _ := ret[0].(errors.Error)
+	return ret0
+}
+
+// DeleteTagXref indicates an expected call of DeleteTagXref
+func (mr *MockTagServiceMockRecorder) DeleteTagXref(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTagXref", reflect.TypeOf((*MockTagService)(nil).DeleteTagXref), arg0)
 }

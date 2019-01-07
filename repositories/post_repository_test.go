@@ -1,11 +1,10 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -29,7 +28,7 @@ func TestPostRepository(t *testing.T) {
 	assert.Equal(t, db, postRepository.db)
 	assert.Equal(t, dbPaginator, postRepository.dbPaginator)
 
-	postId := common.NewModelId()
+	postId := models.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": postId.String(),
 	}}
@@ -52,14 +51,14 @@ func TestPostRepository(t *testing.T) {
 	})
 
 	t.Run("ListPosts:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		postPaginationQuery := &models.PostPaginationQuery{
 			Status:          enums.PostDraftStatus,
 			Privacy:         enums.PostPublicPrivacy,
 			Author:          "Test",
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), postPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -117,7 +116,7 @@ func TestPostRepository(t *testing.T) {
 	})
 
 	t.Run("SavePost:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		postEntity := new(entities.PostEntity)
 		assert.Error(t, postRepository.SavePost(postEntity))
@@ -131,7 +130,7 @@ func TestPostRepository(t *testing.T) {
 	})
 
 	t.Run("RemovePost:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		postEntity := new(entities.PostEntity)
 		assert.Error(t, postRepository.RemovePost(postEntity))

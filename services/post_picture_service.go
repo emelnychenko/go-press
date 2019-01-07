@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
@@ -16,13 +16,13 @@ func NewPostPictureService(postRepository contracts.PostRepository) contracts.Po
 	return &postPictureServiceImpl{postRepository: postRepository}
 }
 
-func (s *postPictureServiceImpl) ChangePostPicture(postEntity *entities.PostEntity, postPicture *entities.FileEntity) common.Error {
+func (s *postPictureServiceImpl) ChangePostPicture(postEntity *entities.PostEntity, postPicture *entities.FileEntity) errors.Error {
 	postEntity.SetPicture(postPicture)
 
 	return s.postRepository.SavePost(postEntity)
 }
 
-func (s *postPictureServiceImpl) RemovePostPicture(postEntity *entities.PostEntity) common.Error {
+func (s *postPictureServiceImpl) RemovePostPicture(postEntity *entities.PostEntity) errors.Error {
 	postEntity.RemovePicture()
 
 	return s.postRepository.SavePost(postEntity)

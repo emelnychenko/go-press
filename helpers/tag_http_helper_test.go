@@ -18,13 +18,13 @@ func TestTagHttpHelper(t *testing.T) {
 	})
 
 	t.Run("ParseTagId", func(t *testing.T) {
-		tag := new(models.TagId)
+		tagId := new(models.TagId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(TagIdParameterName).Return(tag.String())
+		httpContext.EXPECT().Parameter(TagIdParameterName).Return(tagId.String())
 
 		tagHttpHelper := &tagHttpHelperImpl{}
 		parsedTagId, err := tagHttpHelper.ParseTagId(httpContext)
-		assert.Equal(t, tag.String(), parsedTagId.String())
+		assert.Equal(t, tagId.String(), parsedTagId.String())
 		assert.Nil(t, err)
 	})
 }

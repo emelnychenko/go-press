@@ -17,4 +17,14 @@ func TestCategoryEntityFactory(t *testing.T) {
 		categoryEntityFactory := new(categoryEntityFactoryImpl)
 		assert.IsType(t, new(entities.CategoryEntity), categoryEntityFactory.CreateCategoryEntity())
 	})
+
+	t.Run("CreateCategoryXrefEntity", func(t *testing.T) {
+		categoryEntity := new(entities.CategoryEntity)
+		postEntity := new(entities.PostEntity)
+
+		categoryEntityFactory := new(categoryEntityFactoryImpl)
+		categoryXrefEntity := categoryEntityFactory.CreateCategoryXrefEntity(categoryEntity, postEntity)
+
+		assert.IsType(t, new(entities.CategoryXrefEntity), categoryXrefEntity)
+	})
 }

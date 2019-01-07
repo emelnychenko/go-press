@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	multipart "mime/multipart"
@@ -37,11 +37,11 @@ func (m *MockFileHttpHelper) EXPECT() *MockFileHttpHelperMockRecorder {
 }
 
 // ParseFileId mocks base method
-func (m *MockFileHttpHelper) ParseFileId(httpContext contracts.HttpContext) (*models.FileId, common.Error) {
+func (m *MockFileHttpHelper) ParseFileId(httpContext contracts.HttpContext) (*models.FileId, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ParseFileId", httpContext)
 	ret0, _ := ret[0].(*models.FileId)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -52,11 +52,11 @@ func (mr *MockFileHttpHelperMockRecorder) ParseFileId(httpContext interface{}) *
 }
 
 // GetFileHeader mocks base method
-func (m *MockFileHttpHelper) GetFileHeader(httpContext contracts.HttpContext) (*multipart.FileHeader, common.Error) {
+func (m *MockFileHttpHelper) GetFileHeader(httpContext contracts.HttpContext) (*multipart.FileHeader, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFileHeader", httpContext)
 	ret0, _ := ret[0].(*multipart.FileHeader)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -67,11 +67,11 @@ func (mr *MockFileHttpHelperMockRecorder) GetFileHeader(httpContext interface{})
 }
 
 // OpenFormFile mocks base method
-func (m *MockFileHttpHelper) OpenFormFile(httpContext *multipart.FileHeader) (multipart.File, common.Error) {
+func (m *MockFileHttpHelper) OpenFormFile(httpContext *multipart.FileHeader) (multipart.File, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "OpenFormFile", httpContext)
 	ret0, _ := ret[0].(multipart.File)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

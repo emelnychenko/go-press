@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type commentControllerImpl struct {
@@ -23,7 +23,7 @@ func NewCommentController(
 	}
 }
 
-func (c *commentControllerImpl) ListComments(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *commentControllerImpl) ListComments(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	commentPaginationQuery := c.commentModelFactory.CreateCommentPaginationQuery()
 
 	if err = httpContext.BindModel(commentPaginationQuery.PaginationQuery); err != nil {
@@ -38,7 +38,7 @@ func (c *commentControllerImpl) ListComments(httpContext contracts.HttpContext) 
 	return
 }
 
-func (c *commentControllerImpl) GetComment(httpContext contracts.HttpContext) (comment interface{}, err common.Error) {
+func (c *commentControllerImpl) GetComment(httpContext contracts.HttpContext) (comment interface{}, err errors.Error) {
 	commentId, err := c.commentHttpHelper.ParseCommentId(httpContext)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *commentControllerImpl) GetComment(httpContext contracts.HttpContext) (c
 	return
 }
 
-func (c *commentControllerImpl) CreateComment(httpContext contracts.HttpContext) (comment interface{}, err common.Error) {
+func (c *commentControllerImpl) CreateComment(httpContext contracts.HttpContext) (comment interface{}, err errors.Error) {
 	data := c.commentModelFactory.CreateCommentCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -60,7 +60,7 @@ func (c *commentControllerImpl) CreateComment(httpContext contracts.HttpContext)
 	return
 }
 
-func (c *commentControllerImpl) UpdateComment(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *commentControllerImpl) UpdateComment(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	commentId, err := c.commentHttpHelper.ParseCommentId(httpContext)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *commentControllerImpl) UpdateComment(httpContext contracts.HttpContext)
 	return
 }
 
-func (c *commentControllerImpl) DeleteComment(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *commentControllerImpl) DeleteComment(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	commentId, err := c.commentHttpHelper.ParseCommentId(httpContext)
 
 	if err != nil {

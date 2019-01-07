@@ -1,9 +1,9 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -52,7 +52,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("ListPosts:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.PostPaginationQuery)
 
 		postService := mocks.NewMockPostService(ctrl)
@@ -84,7 +84,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("GetPost:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -164,7 +164,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("CreatePost:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postAuthor := new(models.SystemUser)
 		data := new(models.PostCreate)
@@ -263,7 +263,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("UpdatePost:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -275,7 +275,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("UpdatePost:UpdatePostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -344,7 +344,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("DeletePost:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -355,7 +355,7 @@ func TestPostApi(t *testing.T) {
 	})
 
 	t.Run("DeletePost:DeletePostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
 

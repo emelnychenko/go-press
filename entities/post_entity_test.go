@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
@@ -24,8 +23,19 @@ func TestPostEntity(t *testing.T) {
 		assert.Equal(t, PostTableName, postEntity.TableName())
 	})
 
+	t.Run("ObjectId", func(t *testing.T) {
+		postId := new(models.PostId)
+		postEntity := &PostEntity{Id: postId}
+		assert.Equal(t, postId, postEntity.ObjectId())
+	})
+
+	t.Run("ObjectType", func(t *testing.T) {
+		postEntity := new(PostEntity)
+		assert.Equal(t, PostEntityObjectType, postEntity.ObjectType())
+	})
+
 	t.Run("SetPicture", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.ModelId)
 		postPicture := &FileEntity{Id: modelId}
 		postEntity := new(PostEntity)
 
@@ -34,7 +44,7 @@ func TestPostEntity(t *testing.T) {
 	})
 
 	t.Run("RemovePicture", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.ModelId)
 		postEntity := &PostEntity{PictureId: modelId}
 
 		postEntity.RemovePicture()
@@ -42,7 +52,7 @@ func TestPostEntity(t *testing.T) {
 	})
 
 	t.Run("SetVideo", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.ModelId)
 		postVideo := &FileEntity{Id: modelId}
 		postEntity := new(PostEntity)
 
@@ -51,7 +61,7 @@ func TestPostEntity(t *testing.T) {
 	})
 
 	t.Run("RemoveVideo", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.ModelId)
 		postEntity := &PostEntity{VideoId: modelId}
 
 		postEntity.RemoveVideo()
@@ -59,12 +69,12 @@ func TestPostEntity(t *testing.T) {
 	})
 
 	t.Run("SetAuthor", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		userId := new(models.UserId)
 		postEntity := new(PostEntity)
-		userEntity := &UserEntity{Id: modelId}
+		userEntity := &UserEntity{Id: userId}
 		postEntity.SetAuthor(userEntity)
 
-		assert.Equal(t, modelId, postEntity.AuthorId)
+		assert.Equal(t, userId, postEntity.AuthorId)
 		assert.Equal(t, userEntity.SubjectType(), postEntity.AuthorType)
 	})
 }

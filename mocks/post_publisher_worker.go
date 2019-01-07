@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -34,10 +34,10 @@ func (m *MockPostPublisherWorker) EXPECT() *MockPostPublisherWorkerMockRecorder 
 }
 
 // Start mocks base method
-func (m *MockPostPublisherWorker) Start() common.Error {
+func (m *MockPostPublisherWorker) Start() errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Start")
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -48,10 +48,10 @@ func (mr *MockPostPublisherWorkerMockRecorder) Start() *gomock.Call {
 }
 
 // Stop mocks base method
-func (m *MockPostPublisherWorker) Stop() common.Error {
+func (m *MockPostPublisherWorker) Stop() errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Stop")
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

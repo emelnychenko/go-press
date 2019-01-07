@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type channelControllerImpl struct {
@@ -23,7 +23,7 @@ func NewChannelController(
 	}
 }
 
-func (c *channelControllerImpl) ListChannels(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *channelControllerImpl) ListChannels(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	channelPaginationQuery := c.channelModelFactory.CreateChannelPaginationQuery()
 
 	if err = httpContext.BindModel(channelPaginationQuery.PaginationQuery); err != nil {
@@ -38,7 +38,7 @@ func (c *channelControllerImpl) ListChannels(httpContext contracts.HttpContext) 
 	return
 }
 
-func (c *channelControllerImpl) GetChannel(httpContext contracts.HttpContext) (channel interface{}, err common.Error) {
+func (c *channelControllerImpl) GetChannel(httpContext contracts.HttpContext) (channel interface{}, err errors.Error) {
 	channelId, err := c.channelHttpHelper.ParseChannelId(httpContext)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *channelControllerImpl) GetChannel(httpContext contracts.HttpContext) (c
 	return
 }
 
-func (c *channelControllerImpl) CreateChannel(httpContext contracts.HttpContext) (channel interface{}, err common.Error) {
+func (c *channelControllerImpl) CreateChannel(httpContext contracts.HttpContext) (channel interface{}, err errors.Error) {
 	data := c.channelModelFactory.CreateChannelCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -60,7 +60,7 @@ func (c *channelControllerImpl) CreateChannel(httpContext contracts.HttpContext)
 	return
 }
 
-func (c *channelControllerImpl) UpdateChannel(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *channelControllerImpl) UpdateChannel(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	channelId, err := c.channelHttpHelper.ParseChannelId(httpContext)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *channelControllerImpl) UpdateChannel(httpContext contracts.HttpContext)
 	return
 }
 
-func (c *channelControllerImpl) DeleteChannel(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *channelControllerImpl) DeleteChannel(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	channelId, err := c.channelHttpHelper.ParseChannelId(httpContext)
 
 	if err != nil {

@@ -1,9 +1,9 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -32,7 +32,7 @@ func NewPostApi(
 
 func (a *postApiImpl) ListPosts(
 	postPaginationQuery *models.PostPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.postService.ListPosts(postPaginationQuery)
 
 	if nil != err {
@@ -43,7 +43,7 @@ func (a *postApiImpl) ListPosts(
 	return
 }
 
-func (a *postApiImpl) GetPost(postId *models.PostId) (post *models.Post, err common.Error) {
+func (a *postApiImpl) GetPost(postId *models.PostId) (post *models.Post, err errors.Error) {
 	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {
@@ -54,7 +54,7 @@ func (a *postApiImpl) GetPost(postId *models.PostId) (post *models.Post, err com
 	return
 }
 
-func (a *postApiImpl) CreatePost(postAuthor common.Subject, data *models.PostCreate) (post *models.Post, err common.Error) {
+func (a *postApiImpl) CreatePost(postAuthor models.Subject, data *models.PostCreate) (post *models.Post, err errors.Error) {
 	postEntity, err := a.postService.CreatePost(postAuthor, data)
 
 	if nil != err {
@@ -73,7 +73,7 @@ func (a *postApiImpl) CreatePost(postAuthor common.Subject, data *models.PostCre
 	return
 }
 
-func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate) (err common.Error) {
+func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate) (err errors.Error) {
 	postService := a.postService
 	postEntity, err := postService.GetPost(postId)
 
@@ -109,7 +109,7 @@ func (a *postApiImpl) UpdatePost(postId *models.PostId, data *models.PostUpdate)
 	return
 }
 
-func (a *postApiImpl) DeletePost(postId *models.PostId) (err common.Error) {
+func (a *postApiImpl) DeletePost(postId *models.PostId) (err errors.Error) {
 	postService := a.postService
 	postEntity, err := postService.GetPost(postId)
 

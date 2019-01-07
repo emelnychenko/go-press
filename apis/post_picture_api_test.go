@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -73,7 +73,7 @@ func TestNewPostPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:GetPostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -86,7 +86,7 @@ func TestNewPostPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:GetFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -106,7 +106,7 @@ func TestNewPostPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:ValidateImageError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -133,7 +133,7 @@ func TestNewPostPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangePostPicture:ChangePostPictureError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)
@@ -189,7 +189,7 @@ func TestNewPostPictureApi(t *testing.T) {
 	})
 
 	t.Run("RemovePostPicture:GetPostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postService := mocks.NewMockPostService(ctrl)
@@ -201,7 +201,7 @@ func TestNewPostPictureApi(t *testing.T) {
 	})
 
 	t.Run("RemovePostPicture:RemovePostPictureError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		postEntity := new(entities.PostEntity)

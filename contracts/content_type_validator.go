@@ -1,11 +1,11 @@
 package contracts
 
-import "github.com/emelnychenko/go-press/common"
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	ContentTypeValidator interface {
-		ValidateImage(contentType string) common.Error
-		ValidateVideo(contentType string) common.Error
-		ValidateAudio(contentType string) common.Error
+		ValidateImage(contentType string) errors.Error
+		ValidateVideo(contentType string) errors.Error
+		ValidateAudio(contentType string) errors.Error
 	}
 )

@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -32,7 +32,7 @@ func NewPostAuthorApi(
 	}
 }
 
-func (a *postAuthorApiImpl) ChangePostAuthor(postId *models.PostId, postAuthorId *models.UserId) (err common.Error) {
+func (a *postAuthorApiImpl) ChangePostAuthor(postId *models.PostId, postAuthorId *models.UserId) (err errors.Error) {
 	postEntity, err := a.postService.GetPost(postId)
 
 	if nil != err {

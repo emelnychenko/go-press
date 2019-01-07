@@ -1,8 +1,6 @@
 package resolvers
 
 import (
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -24,20 +22,20 @@ func TestSubjectResolver(t *testing.T) {
 
 	t.Run("ResolveSubject:SystemUser", func(t *testing.T) {
 		subjectResolver := &subjectResolverImpl{}
-		subject, err := subjectResolver.ResolveSubject(nil, enums.SystemSubjectType)
+		subject, err := subjectResolver.ResolveSubject(nil, models.SystemSubjectType)
 
 		assert.IsType(t, new(models.SystemUser), subject)
 		assert.Nil(t, err)
 	})
 
 	t.Run("ResolveSubject:UserEntity", func(t *testing.T) {
-		userId := common.NewModelId()
+		userId := models.NewModelId()
 		user := new(models.User)
 		userApi := mocks.NewMockUserApi(ctrl)
 		userApi.EXPECT().GetUser(userId).Return(user, nil)
 
 		subjectResolver := &subjectResolverImpl{userApi: userApi}
-		subject, err := subjectResolver.ResolveSubject(userId, enums.UserSubjectType)
+		subject, err := subjectResolver.ResolveSubject(userId, models.UserSubjectType)
 
 		assert.Equal(t, user, subject)
 		assert.Nil(t, err)

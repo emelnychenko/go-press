@@ -1,8 +1,6 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -24,7 +22,7 @@ func TestUserEntity(t *testing.T) {
 	})
 
 	t.Run("SubjectId", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.SubjectId)
 		userEntity := &UserEntity{Id: modelId}
 		assert.Equal(t, modelId, userEntity.SubjectId())
 	})
@@ -32,11 +30,11 @@ func TestUserEntity(t *testing.T) {
 	t.Run("SubjectType", func(t *testing.T) {
 		userEntity := new(UserEntity)
 
-		assert.Equal(t, enums.UserSubjectType, userEntity.SubjectType())
+		assert.Equal(t, UserEntitySubjectType, userEntity.SubjectType())
 	})
 
 	t.Run("SetPicture", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.ModelId)
 		postPicture := &FileEntity{Id: modelId}
 		userEntity := new(UserEntity)
 
@@ -45,7 +43,7 @@ func TestUserEntity(t *testing.T) {
 	})
 
 	t.Run("RemovePicture", func(t *testing.T) {
-		modelId := new(common.ModelId)
+		modelId := new(models.ModelId)
 		postEntity := &UserEntity{PictureId: modelId}
 
 		postEntity.RemovePicture()

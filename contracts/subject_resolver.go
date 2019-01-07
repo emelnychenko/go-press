@@ -1,12 +1,12 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/errors"
+	"github.com/emelnychenko/go-press/models"
 )
 
 type (
 	SubjectResolver interface {
-		ResolveSubject(subjectId *common.ModelId, subjectType enums.SubjectType) (subject interface{}, err common.Error)
+		ResolveSubject(subjectId *models.SubjectId, subjectType models.SubjectType) (interface{}, errors.Error)
 	}
 )

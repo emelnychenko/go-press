@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockPollApi) EXPECT() *MockPollApiMockRecorder {
 }
 
 // ListPolls mocks base method
-func (m *MockPollApi) ListPolls(pollPaginationQuery *models.PollPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockPollApi) ListPolls(pollPaginationQuery *models.PollPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPolls", pollPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockPollApiMockRecorder) ListPolls(pollPaginationQuery interface{}) *g
 }
 
 // GetPoll mocks base method
-func (m *MockPollApi) GetPoll(pollId *models.PollId) (*models.Poll, common.Error) {
+func (m *MockPollApi) GetPoll(pollId *models.PollId) (*models.Poll, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPoll", pollId)
 	ret0, _ := ret[0].(*models.Poll)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockPollApiMockRecorder) GetPoll(pollId interface{}) *gomock.Call {
 }
 
 // CreatePoll mocks base method
-func (m *MockPollApi) CreatePoll(data *models.PollCreate) (*models.Poll, common.Error) {
+func (m *MockPollApi) CreatePoll(data *models.PollCreate) (*models.Poll, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePoll", data)
 	ret0, _ := ret[0].(*models.Poll)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockPollApiMockRecorder) CreatePoll(data interface{}) *gomock.Call {
 }
 
 // UpdatePoll mocks base method
-func (m *MockPollApi) UpdatePoll(pollId *models.PollId, data *models.PollUpdate) common.Error {
+func (m *MockPollApi) UpdatePoll(pollId *models.PollId, data *models.PollUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePoll", pollId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockPollApiMockRecorder) UpdatePoll(pollId, data interface{}) *gomock.
 }
 
 // DeletePoll mocks base method
-func (m *MockPollApi) DeletePoll(pollId *models.PollId) common.Error {
+func (m *MockPollApi) DeletePoll(pollId *models.PollId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeletePoll", pollId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

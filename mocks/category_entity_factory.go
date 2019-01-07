@@ -6,6 +6,7 @@ package mocks
 
 import (
 	entities "github.com/emelnychenko/go-press/entities"
+	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -45,4 +46,18 @@ func (m *MockCategoryEntityFactory) CreateCategoryEntity() *entities.CategoryEnt
 func (mr *MockCategoryEntityFactoryMockRecorder) CreateCategoryEntity() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryEntity", reflect.TypeOf((*MockCategoryEntityFactory)(nil).CreateCategoryEntity))
+}
+
+// CreateCategoryXrefEntity mocks base method
+func (m *MockCategoryEntityFactory) CreateCategoryXrefEntity(arg0 *entities.CategoryEntity, arg1 models.Object) *entities.CategoryXrefEntity {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateCategoryXrefEntity", arg0, arg1)
+	ret0, _ := ret[0].(*entities.CategoryXrefEntity)
+	return ret0
+}
+
+// CreateCategoryXrefEntity indicates an expected call of CreateCategoryXrefEntity
+func (mr *MockCategoryEntityFactoryMockRecorder) CreateCategoryXrefEntity(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryXrefEntity", reflect.TypeOf((*MockCategoryEntityFactory)(nil).CreateCategoryXrefEntity), arg0, arg1)
 }

@@ -18,13 +18,13 @@ func TestPostHttpHelper(t *testing.T) {
 	})
 
 	t.Run("ParsePostId", func(t *testing.T) {
-		post := new(models.PostId)
+		postId := new(models.PostId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(PostIdParameterName).Return(post.String())
+		httpContext.EXPECT().Parameter(PostIdParameterName).Return(postId.String())
 
 		postHttpHelper := &postHttpHelperImpl{}
 		parsedPostId, err := postHttpHelper.ParsePostId(httpContext)
-		assert.Equal(t, post.String(), parsedPostId.String())
+		assert.Equal(t, postId.String(), parsedPostId.String())
 		assert.Nil(t, err)
 	})
 }

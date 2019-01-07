@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -34,11 +34,11 @@ func (m *MockHasher) EXPECT() *MockHasherMockRecorder {
 }
 
 // Make mocks base method
-func (m *MockHasher) Make(password string) (string, common.Error) {
+func (m *MockHasher) Make(password string) (string, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Make", password)
 	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -49,10 +49,10 @@ func (mr *MockHasherMockRecorder) Make(password interface{}) *gomock.Call {
 }
 
 // Check mocks base method
-func (m *MockHasher) Check(hashedPassword, password string) common.Error {
+func (m *MockHasher) Check(hashedPassword, password string) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Check", hashedPassword, password)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

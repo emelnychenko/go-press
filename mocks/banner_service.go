@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockBannerService) EXPECT() *MockBannerServiceMockRecorder {
 }
 
 // ListBanners mocks base method
-func (m *MockBannerService) ListBanners(bannerPaginationQuery *models.BannerPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockBannerService) ListBanners(bannerPaginationQuery *models.BannerPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListBanners", bannerPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockBannerServiceMockRecorder) ListBanners(bannerPaginationQuery inter
 }
 
 // GetBanner mocks base method
-func (m *MockBannerService) GetBanner(bannerId *models.BannerId) (*entities.BannerEntity, common.Error) {
+func (m *MockBannerService) GetBanner(bannerId *models.BannerId) (*entities.BannerEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBanner", bannerId)
 	ret0, _ := ret[0].(*entities.BannerEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,11 +66,11 @@ func (mr *MockBannerServiceMockRecorder) GetBanner(bannerId interface{}) *gomock
 }
 
 // CreateBanner mocks base method
-func (m *MockBannerService) CreateBanner(data *models.BannerCreate) (*entities.BannerEntity, common.Error) {
+func (m *MockBannerService) CreateBanner(data *models.BannerCreate) (*entities.BannerEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateBanner", data)
 	ret0, _ := ret[0].(*entities.BannerEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -81,10 +81,10 @@ func (mr *MockBannerServiceMockRecorder) CreateBanner(data interface{}) *gomock.
 }
 
 // UpdateBanner mocks base method
-func (m *MockBannerService) UpdateBanner(bannerEntity *entities.BannerEntity, data *models.BannerUpdate) common.Error {
+func (m *MockBannerService) UpdateBanner(bannerEntity *entities.BannerEntity, data *models.BannerUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateBanner", bannerEntity, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -95,10 +95,10 @@ func (mr *MockBannerServiceMockRecorder) UpdateBanner(bannerEntity, data interfa
 }
 
 // DeleteBanner mocks base method
-func (m *MockBannerService) DeleteBanner(bannerEntity *entities.BannerEntity) common.Error {
+func (m *MockBannerService) DeleteBanner(bannerEntity *entities.BannerEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteBanner", bannerEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

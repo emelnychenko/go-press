@@ -1,6 +1,7 @@
-package common
+package models
 
 import (
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/google/uuid"
 )
 
@@ -14,11 +15,11 @@ func NewModelId() *ModelId {
 	return &ModelId{uuid.New()}
 }
 
-func ParseModelId(value string) (*ModelId, Error) {
+func ParseModelId(value string) (*ModelId, errors.Error) {
 	id, err := uuid.Parse(value)
 
 	if nil != err {
-		return nil, NewSystemErrorFromBuiltin(err)
+		return nil, errors.NewSystemErrorFromBuiltin(err)
 	}
 
 	return &ModelId{id}, nil

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -56,7 +56,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("ListPosts:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postPaginationQuery := new(models.PostPaginationQuery)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
@@ -75,7 +75,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("ListPosts:BindPostPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postPaginationQuery := new(models.PostPaginationQuery)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
@@ -113,7 +113,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("GetPost:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
@@ -128,7 +128,7 @@ func TestPostController(t *testing.T) {
 
 	t.Run("GetPost:ApiError", func(t *testing.T) {
 		postId := new(models.PostId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postApi := mocks.NewMockPostApi(ctrl)
@@ -172,7 +172,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("CreatePost:BindPostUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PostCreate)
 
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
@@ -190,7 +190,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("CreatePost:PostStatusValidateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PostCreate)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePostCreate().Return(data)
@@ -211,7 +211,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("CreatePost:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PostCreate)
 
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
@@ -266,7 +266,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("UpdatePost:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		postHttpHelper := mocks.NewMockPostHttpHelper(ctrl)
@@ -280,7 +280,7 @@ func TestPostController(t *testing.T) {
 
 	t.Run("UpdatePost:BindPostUpdateError", func(t *testing.T) {
 		postId := new(models.PostId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.PostUpdate)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePostUpdate().Return(data)
@@ -301,7 +301,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("UpdatePost:ValidatePostUpdate", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postId := new(models.PostId)
 		data := new(models.PostUpdate)
@@ -329,7 +329,7 @@ func TestPostController(t *testing.T) {
 
 	t.Run("UpdatePost:ApiError", func(t *testing.T) {
 		postId := new(models.PostId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.PostUpdate)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
@@ -376,7 +376,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("DeletePost:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -390,7 +390,7 @@ func TestPostController(t *testing.T) {
 	})
 
 	t.Run("DeletePost:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		postId := new(models.PostId)
 
 		postApi := mocks.NewMockPostApi(ctrl)

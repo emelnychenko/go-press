@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -22,7 +21,7 @@ func NewFileRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contracts
 
 func (r *fileRepositoryImpl) ListFiles(
 	filePaginationQuery *models.FilePaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	paginationTotal, fileEntities := 0, make([]*entities.FileEntity, filePaginationQuery.Limit)
 	db := r.db.Model(&fileEntities).Order("created desc")
 	err = r.dbPaginator.Paginate(db, filePaginationQuery.PaginationQuery, &fileEntities, &paginationTotal)
@@ -35,31 +34,31 @@ func (r *fileRepositoryImpl) ListFiles(
 	return
 }
 
-func (r *fileRepositoryImpl) GetFile(fileId *models.FileId) (fileEntity *entities.FileEntity, err common.Error) {
+func (r *fileRepositoryImpl) GetFile(fileId *models.FileId) (fileEntity *entities.FileEntity, err errors.Error) {
 	fileEntity = new(entities.FileEntity)
 
 	if gormErr := r.db.First(fileEntity, "id = ?", fileId).Error; gormErr != nil {
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewFileByIdNotFoundError(fileId)
 		} else {
-			err = common.NewSystemErrorFromBuiltin(gormErr)
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
 	return
 }
 
-func (r *fileRepositoryImpl) SaveFile(fileEntity *entities.FileEntity) (err common.Error) {
+func (r *fileRepositoryImpl) SaveFile(fileEntity *entities.FileEntity) (err errors.Error) {
 	if gormErr := r.db.Save(fileEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (r *fileRepositoryImpl) RemoveFile(fileEntity *entities.FileEntity) (err common.Error) {
+func (r *fileRepositoryImpl) RemoveFile(fileEntity *entities.FileEntity) (err errors.Error) {
 	if gormErr := r.db.Delete(fileEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

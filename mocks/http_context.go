@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	multipart "mime/multipart"
 	http "net/http"
@@ -78,11 +78,11 @@ func (mr *MockHttpContextMockRecorder) Parameter(parameterName interface{}) *gom
 }
 
 // FormFile mocks base method
-func (m *MockHttpContext) FormFile(formFileName string) (*multipart.FileHeader, common.Error) {
+func (m *MockHttpContext) FormFile(formFileName string) (*multipart.FileHeader, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FormFile", formFileName)
 	ret0, _ := ret[0].(*multipart.FileHeader)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -93,10 +93,10 @@ func (mr *MockHttpContextMockRecorder) FormFile(formFileName interface{}) *gomoc
 }
 
 // BindModel mocks base method
-func (m *MockHttpContext) BindModel(data interface{}) common.Error {
+func (m *MockHttpContext) BindModel(data interface{}) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BindModel", data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

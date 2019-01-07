@@ -1,13 +1,15 @@
 package models
 
 import (
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/enums"
 	"time"
 )
 
+const (
+	UserSubjectType SubjectType = "user"
+)
+
 type (
-	UserId = common.ModelId
+	UserId = ModelId
 
 	User struct {
 		Id        *UserId    `json:"id" xml:"id"`
@@ -46,10 +48,10 @@ type (
 	}
 )
 
-func (c *User) SubjectId() *common.ModelId {
+func (c *User) SubjectId() *ModelId {
 	return c.Id
 }
 
-func (*User) SubjectType() enums.SubjectType {
-	return enums.UserSubjectType
+func (*User) SubjectType() SubjectType {
+	return UserSubjectType
 }

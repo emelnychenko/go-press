@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -27,16 +27,16 @@ func NewChannelService(
 
 func (s *channelServiceImpl) ListChannels(
 	channelPaginationQuery *models.ChannelPaginationQuery,
-) (*models.PaginationResult, common.Error) {
+) (*models.PaginationResult, errors.Error) {
 	return s.channelRepository.ListChannels(channelPaginationQuery)
 }
 
-func (s *channelServiceImpl) GetChannel(channelId *models.ChannelId) (*entities.ChannelEntity, common.Error) {
+func (s *channelServiceImpl) GetChannel(channelId *models.ChannelId) (*entities.ChannelEntity, errors.Error) {
 	return s.channelRepository.GetChannel(channelId)
 }
 
 func (s *channelServiceImpl) CreateChannel(data *models.ChannelCreate) (
-	channelEntity *entities.ChannelEntity, err common.Error,
+	channelEntity *entities.ChannelEntity, err errors.Error,
 ) {
 	channelEntity = s.channelEntityFactory.CreateChannelEntity()
 	channelEntity.Name = data.Name
@@ -45,7 +45,7 @@ func (s *channelServiceImpl) CreateChannel(data *models.ChannelCreate) (
 	return
 }
 
-func (s *channelServiceImpl) UpdateChannel(channelEntity *entities.ChannelEntity, data *models.ChannelUpdate) common.Error {
+func (s *channelServiceImpl) UpdateChannel(channelEntity *entities.ChannelEntity, data *models.ChannelUpdate) errors.Error {
 	channelEntity.Name = data.Name
 
 	updated := time.Now().UTC()
@@ -54,6 +54,6 @@ func (s *channelServiceImpl) UpdateChannel(channelEntity *entities.ChannelEntity
 	return s.channelRepository.SaveChannel(channelEntity)
 }
 
-func (s *channelServiceImpl) DeleteChannel(channelEntity *entities.ChannelEntity) common.Error {
+func (s *channelServiceImpl) DeleteChannel(channelEntity *entities.ChannelEntity) errors.Error {
 	return s.channelRepository.RemoveChannel(channelEntity)
 }

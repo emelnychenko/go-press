@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockPollController) EXPECT() *MockPollControllerMockRecorder {
 }
 
 // ListPolls mocks base method
-func (m *MockPollController) ListPolls(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPollController) ListPolls(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPolls", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockPollControllerMockRecorder) ListPolls(httpContext interface{}) *go
 }
 
 // GetPoll mocks base method
-func (m *MockPollController) GetPoll(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPollController) GetPoll(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPoll", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockPollControllerMockRecorder) GetPoll(httpContext interface{}) *gomo
 }
 
 // CreatePoll mocks base method
-func (m *MockPollController) CreatePoll(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPollController) CreatePoll(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePoll", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockPollControllerMockRecorder) CreatePoll(httpContext interface{}) *g
 }
 
 // UpdatePoll mocks base method
-func (m *MockPollController) UpdatePoll(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPollController) UpdatePoll(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePoll", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockPollControllerMockRecorder) UpdatePoll(httpContext interface{}) *g
 }
 
 // DeletePoll mocks base method
-func (m *MockPollController) DeletePoll(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockPollController) DeletePoll(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeletePoll", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

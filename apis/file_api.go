@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"io"
 )
@@ -32,7 +32,7 @@ func NewFileApi(
 
 func (a *fileApiImpl) ListFiles(
 	filePaginationQuery *models.FilePaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	entityPaginationResult, err := a.fileService.ListFiles(filePaginationQuery)
 
 	if nil != err {
@@ -43,7 +43,7 @@ func (a *fileApiImpl) ListFiles(
 	return
 }
 
-func (a *fileApiImpl) GetFile(fileId *models.FileId) (file *models.File, err common.Error) {
+func (a *fileApiImpl) GetFile(fileId *models.FileId) (file *models.File, err errors.Error) {
 	fileEntity, err := a.fileService.GetFile(fileId)
 
 	if nil != err {
@@ -54,7 +54,7 @@ func (a *fileApiImpl) GetFile(fileId *models.FileId) (file *models.File, err com
 	return
 }
 
-func (a *fileApiImpl) UploadFile(fileSource io.Reader, data *models.FileUpload) (file *models.File, err common.Error) {
+func (a *fileApiImpl) UploadFile(fileSource io.Reader, data *models.FileUpload) (file *models.File, err errors.Error) {
 	fileEntity, err := a.fileService.UploadFile(fileSource, data)
 
 	if nil != err {
@@ -68,7 +68,7 @@ func (a *fileApiImpl) UploadFile(fileSource io.Reader, data *models.FileUpload) 
 	return
 }
 
-func (a *fileApiImpl) DownloadFile(fileId *models.FileId, getFileDestination contracts.PrepareFileDestination) (err common.Error) {
+func (a *fileApiImpl) DownloadFile(fileId *models.FileId, getFileDestination contracts.PrepareFileDestination) (err errors.Error) {
 	fileService := a.fileService
 	fileEntity, err := fileService.GetFile(fileId)
 
@@ -87,7 +87,7 @@ func (a *fileApiImpl) DownloadFile(fileId *models.FileId, getFileDestination con
 	return
 }
 
-func (a *fileApiImpl) UpdateFile(fileId *models.FileId, data *models.FileUpdate) (err common.Error) {
+func (a *fileApiImpl) UpdateFile(fileId *models.FileId, data *models.FileUpdate) (err errors.Error) {
 	fileService := a.fileService
 	fileEntity, err := fileService.GetFile(fileId)
 
@@ -107,7 +107,7 @@ func (a *fileApiImpl) UpdateFile(fileId *models.FileId, data *models.FileUpdate)
 	return
 }
 
-func (a *fileApiImpl) DeleteFile(fileId *models.FileId) (err common.Error) {
+func (a *fileApiImpl) DeleteFile(fileId *models.FileId) (err errors.Error) {
 	fileService := a.fileService
 	fileEntity, err := fileService.GetFile(fileId)
 

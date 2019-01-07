@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockBannerApi) EXPECT() *MockBannerApiMockRecorder {
 }
 
 // ListBanners mocks base method
-func (m *MockBannerApi) ListBanners(bannerPaginationQuery *models.BannerPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockBannerApi) ListBanners(bannerPaginationQuery *models.BannerPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListBanners", bannerPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockBannerApiMockRecorder) ListBanners(bannerPaginationQuery interface
 }
 
 // GetBanner mocks base method
-func (m *MockBannerApi) GetBanner(bannerId *models.BannerId) (*models.Banner, common.Error) {
+func (m *MockBannerApi) GetBanner(bannerId *models.BannerId) (*models.Banner, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBanner", bannerId)
 	ret0, _ := ret[0].(*models.Banner)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockBannerApiMockRecorder) GetBanner(bannerId interface{}) *gomock.Cal
 }
 
 // CreateBanner mocks base method
-func (m *MockBannerApi) CreateBanner(data *models.BannerCreate) (*models.Banner, common.Error) {
+func (m *MockBannerApi) CreateBanner(data *models.BannerCreate) (*models.Banner, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateBanner", data)
 	ret0, _ := ret[0].(*models.Banner)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockBannerApiMockRecorder) CreateBanner(data interface{}) *gomock.Call
 }
 
 // UpdateBanner mocks base method
-func (m *MockBannerApi) UpdateBanner(bannerId *models.BannerId, data *models.BannerUpdate) common.Error {
+func (m *MockBannerApi) UpdateBanner(bannerId *models.BannerId, data *models.BannerUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateBanner", bannerId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockBannerApiMockRecorder) UpdateBanner(bannerId, data interface{}) *g
 }
 
 // DeleteBanner mocks base method
-func (m *MockBannerApi) DeleteBanner(bannerId *models.BannerId) common.Error {
+func (m *MockBannerApi) DeleteBanner(bannerId *models.BannerId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteBanner", bannerId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

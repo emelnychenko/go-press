@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type postVideoControllerImpl struct {
@@ -23,7 +23,7 @@ func NewPostVideoController(
 	}
 }
 
-func (c *postVideoControllerImpl) ChangePostVideo(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postVideoControllerImpl) ChangePostVideo(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {
@@ -41,7 +41,7 @@ func (c *postVideoControllerImpl) ChangePostVideo(httpContext contracts.HttpCont
 	return
 }
 
-func (c *postVideoControllerImpl) RemovePostVideo(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postVideoControllerImpl) RemovePostVideo(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {

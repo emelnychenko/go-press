@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -27,16 +27,16 @@ func NewCommentService(
 
 func (s *commentServiceImpl) ListComments(
 	commentPaginationQuery *models.CommentPaginationQuery,
-) (*models.PaginationResult, common.Error) {
+) (*models.PaginationResult, errors.Error) {
 	return s.commentRepository.ListComments(commentPaginationQuery)
 }
 
-func (s *commentServiceImpl) GetComment(commentId *models.CommentId) (*entities.CommentEntity, common.Error) {
+func (s *commentServiceImpl) GetComment(commentId *models.CommentId) (*entities.CommentEntity, errors.Error) {
 	return s.commentRepository.GetComment(commentId)
 }
 
 func (s *commentServiceImpl) CreateComment(data *models.CommentCreate) (
-	commentEntity *entities.CommentEntity, err common.Error,
+	commentEntity *entities.CommentEntity, err errors.Error,
 ) {
 	commentEntity = s.commentEntityFactory.CreateCommentEntity()
 	commentEntity.Content = data.Content
@@ -47,7 +47,7 @@ func (s *commentServiceImpl) CreateComment(data *models.CommentCreate) (
 
 func (s *commentServiceImpl) UpdateComment(
 	commentEntity *entities.CommentEntity, data *models.CommentUpdate,
-) common.Error {
+) errors.Error {
 	commentEntity.Content = data.Content
 
 	updated := time.Now().UTC()
@@ -56,6 +56,6 @@ func (s *commentServiceImpl) UpdateComment(
 	return s.commentRepository.SaveComment(commentEntity)
 }
 
-func (s *commentServiceImpl) DeleteComment(commentEntity *entities.CommentEntity) common.Error {
+func (s *commentServiceImpl) DeleteComment(commentEntity *entities.CommentEntity) errors.Error {
 	return s.commentRepository.RemoveComment(commentEntity)
 }

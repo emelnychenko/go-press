@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockBannerController) EXPECT() *MockBannerControllerMockRecorder {
 }
 
 // ListBanners mocks base method
-func (m *MockBannerController) ListBanners(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockBannerController) ListBanners(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListBanners", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockBannerControllerMockRecorder) ListBanners(httpContext interface{})
 }
 
 // GetBanner mocks base method
-func (m *MockBannerController) GetBanner(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockBannerController) GetBanner(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBanner", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockBannerControllerMockRecorder) GetBanner(httpContext interface{}) *
 }
 
 // CreateBanner mocks base method
-func (m *MockBannerController) CreateBanner(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockBannerController) CreateBanner(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateBanner", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockBannerControllerMockRecorder) CreateBanner(httpContext interface{}
 }
 
 // UpdateBanner mocks base method
-func (m *MockBannerController) UpdateBanner(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockBannerController) UpdateBanner(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateBanner", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockBannerControllerMockRecorder) UpdateBanner(httpContext interface{}
 }
 
 // DeleteBanner mocks base method
-func (m *MockBannerController) DeleteBanner(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockBannerController) DeleteBanner(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteBanner", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 

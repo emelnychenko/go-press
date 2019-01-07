@@ -1,14 +1,13 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/enums"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
 
 const (
-	UserTableName = "users"
+	UserTableName         = "users"
+	UserEntitySubjectType models.SubjectType = "user"
 )
 
 type (
@@ -27,19 +26,19 @@ type (
 
 func NewUserEntity() *UserEntity {
 	created := time.Now().UTC()
-	return &UserEntity{Id: common.NewModelId(), Created: &created}
+	return &UserEntity{Id: models.NewModelId(), Created: &created}
 }
 
 func (*UserEntity) TableName() string {
 	return UserTableName
 }
 
-func (c *UserEntity) SubjectId() *common.ModelId {
+func (c *UserEntity) SubjectId() *models.SubjectId {
 	return c.Id
 }
 
-func (*UserEntity) SubjectType() enums.SubjectType {
-	return enums.UserSubjectType
+func (*UserEntity) SubjectType() models.SubjectType {
+	return UserEntitySubjectType
 }
 
 func (e *UserEntity) SetPicture(postPicture *FileEntity) {

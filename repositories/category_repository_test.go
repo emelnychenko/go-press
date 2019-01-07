@@ -1,15 +1,15 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"testing"
 )
 
@@ -34,7 +34,7 @@ func TestCategoryRepository(t *testing.T) {
 	assert.Equal(t, categoryTreeBuilder, categoryRepository.categoryTreeBuilder)
 	assert.Equal(t, categoryNestedSetBuilder, categoryRepository.categoryNestedSetBuilder)
 
-	categoryId := common.NewModelId()
+	categoryId := models.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": categoryId.String(),
 	}}
@@ -54,11 +54,11 @@ func TestCategoryRepository(t *testing.T) {
 	})
 
 	t.Run("ListCategories:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		categoryPaginationQuery := &models.CategoryPaginationQuery{
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), categoryPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -142,7 +142,7 @@ func TestCategoryRepository(t *testing.T) {
 
 		categoryEntity, err := categoryRepository.GetCategory(categoryId)
 		assert.NotNil(t, categoryEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("GetCategoryTree", func(t *testing.T) {
@@ -186,7 +186,7 @@ func TestCategoryRepository(t *testing.T) {
 	})
 
 	t.Run("SaveCategory:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		categoryEntity := new(entities.CategoryEntity)
 		assert.Error(t, categoryRepository.SaveCategory(categoryEntity))
@@ -200,9 +200,116 @@ func TestCategoryRepository(t *testing.T) {
 	})
 
 	t.Run("RemoveCategory:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		categoryEntity := new(entities.CategoryEntity)
 		assert.Error(t, categoryRepository.RemoveCategory(categoryEntity))
+	})
+
+	t.Run("GetCategoryXrefs", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+		categoryEntity := &entities.CategoryEntity{Id: new(models.CategoryId)}
+
+		results, err := categoryRepository.GetCategoryXrefs(categoryEntity)
+		assert.NotNil(t, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryXrefs:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery(`SELECT *`).WithError(gorm.ErrInvalidSQL)
+		categoryEntity := &entities.CategoryEntity{Id: new(models.CategoryId)}
+
+		results, err := categoryRepository.GetCategoryXrefs(categoryEntity)
+		assert.NotNil(t, results)
+		assert.Error(t, err)
+	})
+
+	t.Run("GetCategoryObjectXrefs", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+		postEntity := &entities.PostEntity{Id: new(models.PostId)}
+
+		results, err := categoryRepository.GetCategoryObjectXrefs(postEntity)
+		assert.NotNil(t, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryObjectXrefs:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery(`SELECT *`).WithError(gorm.ErrInvalidSQL)
+		postEntity := &entities.PostEntity{Id: new(models.PostId)}
+
+		results, err := categoryRepository.GetCategoryObjectXrefs(postEntity)
+		assert.NotNil(t, results)
+		assert.Error(t, err)
+	})
+
+	t.Run("GetCategoryXref", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		categoryId := new(models.CategoryId)
+		categoryEntity := &entities.CategoryEntity{Id: categoryId}
+		postId := new(models.PostId)
+		postEntity := &entities.PostEntity{Id: postId}
+
+		categoryXrefEntity, err := categoryRepository.GetCategoryXref(categoryEntity, postEntity)
+		assert.IsType(t, new(entities.CategoryXrefEntity), categoryXrefEntity)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryXref:NotFoundError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrRecordNotFound
+
+		categoryId := new(models.CategoryId)
+		categoryEntity := &entities.CategoryEntity{Id: categoryId}
+		postId := new(models.PostId)
+		postEntity := &entities.PostEntity{Id: postId}
+
+		categoryXrefEntity, err := categoryRepository.GetCategoryXref(categoryEntity, postEntity)
+		assert.NotNil(t, categoryXrefEntity)
+		assert.Error(t, err)
+		assert.Equal(t, http.StatusNotFound, err.Code())
+	})
+
+	t.Run("GetCategoryXref:Error", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+
+		categoryId := new(models.CategoryId)
+		categoryEntity := &entities.CategoryEntity{Id: categoryId}
+		postId := new(models.PostId)
+		postEntity := &entities.PostEntity{Id: postId}
+
+		categoryXrefEntity, err := categoryRepository.GetCategoryXref(categoryEntity, postEntity)
+		assert.NotNil(t, categoryXrefEntity)
+		assert.Error(t, err)
+		assert.Equal(t, http.StatusInternalServerError, err.Code())
+	})
+
+	t.Run("SaveCategoryXref", func(t *testing.T) {
+		mocket.Catcher.Reset()
+
+		categoryXrefEntity := &entities.CategoryXrefEntity{
+			CategoryId: new(models.CategoryId), ObjectId: new(models.ObjectId),
+		}
+		assert.Nil(t, categoryRepository.SaveCategoryXref(categoryXrefEntity))
+	})
+
+	t.Run("SaveCategoryXref:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+
+		categoryXrefEntity := new(entities.CategoryXrefEntity)
+		assert.Error(t, categoryRepository.SaveCategoryXref(categoryXrefEntity))
+	})
+
+	t.Run("RemoveCategoryXref", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("DELETE")
+
+		categoryXrefEntity := new(entities.CategoryXrefEntity)
+		assert.Nil(t, categoryRepository.RemoveCategoryXref(categoryXrefEntity))
+	})
+
+	t.Run("RemoveCategoryXref:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+
+		categoryXrefEntity := new(entities.CategoryXrefEntity)
+		assert.Error(t, categoryRepository.RemoveCategoryXref(categoryXrefEntity))
 	})
 }

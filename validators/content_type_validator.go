@@ -1,8 +1,8 @@
 package validators
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 	"strings"
 )
 
@@ -15,25 +15,25 @@ func NewContentTypeValidator() contracts.ContentTypeValidator {
 	return &contentTypeValidatorImpl{}
 }
 
-func (*contentTypeValidatorImpl) ValidateImage(contentType string) (err common.Error) {
+func (*contentTypeValidatorImpl) ValidateImage(contentType string) (err errors.Error) {
 	if !strings.HasPrefix(contentType, "image/") {
-		err = common.NewBadRequestError("ContentType is not Image")
+		err = errors.NewBadRequestError("ContentType is not Image")
 	}
 
 	return
 }
 
-func (*contentTypeValidatorImpl) ValidateVideo(contentType string) (err common.Error) {
+func (*contentTypeValidatorImpl) ValidateVideo(contentType string) (err errors.Error) {
 	if !strings.HasPrefix(contentType, "video/") {
-		err = common.NewBadRequestError("ContentType is not Video")
+		err = errors.NewBadRequestError("ContentType is not Video")
 	}
 
 	return
 }
 
-func (*contentTypeValidatorImpl) ValidateAudio(contentType string) (err common.Error) {
+func (*contentTypeValidatorImpl) ValidateAudio(contentType string) (err errors.Error) {
 	if !strings.HasPrefix(contentType, "audio/") {
-		err = common.NewBadRequestError("ContentType is not Audio")
+		err = errors.NewBadRequestError("ContentType is not Audio")
 	}
 
 	return

@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -34,10 +34,10 @@ func (m *MockContentTypeValidator) EXPECT() *MockContentTypeValidatorMockRecorde
 }
 
 // ValidateImage mocks base method
-func (m *MockContentTypeValidator) ValidateImage(contentType string) common.Error {
+func (m *MockContentTypeValidator) ValidateImage(contentType string) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidateImage", contentType)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -48,10 +48,10 @@ func (mr *MockContentTypeValidatorMockRecorder) ValidateImage(contentType interf
 }
 
 // ValidateVideo mocks base method
-func (m *MockContentTypeValidator) ValidateVideo(contentType string) common.Error {
+func (m *MockContentTypeValidator) ValidateVideo(contentType string) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidateVideo", contentType)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -62,10 +62,10 @@ func (mr *MockContentTypeValidatorMockRecorder) ValidateVideo(contentType interf
 }
 
 // ValidateAudio mocks base method
-func (m *MockContentTypeValidator) ValidateAudio(contentType string) common.Error {
+func (m *MockContentTypeValidator) ValidateAudio(contentType string) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidateAudio", contentType)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

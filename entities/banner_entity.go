@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/models"
 	"time"
 )
@@ -23,7 +22,7 @@ type (
 func NewBannerEntity() *BannerEntity {
 	created := time.Now().UTC()
 	return &BannerEntity{
-		Id:      common.NewModelId(),
+		Id:      models.NewModelId(),
 		Created: &created,
 	}
 }

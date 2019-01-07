@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -22,7 +21,7 @@ func NewBannerRepository(db *gorm.DB, dbPaginator contracts.DbPaginator) contrac
 
 func (r *bannerRepositoryImpl) ListBanners(
 	bannerPaginationQuery *models.BannerPaginationQuery,
-) (paginationResult *models.PaginationResult, err common.Error) {
+) (paginationResult *models.PaginationResult, err errors.Error) {
 	paginationTotal, bannerEntities := 0, make([]*entities.BannerEntity, bannerPaginationQuery.Limit)
 	db := r.db.Model(&bannerEntities).Order("created desc")
 	err = r.dbPaginator.Paginate(db, bannerPaginationQuery.PaginationQuery, &bannerEntities, &paginationTotal)
@@ -36,7 +35,7 @@ func (r *bannerRepositoryImpl) ListBanners(
 }
 
 func (r *bannerRepositoryImpl) GetBanner(bannerId *models.BannerId) (
-	bannerEntity *entities.BannerEntity, err common.Error,
+	bannerEntity *entities.BannerEntity, err errors.Error,
 ) {
 	bannerEntity = new(entities.BannerEntity)
 
@@ -44,24 +43,24 @@ func (r *bannerRepositoryImpl) GetBanner(bannerId *models.BannerId) (
 		if gorm.IsRecordNotFoundError(gormErr) {
 			err = errors.NewBannerByIdNotFoundError(bannerId)
 		} else {
-			err = common.NewSystemErrorFromBuiltin(gormErr)
+			err = errors.NewSystemErrorFromBuiltin(gormErr)
 		}
 	}
 
 	return
 }
 
-func (r *bannerRepositoryImpl) SaveBanner(bannerEntity *entities.BannerEntity) (err common.Error) {
+func (r *bannerRepositoryImpl) SaveBanner(bannerEntity *entities.BannerEntity) (err errors.Error) {
 	if gormErr := r.db.Save(bannerEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return
 }
 
-func (r *bannerRepositoryImpl) RemoveBanner(bannerEntity *entities.BannerEntity) (err common.Error) {
+func (r *bannerRepositoryImpl) RemoveBanner(bannerEntity *entities.BannerEntity) (err errors.Error) {
 	if gormErr := r.db.Delete(bannerEntity).Error; gormErr != nil {
-		err = common.NewSystemErrorFromBuiltin(gormErr)
+		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
 	return

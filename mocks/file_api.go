@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	io "io"
@@ -37,11 +37,11 @@ func (m *MockFileApi) EXPECT() *MockFileApiMockRecorder {
 }
 
 // ListFiles mocks base method
-func (m *MockFileApi) ListFiles(filePaginationQuery *models.FilePaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockFileApi) ListFiles(filePaginationQuery *models.FilePaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListFiles", filePaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -52,11 +52,11 @@ func (mr *MockFileApiMockRecorder) ListFiles(filePaginationQuery interface{}) *g
 }
 
 // GetFile mocks base method
-func (m *MockFileApi) GetFile(fileId *models.FileId) (*models.File, common.Error) {
+func (m *MockFileApi) GetFile(fileId *models.FileId) (*models.File, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFile", fileId)
 	ret0, _ := ret[0].(*models.File)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -67,11 +67,11 @@ func (mr *MockFileApiMockRecorder) GetFile(fileId interface{}) *gomock.Call {
 }
 
 // UploadFile mocks base method
-func (m *MockFileApi) UploadFile(fileSource io.Reader, data *models.FileUpload) (*models.File, common.Error) {
+func (m *MockFileApi) UploadFile(fileSource io.Reader, data *models.FileUpload) (*models.File, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadFile", fileSource, data)
 	ret0, _ := ret[0].(*models.File)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -82,10 +82,10 @@ func (mr *MockFileApiMockRecorder) UploadFile(fileSource, data interface{}) *gom
 }
 
 // DownloadFile mocks base method
-func (m *MockFileApi) DownloadFile(fileId *models.FileId, prepareFileDestination contracts.PrepareFileDestination) common.Error {
+func (m *MockFileApi) DownloadFile(fileId *models.FileId, prepareFileDestination contracts.PrepareFileDestination) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DownloadFile", fileId, prepareFileDestination)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -96,10 +96,10 @@ func (mr *MockFileApiMockRecorder) DownloadFile(fileId, prepareFileDestination i
 }
 
 // UpdateFile mocks base method
-func (m *MockFileApi) UpdateFile(fileId *models.FileId, data *models.FileUpdate) common.Error {
+func (m *MockFileApi) UpdateFile(fileId *models.FileId, data *models.FileUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateFile", fileId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -110,10 +110,10 @@ func (mr *MockFileApiMockRecorder) UpdateFile(fileId, data interface{}) *gomock.
 }
 
 // DeleteFile mocks base method
-func (m *MockFileApi) DeleteFile(fileId *models.FileId) common.Error {
+func (m *MockFileApi) DeleteFile(fileId *models.FileId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteFile", fileId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

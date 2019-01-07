@@ -1,10 +1,9 @@
 package repositories
 
 import (
-	"errors"
 	mocket "github.com/Selvatico/go-mocket"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -28,7 +27,7 @@ func TestCommentRepository(t *testing.T) {
 	assert.Equal(t, db, commentRepository.db)
 	assert.Equal(t, dbPaginator, commentRepository.dbPaginator)
 
-	commentId := common.NewModelId()
+	commentId := models.NewModelId()
 	commonReply := []map[string]interface{}{{
 		"id": commentId.String(),
 	}}
@@ -48,11 +47,11 @@ func TestCommentRepository(t *testing.T) {
 	})
 
 	t.Run("ListComments:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		commentPaginationQuery := &models.CommentPaginationQuery{
 			PaginationQuery: &models.PaginationQuery{Limit: 20},
 		}
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 		dbPaginator.EXPECT().Paginate(
 			gomock.Any(), commentPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
 		).Return(systemErr)
@@ -83,7 +82,7 @@ func TestCommentRepository(t *testing.T) {
 
 		commentEntity, err := commentRepository.GetComment(commentId)
 		assert.NotNil(t, commentEntity)
-		assert.Error(t, err, common.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
+		assert.Error(t, err, errors.NewSystemErrorFromBuiltin(gorm.ErrInvalidSQL))
 	})
 
 	t.Run("SaveComment", func(t *testing.T) {
@@ -94,7 +93,7 @@ func TestCommentRepository(t *testing.T) {
 	})
 
 	t.Run("SaveComment:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		commentEntity := new(entities.CommentEntity)
 		assert.Error(t, commentRepository.SaveComment(commentEntity))
@@ -108,7 +107,7 @@ func TestCommentRepository(t *testing.T) {
 	})
 
 	t.Run("RemoveComment:Error", func(t *testing.T) {
-		mocket.Catcher.Reset().NewMock().Error = errors.New("")
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
 
 		commentEntity := new(entities.CommentEntity)
 		assert.Error(t, commentRepository.RemoveComment(commentEntity))

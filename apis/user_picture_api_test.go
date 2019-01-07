@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -73,7 +73,7 @@ func TestNewUserPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		userService := mocks.NewMockUserService(ctrl)
@@ -86,7 +86,7 @@ func TestNewUserPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:GetFileError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
@@ -106,7 +106,7 @@ func TestNewUserPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:ValidateImageError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
@@ -133,7 +133,7 @@ func TestNewUserPictureApi(t *testing.T) {
 	})
 
 	t.Run("ChangeUserPicture:ChangeUserPictureError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)
@@ -189,7 +189,7 @@ func TestNewUserPictureApi(t *testing.T) {
 	})
 
 	t.Run("RemoveUserPicture:GetUserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		userService := mocks.NewMockUserService(ctrl)
@@ -201,7 +201,7 @@ func TestNewUserPictureApi(t *testing.T) {
 	})
 
 	t.Run("RemoveUserPicture:RemoveUserPictureError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		userId := new(models.UserId)
 		userEntity := new(entities.UserEntity)

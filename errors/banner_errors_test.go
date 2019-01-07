@@ -2,7 +2,7 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/models"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -17,7 +17,7 @@ func TestBannerErrors(t *testing.T) {
 	})
 
 	t.Run("BannerNotFoundByIdError", func(t *testing.T) {
-		bannerId := new(models.BannerId)
+		bannerId := new(uuid.UUID)
 		err := NewBannerByIdNotFoundError(bannerId)
 		assert.Equal(t, fmt.Sprintf("The banner was not found on request: id = %s", bannerId), err.Error())
 		assert.Equal(t, http.StatusNotFound, err.Code())

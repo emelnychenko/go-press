@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -35,11 +35,11 @@ func (m *MockPostApi) EXPECT() *MockPostApiMockRecorder {
 }
 
 // ListPosts mocks base method
-func (m *MockPostApi) ListPosts(postPaginationQuery *models.PostPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockPostApi) ListPosts(postPaginationQuery *models.PostPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPosts", postPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockPostApiMockRecorder) ListPosts(postPaginationQuery interface{}) *g
 }
 
 // GetPost mocks base method
-func (m *MockPostApi) GetPost(postId *models.PostId) (*models.Post, common.Error) {
+func (m *MockPostApi) GetPost(postId *models.PostId) (*models.Post, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPost", postId)
 	ret0, _ := ret[0].(*models.Post)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockPostApiMockRecorder) GetPost(postId interface{}) *gomock.Call {
 }
 
 // CreatePost mocks base method
-func (m *MockPostApi) CreatePost(postAuthor common.Subject, data *models.PostCreate) (*models.Post, common.Error) {
+func (m *MockPostApi) CreatePost(postAuthor models.Subject, data *models.PostCreate) (*models.Post, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePost", postAuthor, data)
 	ret0, _ := ret[0].(*models.Post)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,10 +80,10 @@ func (mr *MockPostApiMockRecorder) CreatePost(postAuthor, data interface{}) *gom
 }
 
 // UpdatePost mocks base method
-func (m *MockPostApi) UpdatePost(postId *models.PostId, data *models.PostUpdate) common.Error {
+func (m *MockPostApi) UpdatePost(postId *models.PostId, data *models.PostUpdate) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePost", postId, data)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -94,10 +94,10 @@ func (mr *MockPostApiMockRecorder) UpdatePost(postId, data interface{}) *gomock.
 }
 
 // DeletePost mocks base method
-func (m *MockPostApi) DeletePost(postId *models.PostId) common.Error {
+func (m *MockPostApi) DeletePost(postId *models.PostId) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeletePost", postId)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

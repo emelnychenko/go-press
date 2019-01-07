@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -149,7 +149,7 @@ func TestCategoryService(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:GetCategoriesExceptError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		parentCategoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -167,7 +167,7 @@ func TestCategoryService(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:BuildCategoryEntityTreeError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		parentCategoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -191,7 +191,7 @@ func TestCategoryService(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:SaveCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		parentCategoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -234,7 +234,7 @@ func TestCategoryService(t *testing.T) {
 	})
 
 	t.Run("RemoveCategoryParent:SaveCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		categoryEntity := &entities.CategoryEntity{ParentCategoryId: new(models.CategoryId)}
 
 		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
@@ -253,5 +253,80 @@ func TestCategoryService(t *testing.T) {
 
 		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
 		assert.Nil(t, categoryService.DeleteCategory(categoryEntity))
+	})
+
+	t.Run("GetCategoryXrefs", func(t *testing.T) {
+		categoryEntity := new(entities.CategoryEntity)
+		var categoryXrefEntities []*entities.CategoryXrefEntity
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoryXrefs(categoryEntity).Return(categoryXrefEntities, nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		results, err := categoryService.GetCategoryXrefs(categoryEntity)
+
+		assert.Equal(t, categoryXrefEntities, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryObjectXrefs", func(t *testing.T) {
+		postEntity := new(entities.PostEntity)
+		var categoryXrefEntities []*entities.CategoryXrefEntity
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoryObjectXrefs(postEntity).Return(categoryXrefEntities, nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		results, err := categoryService.GetCategoryObjectXrefs(postEntity)
+
+		assert.Equal(t, categoryXrefEntities, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoryXref", func(t *testing.T) {
+		categoryEntity := new(entities.CategoryEntity)
+		postEntity := new(entities.PostEntity)
+		categoryXrefEntity := new(entities.CategoryXrefEntity)
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoryXref(categoryEntity, postEntity).Return(categoryXrefEntity, nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		result, err := categoryService.GetCategoryXref(categoryEntity, postEntity)
+
+		assert.Equal(t, categoryXrefEntity, result)
+		assert.Nil(t, err)
+	})
+
+	t.Run("CreateCategoryXref", func(t *testing.T) {
+		categoryEntity := new(entities.CategoryEntity)
+		postEntity := new(entities.PostEntity)
+		categoryXrefEntity := new(entities.CategoryXrefEntity)
+
+		categoryEntityFactory := mocks.NewMockCategoryEntityFactory(ctrl)
+		categoryEntityFactory.EXPECT().CreateCategoryXrefEntity(categoryEntity, postEntity).Return(categoryXrefEntity)
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().SaveCategoryXref(categoryXrefEntity).Return(nil)
+
+		categoryService := &categoryServiceImpl{
+			categoryRepository: categoryRepository, categoryEntityFactory: categoryEntityFactory,
+		}
+		result, err := categoryService.CreateCategoryXref(categoryEntity, postEntity)
+
+		assert.Equal(t, categoryXrefEntity, result)
+		assert.Nil(t, err)
+	})
+
+	t.Run("DeleteCategoryXref", func(t *testing.T) {
+		categoryXrefEntity := new(entities.CategoryXrefEntity)
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().RemoveCategoryXref(categoryXrefEntity).Return(nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		err := categoryService.DeleteCategoryXref(categoryXrefEntity)
+
+		assert.Nil(t, err)
 	})
 }

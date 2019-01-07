@@ -1,9 +1,9 @@
 package workers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"time"
 )
 
@@ -28,7 +28,7 @@ func NewPostPublisherWorker(
 	}
 }
 
-func (w *postPublisherWorkerImpl) Start() (err common.Error) {
+func (w *postPublisherWorkerImpl) Start() (err errors.Error) {
 	w.working = true
 	for w.working {
 		postEntities, serviceErr := w.postService.GetScheduledPosts()
@@ -40,7 +40,7 @@ func (w *postPublisherWorkerImpl) Start() (err common.Error) {
 		}
 
 		if 0 < len(postEntities) {
-			queueErrs := make(chan common.Error, len(postEntities))
+			queueErrs := make(chan errors.Error, len(postEntities))
 
 			for _, postEntity := range postEntities {
 				go func(postEntity *entities.PostEntity) {
@@ -64,7 +64,7 @@ func (w *postPublisherWorkerImpl) Start() (err common.Error) {
 	return
 }
 
-func (w *postPublisherWorkerImpl) Stop() (err common.Error) {
+func (w *postPublisherWorkerImpl) Stop() (err errors.Error) {
 	w.working = false
 	return
 }

@@ -1,8 +1,8 @@
 package apis
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/events"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -51,7 +51,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("ListCategories:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		paginationQuery := new(models.CategoryPaginationQuery)
 
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -83,7 +83,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("GetCategoriesTree:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryService := mocks.NewMockCategoryService(ctrl)
 		categoryService.EXPECT().GetCategoriesTree().Return(nil, systemErr)
@@ -114,7 +114,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("GetCategory:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -146,7 +146,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("GetCategoryTree:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -190,7 +190,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("CreateCategory:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.CategoryCreate)
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -228,7 +228,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("UpdateCategory:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -240,7 +240,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("UpdateCategory:UpdateCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -287,7 +287,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:GetCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		parentCategoryId := new(models.CategoryId)
@@ -303,7 +303,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:GetParentCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -322,7 +322,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:ServiceCallError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -367,7 +367,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("RemoveCategoryParent:GetCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		categoryId := new(models.CategoryId)
 
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -382,7 +382,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("RemoveCategoryParent:ApiRemoveCategoryParentError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
@@ -423,7 +423,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("DeleteCategory:Error", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		categoryService := mocks.NewMockCategoryService(ctrl)
@@ -434,7 +434,7 @@ func TestCategoryApi(t *testing.T) {
 	})
 
 	t.Run("DeleteCategory:DeleteCategoryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)
 

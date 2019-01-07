@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -36,11 +36,11 @@ func (m *MockBannerRepository) EXPECT() *MockBannerRepositoryMockRecorder {
 }
 
 // ListBanners mocks base method
-func (m *MockBannerRepository) ListBanners(bannerPaginationQuery *models.BannerPaginationQuery) (*models.PaginationResult, common.Error) {
+func (m *MockBannerRepository) ListBanners(bannerPaginationQuery *models.BannerPaginationQuery) (*models.PaginationResult, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListBanners", bannerPaginationQuery)
 	ret0, _ := ret[0].(*models.PaginationResult)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -51,11 +51,11 @@ func (mr *MockBannerRepositoryMockRecorder) ListBanners(bannerPaginationQuery in
 }
 
 // GetBanner mocks base method
-func (m *MockBannerRepository) GetBanner(bannerId *models.BannerId) (*entities.BannerEntity, common.Error) {
+func (m *MockBannerRepository) GetBanner(bannerId *models.BannerId) (*entities.BannerEntity, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBanner", bannerId)
 	ret0, _ := ret[0].(*entities.BannerEntity)
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -66,10 +66,10 @@ func (mr *MockBannerRepositoryMockRecorder) GetBanner(bannerId interface{}) *gom
 }
 
 // SaveBanner mocks base method
-func (m *MockBannerRepository) SaveBanner(bannerEntity *entities.BannerEntity) common.Error {
+func (m *MockBannerRepository) SaveBanner(bannerEntity *entities.BannerEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveBanner", bannerEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 
@@ -80,10 +80,10 @@ func (mr *MockBannerRepositoryMockRecorder) SaveBanner(bannerEntity interface{})
 }
 
 // RemoveBanner mocks base method
-func (m *MockBannerRepository) RemoveBanner(bannerEntity *entities.BannerEntity) common.Error {
+func (m *MockBannerRepository) RemoveBanner(bannerEntity *entities.BannerEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveBanner", bannerEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

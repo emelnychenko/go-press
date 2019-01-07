@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,10 +35,10 @@ func (m *MockPostPublisherJob) EXPECT() *MockPostPublisherJobMockRecorder {
 }
 
 // PublishPost mocks base method
-func (m *MockPostPublisherJob) PublishPost(postEntity *entities.PostEntity) common.Error {
+func (m *MockPostPublisherJob) PublishPost(postEntity *entities.PostEntity) errors.Error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "PublishPost", postEntity)
-	ret0, _ := ret[0].(common.Error)
+	ret0, _ := ret[0].(errors.Error)
 	return ret0
 }
 

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type pollControllerImpl struct {
@@ -23,7 +23,7 @@ func NewPollController(
 	}
 }
 
-func (c *pollControllerImpl) ListPolls(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *pollControllerImpl) ListPolls(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	pollPaginationQuery := c.pollModelFactory.CreatePollPaginationQuery()
 
 	if err = httpContext.BindModel(pollPaginationQuery.PaginationQuery); err != nil {
@@ -38,7 +38,7 @@ func (c *pollControllerImpl) ListPolls(httpContext contracts.HttpContext) (pagin
 	return
 }
 
-func (c *pollControllerImpl) GetPoll(httpContext contracts.HttpContext) (poll interface{}, err common.Error) {
+func (c *pollControllerImpl) GetPoll(httpContext contracts.HttpContext) (poll interface{}, err errors.Error) {
 	pollId, err := c.pollHttpHelper.ParsePollId(httpContext)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (c *pollControllerImpl) GetPoll(httpContext contracts.HttpContext) (poll in
 	return
 }
 
-func (c *pollControllerImpl) CreatePoll(httpContext contracts.HttpContext) (poll interface{}, err common.Error) {
+func (c *pollControllerImpl) CreatePoll(httpContext contracts.HttpContext) (poll interface{}, err errors.Error) {
 	data := c.pollModelFactory.CreatePollCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -60,7 +60,7 @@ func (c *pollControllerImpl) CreatePoll(httpContext contracts.HttpContext) (poll
 	return
 }
 
-func (c *pollControllerImpl) UpdatePoll(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *pollControllerImpl) UpdatePoll(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	pollId, err := c.pollHttpHelper.ParsePollId(httpContext)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (c *pollControllerImpl) UpdatePoll(httpContext contracts.HttpContext) (_ in
 	return
 }
 
-func (c *pollControllerImpl) DeletePoll(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *pollControllerImpl) DeletePoll(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	pollId, err := c.pollHttpHelper.ParsePollId(httpContext)
 
 	if err != nil {

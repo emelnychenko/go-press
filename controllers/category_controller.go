@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type categoryControllerImpl struct {
@@ -25,7 +25,7 @@ func NewCategoryController(
 }
 
 //ListCategories
-func (c *categoryControllerImpl) ListCategories(httpContext contracts.HttpContext) (paginationResult interface{}, err common.Error) {
+func (c *categoryControllerImpl) ListCategories(httpContext contracts.HttpContext) (paginationResult interface{}, err errors.Error) {
 	categoryPaginationQuery := c.categoryModelFactory.CreateCategoryPaginationQuery()
 
 	if err = httpContext.BindModel(categoryPaginationQuery.PaginationQuery); err != nil {
@@ -42,7 +42,7 @@ func (c *categoryControllerImpl) ListCategories(httpContext contracts.HttpContex
 
 //GetCategoriesTree
 func (c *categoryControllerImpl) GetCategoriesTree(httpContext contracts.HttpContext) (
-	categoriesTree interface{}, err common.Error,
+	categoriesTree interface{}, err errors.Error,
 ) {
 	categoriesTree, err = c.categoryApi.GetCategoriesTree()
 	return
@@ -50,7 +50,7 @@ func (c *categoryControllerImpl) GetCategoriesTree(httpContext contracts.HttpCon
 
 //GetCategory
 func (c *categoryControllerImpl) GetCategory(httpContext contracts.HttpContext) (
-	category interface{}, err common.Error,
+	category interface{}, err errors.Error,
 ) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
@@ -64,7 +64,7 @@ func (c *categoryControllerImpl) GetCategory(httpContext contracts.HttpContext) 
 
 //GetCategoryTree
 func (c *categoryControllerImpl) GetCategoryTree(httpContext contracts.HttpContext) (
-	categoryTree interface{}, err common.Error,
+	categoryTree interface{}, err errors.Error,
 ) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
@@ -77,7 +77,7 @@ func (c *categoryControllerImpl) GetCategoryTree(httpContext contracts.HttpConte
 }
 
 //CreateCategory
-func (c *categoryControllerImpl) CreateCategory(httpContext contracts.HttpContext) (category interface{}, err common.Error) {
+func (c *categoryControllerImpl) CreateCategory(httpContext contracts.HttpContext) (category interface{}, err errors.Error) {
 	data := c.categoryModelFactory.CreateCategoryCreate()
 
 	if err = httpContext.BindModel(data); err != nil {
@@ -89,7 +89,7 @@ func (c *categoryControllerImpl) CreateCategory(httpContext contracts.HttpContex
 }
 
 //UpdateCategory
-func (c *categoryControllerImpl) UpdateCategory(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *categoryControllerImpl) UpdateCategory(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *categoryControllerImpl) UpdateCategory(httpContext contracts.HttpContex
 }
 
 //ChangeCategoryParent
-func (c *categoryControllerImpl) ChangeCategoryParent(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *categoryControllerImpl) ChangeCategoryParent(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
 	if err != nil {
@@ -125,7 +125,7 @@ func (c *categoryControllerImpl) ChangeCategoryParent(httpContext contracts.Http
 }
 
 //RemoveCategoryParent
-func (c *categoryControllerImpl) RemoveCategoryParent(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *categoryControllerImpl) RemoveCategoryParent(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
 	if err != nil {
@@ -137,7 +137,7 @@ func (c *categoryControllerImpl) RemoveCategoryParent(httpContext contracts.Http
 }
 
 //DeleteCategory
-func (c *categoryControllerImpl) DeleteCategory(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *categoryControllerImpl) DeleteCategory(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
 
 	if err != nil {

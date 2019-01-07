@@ -1,8 +1,8 @@
 package workers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -58,7 +58,7 @@ func TestPostPublisherWorker(t *testing.T) {
 	})
 
 	t.Run("Start:GetScheduledPostsError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postService := mocks.NewMockPostService(ctrl)
 		postService.EXPECT().GetScheduledPosts().Return(nil, systemErr)
@@ -73,7 +73,7 @@ func TestPostPublisherWorker(t *testing.T) {
 	})
 
 	t.Run("Start:PublishPostError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		postEntity := new(entities.PostEntity)
 		postEntities := []*entities.PostEntity{postEntity}

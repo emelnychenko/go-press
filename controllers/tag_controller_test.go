@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("ListTags:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		tagPaginationQuery := new(models.TagPaginationQuery)
 		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
@@ -72,7 +72,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("ListTags:BindTagPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		tagPaginationQuery := new(models.TagPaginationQuery)
 		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
@@ -110,7 +110,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("GetTag:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		tagHttpHelper := mocks.NewMockTagHttpHelper(ctrl)
@@ -125,7 +125,7 @@ func TestTagController(t *testing.T) {
 
 	t.Run("GetTag:ApiError", func(t *testing.T) {
 		tagId := new(models.TagId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		tagApi := mocks.NewMockTagApi(ctrl)
@@ -164,7 +164,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("CreateTag:BindTagUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.TagCreate)
 
 		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
@@ -182,7 +182,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("CreateTag:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.TagCreate)
 
 		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
@@ -229,7 +229,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("UpdateTag:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		tagHttpHelper := mocks.NewMockTagHttpHelper(ctrl)
@@ -243,7 +243,7 @@ func TestTagController(t *testing.T) {
 
 	t.Run("UpdateTag:BindTagUpdateError", func(t *testing.T) {
 		tagId := new(models.TagId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.TagUpdate)
 		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
 		tagModelFactory.EXPECT().CreateTagUpdate().Return(data)
@@ -265,7 +265,7 @@ func TestTagController(t *testing.T) {
 
 	t.Run("UpdateTag:ApiError", func(t *testing.T) {
 		tagId := new(models.TagId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.TagUpdate)
 		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
@@ -308,7 +308,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("DeleteTag:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -322,7 +322,7 @@ func TestTagController(t *testing.T) {
 	})
 
 	t.Run("DeleteTag:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		tagId := new(models.TagId)
 
 		tagApi := mocks.NewMockTagApi(ctrl)

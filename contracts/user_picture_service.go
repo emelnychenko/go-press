@@ -1,13 +1,13 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type (
 	UserPictureService interface {
-		ChangeUserPicture(userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity) common.Error
-		RemoveUserPicture(userEntity *entities.UserEntity) common.Error
+		ChangeUserPicture(userEntity *entities.UserEntity, userPictureEntity *entities.FileEntity) errors.Error
+		RemoveUserPicture(userEntity *entities.UserEntity) errors.Error
 	}
 )

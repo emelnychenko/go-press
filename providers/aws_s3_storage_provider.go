@@ -1,7 +1,6 @@
 package providers
 
 import (
-	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -10,9 +9,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"io"
 )
 
@@ -55,7 +54,7 @@ func NewAwsS3StorageProvider(
 	}
 }
 
-func (a *awsS3StorageProviderImpl) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (err common.Error) {
+func (a *awsS3StorageProviderImpl) UploadFile(fileEntity *entities.FileEntity, fileSource io.Reader) (err errors.Error) {
 	awsS3Bucket := a.awsS3Parameters.Bucket()
 
 	_, err2 := a.awsSdkS3Uploader.Upload(&s3manager.UploadInput{
@@ -66,14 +65,13 @@ func (a *awsS3StorageProviderImpl) UploadFile(fileEntity *entities.FileEntity, f
 
 	if err2 != nil {
 		errorMessage := fmt.Sprintf("Unable to upload %q to %q, %v", fileEntity.Path, awsS3Bucket, err2)
-		stringErr := errors.New(errorMessage)
-		err = common.NewSystemErrorFromBuiltin(stringErr)
+		err = errors.NewSystemError(errorMessage)
 	}
 
 	return
 }
 
-func (a *awsS3StorageProviderImpl) DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) (err common.Error) {
+func (a *awsS3StorageProviderImpl) DownloadFile(fileEntity *entities.FileEntity, fileDestination io.Writer) (err errors.Error) {
 	awsS3WriterProxy := a.awsS3WriterProxyFactory.Create(fileDestination)
 
 	_, err2 := a.awsSdkS3Downloader.Download(awsS3WriterProxy,
@@ -84,14 +82,13 @@ func (a *awsS3StorageProviderImpl) DownloadFile(fileEntity *entities.FileEntity,
 
 	if err2 != nil {
 		errorMessage := fmt.Sprintf("Unable to download item %q, %v", fileEntity.Path, err2)
-		stringErr := errors.New(errorMessage)
-		err = common.NewSystemErrorFromBuiltin(stringErr)
+		err = errors.NewSystemError(errorMessage)
 	}
 
 	return
 }
 
-func (a *awsS3StorageProviderImpl) DeleteFile(fileEntity *entities.FileEntity) (err common.Error) {
+func (a *awsS3StorageProviderImpl) DeleteFile(fileEntity *entities.FileEntity) (err errors.Error) {
 	awsS3Bucket := a.awsS3Parameters.Bucket()
 
 	_, err2 := a.awsSdkS3.DeleteObject(&s3.DeleteObjectInput{
@@ -101,8 +98,7 @@ func (a *awsS3StorageProviderImpl) DeleteFile(fileEntity *entities.FileEntity) (
 
 	if err2 != nil {
 		errorMessage := fmt.Sprintf("Unable to delete object %q from awsS3Bucket %q, %v", fileEntity.Path, awsS3Bucket, err2)
-		stringErr := errors.New(errorMessage)
-		err = common.NewSystemErrorFromBuiltin(stringErr)
+		err = errors.NewSystemError(errorMessage)
 	}
 
 	return

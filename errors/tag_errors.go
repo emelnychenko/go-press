@@ -2,16 +2,27 @@ package errors
 
 import (
 	"fmt"
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/models"
 )
 
-func NewTagNotFoundError(request string) common.Error {
+func NewTagNotFoundError(request string) Error {
 	message := fmt.Sprintf("The tag was not found on request: %s", request)
-	return common.NewNotFoundError(message)
+	return NewNotFoundError(message)
 }
 
-func NewTagByIdNotFoundError(categoryId *models.TagId) common.Error {
-	request := fmt.Sprintf("id = %s", categoryId)
+func NewTagByIdNotFoundError(tagId fmt.Stringer) Error {
+	request := fmt.Sprintf("id = %s", tagId)
 	return NewTagNotFoundError(request)
+}
+
+
+//NewTagXrefNotFoundError
+func NewTagXrefNotFoundError(request string) Error {
+	message := fmt.Sprintf("The tag reference was not found on request: %s", request)
+	return NewNotFoundError(message)
+}
+
+//NewTagXrefNotFoundByReferenceError
+func NewTagXrefNotFoundByReferenceError(tagId fmt.Stringer, objectType string, objectId fmt.Stringer) Error {
+	request := fmt.Sprintf("tagId = %s, objectType = %s, objectId = %s", tagId, objectType, objectId)
+	return NewTagXrefNotFoundError(request)
 }

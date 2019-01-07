@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/golang/mock/gomock"
@@ -53,7 +53,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("ListCategories:BindPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryPaginationQuery := new(models.CategoryPaginationQuery)
 		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
@@ -72,7 +72,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("ListCategories:BindCategoryPaginationQueryError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryPaginationQuery := new(models.CategoryPaginationQuery)
 		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
@@ -124,7 +124,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("GetCategory:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
@@ -139,7 +139,7 @@ func TestCategoryController(t *testing.T) {
 
 	t.Run("GetCategory:ApiError", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		categoryApi := mocks.NewMockCategoryApi(ctrl)
@@ -174,7 +174,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("GetCategoryTree:ParserError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
@@ -189,7 +189,7 @@ func TestCategoryController(t *testing.T) {
 
 	t.Run("GetCategoryTree:ApiError", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		categoryApi := mocks.NewMockCategoryApi(ctrl)
@@ -228,7 +228,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("CreateCategory:BindCategoryUpdateError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.CategoryCreate)
 
 		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
@@ -246,7 +246,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("CreateCategory:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.CategoryCreate)
 
 		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
@@ -293,7 +293,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("UpdateCategory:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
@@ -307,7 +307,7 @@ func TestCategoryController(t *testing.T) {
 
 	t.Run("UpdateCategory:BindCategoryUpdateError", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		data := new(models.CategoryUpdate)
 		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
 		categoryModelFactory.EXPECT().CreateCategoryUpdate().Return(data)
@@ -329,7 +329,7 @@ func TestCategoryController(t *testing.T) {
 
 	t.Run("UpdateCategory:ApiError", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		data := new(models.CategoryUpdate)
 		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
@@ -377,7 +377,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:ParseCategoryIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -393,7 +393,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:ParseParentCategoryIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
@@ -411,7 +411,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("ChangeCategoryParent:ApiChangeCategoryParentError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		parentCategoryId := new(models.CategoryId)
@@ -454,7 +454,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("RemoveCategoryParent:ParseCategoryIdError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
 		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
@@ -469,7 +469,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("RemoveCategoryParent:ApiRemoveCategoryParentError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		categoryId := new(models.CategoryId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
@@ -507,7 +507,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("DeleteCategory:ParseError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 
 		httpContext := mocks.NewMockHttpContext(ctrl)
 
@@ -521,7 +521,7 @@ func TestCategoryController(t *testing.T) {
 	})
 
 	t.Run("DeleteCategory:ApiError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		categoryId := new(models.CategoryId)
 
 		categoryApi := mocks.NewMockCategoryApi(ctrl)

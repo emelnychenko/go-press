@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
+	"github.com/emelnychenko/go-press/errors"
 )
 
 type postPictureControllerImpl struct {
@@ -23,7 +23,7 @@ func NewPostPictureController(
 	}
 }
 
-func (c *postPictureControllerImpl) ChangePostPicture(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postPictureControllerImpl) ChangePostPicture(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {
@@ -41,7 +41,7 @@ func (c *postPictureControllerImpl) ChangePostPicture(httpContext contracts.Http
 	return
 }
 
-func (c *postPictureControllerImpl) RemovePostPicture(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+func (c *postPictureControllerImpl) RemovePostPicture(httpContext contracts.HttpContext) (_ interface{}, err errors.Error) {
 	postId, err := c.postHttpHelper.ParsePostId(httpContext)
 
 	if err != nil {

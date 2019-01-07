@@ -1,10 +1,8 @@
 package resolvers
 
 import (
-	"errors"
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
-	"github.com/emelnychenko/go-press/enums"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
@@ -18,15 +16,14 @@ func NewSubjectResolver(userApi contracts.UserApi) (subjectResolver contracts.Su
 	return &subjectResolverImpl{userApi}
 }
 
-func (c *subjectResolverImpl) ResolveSubject(subjectId *common.ModelId, subjectType enums.SubjectType) (subject interface{}, err common.Error) {
+func (c *subjectResolverImpl) ResolveSubject(subjectId *models.ModelId, subjectType models.SubjectType) (subject interface{}, err errors.Error) {
 	switch subjectType {
-	case enums.SystemSubjectType:
+	case models.SystemSubjectType:
 		subject = models.NewSystemUser()
-	case enums.UserSubjectType:
+	case models.UserSubjectType:
 		subject, err = c.userApi.GetUser(subjectId)
 	default:
-		stringErr := errors.New("SubjectType out of range")
-		err = common.NewSystemErrorFromBuiltin(stringErr)
+		err = errors.NewSystemError("SubjectType out of range")
 	}
 
 	return

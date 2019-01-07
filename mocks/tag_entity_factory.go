@@ -6,6 +6,7 @@ package mocks
 
 import (
 	entities "github.com/emelnychenko/go-press/entities"
+	models "github.com/emelnychenko/go-press/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -45,4 +46,18 @@ func (m *MockTagEntityFactory) CreateTagEntity() *entities.TagEntity {
 func (mr *MockTagEntityFactoryMockRecorder) CreateTagEntity() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTagEntity", reflect.TypeOf((*MockTagEntityFactory)(nil).CreateTagEntity))
+}
+
+// CreateTagXrefEntity mocks base method
+func (m *MockTagEntityFactory) CreateTagXrefEntity(arg0 *entities.TagEntity, arg1 models.Object) *entities.TagXrefEntity {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTagXrefEntity", arg0, arg1)
+	ret0, _ := ret[0].(*entities.TagXrefEntity)
+	return ret0
+}
+
+// CreateTagXrefEntity indicates an expected call of CreateTagXrefEntity
+func (mr *MockTagEntityFactoryMockRecorder) CreateTagXrefEntity(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTagXrefEntity", reflect.TypeOf((*MockTagEntityFactory)(nil).CreateTagXrefEntity), arg0, arg1)
 }

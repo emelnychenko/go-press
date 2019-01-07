@@ -1,24 +1,22 @@
 package contracts
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/models"
 )
 
 type (
 	UserService interface {
-		ListUsers(
-			userPaginationQuery *models.UserPaginationQuery,
-		) (paginationResult *models.PaginationResult, err common.Error)
-		GetUser(userId *models.UserId) (*entities.UserEntity, common.Error)
-		LookupUser(userIdentity string) (*entities.UserEntity, common.Error)
-		ChallengeUser(userEntity *entities.UserEntity, password string) common.Error
-		CreateUser(data *models.UserCreate) (*entities.UserEntity, common.Error)
-		VerifyUser(userEntity *entities.UserEntity) common.Error
-		ChangeUserIdentity(userEntity *entities.UserEntity, data *models.UserChangeIdentity) common.Error
-		ChangeUserPassword(userEntity *entities.UserEntity, data *models.UserChangePassword) common.Error
-		UpdateUser(userEntity *entities.UserEntity, data *models.UserUpdate) common.Error
-		DeleteUser(userEntity *entities.UserEntity) common.Error
+		ListUsers(userPaginationQuery *models.UserPaginationQuery) (*models.PaginationResult, errors.Error)
+		GetUser(userId *models.UserId) (*entities.UserEntity, errors.Error)
+		LookupUser(userIdentity string) (*entities.UserEntity, errors.Error)
+		ChallengeUser(userEntity *entities.UserEntity, password string) errors.Error
+		CreateUser(data *models.UserCreate) (*entities.UserEntity, errors.Error)
+		VerifyUser(userEntity *entities.UserEntity) errors.Error
+		ChangeUserIdentity(userEntity *entities.UserEntity, data *models.UserChangeIdentity) errors.Error
+		ChangeUserPassword(userEntity *entities.UserEntity, data *models.UserChangePassword) errors.Error
+		UpdateUser(userEntity *entities.UserEntity, data *models.UserUpdate) errors.Error
+		DeleteUser(userEntity *entities.UserEntity) errors.Error
 	}
 )

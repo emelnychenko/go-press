@@ -1,9 +1,8 @@
 package echo
 
 import (
-	"errors"
-	"github.com/emelnychenko/go-press/common"
-	"github.com/emelnychenko/go-press/echo_mocks"
+	builtinErr "errors"
+	"github.com/emelnychenko/go-press/errors"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
@@ -18,7 +17,7 @@ func TestHttpContext(t *testing.T) {
 	defer ctrl.Finish()
 
 	t.Run("NewHttpContext", func(t *testing.T) {
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		modelValidator := mocks.NewMockModelValidator(ctrl)
 		httpContext, isHttpContext := NewHttpContext(context, modelValidator).(*httpContextImpl)
 
@@ -30,7 +29,7 @@ func TestHttpContext(t *testing.T) {
 	t.Run("Request", func(t *testing.T) {
 		request := new(http.Request)
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().Request().Return(request)
 
 		httpContext := &httpContextImpl{context: context}
@@ -40,7 +39,7 @@ func TestHttpContext(t *testing.T) {
 	t.Run("Request", func(t *testing.T) {
 		response := new(echo.Response)
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().Response().Return(response)
 
 		httpContext := &httpContextImpl{context: context}
@@ -51,7 +50,7 @@ func TestHttpContext(t *testing.T) {
 		parameterName := ":test"
 		parameter := "test"
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().Param(parameterName).Return(parameter)
 
 		httpContext := &httpContextImpl{context: context}
@@ -61,7 +60,7 @@ func TestHttpContext(t *testing.T) {
 	t.Run("BindModel", func(t *testing.T) {
 		var data interface{}
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().Bind(data).Return(nil)
 
 		modelValidator := mocks.NewMockModelValidator(ctrl)
@@ -72,10 +71,10 @@ func TestHttpContext(t *testing.T) {
 	})
 
 	t.Run("BindModel:BindError", func(t *testing.T) {
-		systemErr := errors.New("")
+		systemErr := builtinErr.New("")
 		var data interface{}
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().Bind(data).Return(systemErr)
 
 		httpContext := &httpContextImpl{context: context}
@@ -83,10 +82,10 @@ func TestHttpContext(t *testing.T) {
 	})
 
 	t.Run("BindModel:ValidateModelError", func(t *testing.T) {
-		systemErr := common.NewUnknownError()
+		systemErr := errors.NewUnknownError()
 		var data interface{}
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().Bind(data).Return(nil)
 
 		modelValidator := mocks.NewMockModelValidator(ctrl)
@@ -100,7 +99,7 @@ func TestHttpContext(t *testing.T) {
 		formFileName := ":test"
 		fileHeader := new(multipart.FileHeader)
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().FormFile(formFileName).Return(fileHeader, nil)
 
 		httpContext := &httpContextImpl{context: context}
@@ -111,10 +110,10 @@ func TestHttpContext(t *testing.T) {
 	})
 
 	t.Run("FormFile:Error", func(t *testing.T) {
-		systemErr := errors.New("")
+		systemErr := builtinErr.New("")
 		formFileName := ":test"
 
-		context := echo_mocks.NewMockContext(ctrl)
+		context := mocks.NewMockContext(ctrl)
 		context.EXPECT().FormFile(formFileName).Return(nil, systemErr)
 
 		httpContext := &httpContextImpl{context: context}

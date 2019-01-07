@@ -1,12 +1,10 @@
 package contracts
 
-import (
-	"github.com/emelnychenko/go-press/common"
-)
+import "github.com/emelnychenko/go-press/errors"
 
 type (
 	PostPublisherWorker interface {
-		Start() (err common.Error)
-		Stop() (err common.Error)
+		Start() errors.Error
+		Stop() errors.Error
 	}
 )

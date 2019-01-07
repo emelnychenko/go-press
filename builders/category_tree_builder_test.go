@@ -1,7 +1,6 @@
 package builders
 
 import (
-	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/models"
 	"github.com/stretchr/testify/assert"
@@ -15,18 +14,18 @@ func TestCategoryTreeBuilder(t *testing.T) {
 	})
 
 	t.Run("BuildCategoryEntityTree", func(t *testing.T) {
-		categoryEntityRoot0 := &entities.CategoryEntity{Id: common.NewModelId()}
+		categoryEntityRoot0 := &entities.CategoryEntity{Id: models.NewModelId()}
 		categoryEntityRoot0Node0 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
 		categoryEntityRoot0Node1 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0.Id}
 		categoryEntityRoot0Node1Node0 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
 		categoryEntityRoot0Node1Node1 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
-		categoryEntityRoot1 := &entities.CategoryEntity{Id: common.NewModelId(), ParentCategoryId: common.NewModelId()}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot0Node1.Id}
+		categoryEntityRoot1 := &entities.CategoryEntity{Id: models.NewModelId(), ParentCategoryId: models.NewModelId()}
 		categoryEntityRoot1Node0 := &entities.CategoryEntity{
-			Id: common.NewModelId(), ParentCategoryId: categoryEntityRoot1.Id}
+			Id: models.NewModelId(), ParentCategoryId: categoryEntityRoot1.Id}
 
 		categoryEntities := []*entities.CategoryEntity{
 			categoryEntityRoot0,
@@ -68,10 +67,10 @@ func TestCategoryTreeBuilder(t *testing.T) {
 	})
 
 	t.Run("BuildCategoryEntityTree:CircularDependencyError", func(t *testing.T) {
-		chainConnectorId := common.NewModelId()
+		chainConnectorId := models.NewModelId()
 
-		categoryEntity0 := &entities.CategoryEntity{Id: common.NewModelId(), ParentCategoryId: chainConnectorId}
-		categoryEntity1 := &entities.CategoryEntity{Id: common.NewModelId(), ParentCategoryId: categoryEntity0.Id}
+		categoryEntity0 := &entities.CategoryEntity{Id: models.NewModelId(), ParentCategoryId: chainConnectorId}
+		categoryEntity1 := &entities.CategoryEntity{Id: models.NewModelId(), ParentCategoryId: categoryEntity0.Id}
 		categoryEntity2 := &entities.CategoryEntity{Id: chainConnectorId, ParentCategoryId: categoryEntity1.Id}
 
 		categoryEntities := []*entities.CategoryEntity{
@@ -90,7 +89,7 @@ func TestCategoryTreeBuilder(t *testing.T) {
 	t.Run("prepareCategoryEntities", func(t *testing.T) {
 		parentCategoryId := new(models.CategoryId)
 		rootCategoryEntity := &entities.CategoryEntity{Id: parentCategoryId}
-		nodeCategoryEntity := &entities.CategoryEntity{Id: common.NewModelId(), ParentCategoryId: parentCategoryId}
+		nodeCategoryEntity := &entities.CategoryEntity{Id: models.NewModelId(), ParentCategoryId: parentCategoryId}
 		categoryEntities := []*entities.CategoryEntity{rootCategoryEntity, nodeCategoryEntity}
 
 		categoryTreeBuilder := new(categoryTreeBuilderImpl)

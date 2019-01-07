@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	common "github.com/emelnychenko/go-press/common"
 	contracts "github.com/emelnychenko/go-press/contracts"
+	errors "github.com/emelnychenko/go-press/errors"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,11 +35,11 @@ func (m *MockTagController) EXPECT() *MockTagControllerMockRecorder {
 }
 
 // ListTags mocks base method
-func (m *MockTagController) ListTags(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockTagController) ListTags(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTags", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -50,11 +50,11 @@ func (mr *MockTagControllerMockRecorder) ListTags(httpContext interface{}) *gomo
 }
 
 // GetTag mocks base method
-func (m *MockTagController) GetTag(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockTagController) GetTag(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTag", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -65,11 +65,11 @@ func (mr *MockTagControllerMockRecorder) GetTag(httpContext interface{}) *gomock
 }
 
 // CreateTag mocks base method
-func (m *MockTagController) CreateTag(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockTagController) CreateTag(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTag", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -80,11 +80,11 @@ func (mr *MockTagControllerMockRecorder) CreateTag(httpContext interface{}) *gom
 }
 
 // UpdateTag mocks base method
-func (m *MockTagController) UpdateTag(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockTagController) UpdateTag(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTag", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
@@ -95,11 +95,11 @@ func (mr *MockTagControllerMockRecorder) UpdateTag(httpContext interface{}) *gom
 }
 
 // DeleteTag mocks base method
-func (m *MockTagController) DeleteTag(httpContext contracts.HttpContext) (interface{}, common.Error) {
+func (m *MockTagController) DeleteTag(httpContext contracts.HttpContext) (interface{}, errors.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteTag", httpContext)
 	ret0, _ := ret[0].(interface{})
-	ret1, _ := ret[1].(common.Error)
+	ret1, _ := ret[1].(errors.Error)
 	return ret0, ret1
 }
 
