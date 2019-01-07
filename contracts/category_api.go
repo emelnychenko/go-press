@@ -13,6 +13,8 @@ type (
 		GetCategoryTree(categoryId *models.CategoryId) (*models.CategoryTree, common.Error)
 		CreateCategory(data *models.CategoryCreate) (category *models.Category, err common.Error)
 		UpdateCategory(categoryId *models.CategoryId, data *models.CategoryUpdate) (err common.Error)
+		ChangeCategoryParent(categoryId *models.CategoryId, parentCategoryId *models.CategoryId) common.Error
+		RemoveCategoryParent(categoryId *models.CategoryId) common.Error
 		DeleteCategory(categoryId *models.CategoryId) (err common.Error)
 	}
 )

@@ -39,8 +39,9 @@ func TestCategoryTreeBuilder(t *testing.T) {
 		}
 
 		categoryTreeBuilder := new(categoryTreeBuilderImpl)
-		categoryEntityTree := categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
+		categoryEntityTree, err := categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
 
+		assert.Nil(t, err)
 		// Test Roots
 		assert.Len(t, categoryEntityTree.Roots, 2)
 		// Test Root0
@@ -66,6 +67,26 @@ func TestCategoryTreeBuilder(t *testing.T) {
 		assert.Len(t, categoryEntityTree.Roots[1].Children[0].Children, 0)
 	})
 
+	t.Run("BuildCategoryEntityTree:CircularDependencyError", func(t *testing.T) {
+		chainConnectorId := common.NewModelId()
+
+		categoryEntity0 := &entities.CategoryEntity{Id: common.NewModelId(), ParentCategoryId: chainConnectorId}
+		categoryEntity1 := &entities.CategoryEntity{Id: common.NewModelId(), ParentCategoryId: categoryEntity0.Id}
+		categoryEntity2 := &entities.CategoryEntity{Id: chainConnectorId, ParentCategoryId: categoryEntity1.Id}
+
+		categoryEntities := []*entities.CategoryEntity{
+			categoryEntity0,
+			categoryEntity1,
+			categoryEntity2,
+		}
+
+		categoryTreeBuilder := new(categoryTreeBuilderImpl)
+		categoryEntityTree, err := categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
+
+		assert.Nil(t, categoryEntityTree)
+		assert.Error(t, err)
+	})
+
 	t.Run("prepareCategoryEntities", func(t *testing.T) {
 		parentCategoryId := new(models.CategoryId)
 		rootCategoryEntity := &entities.CategoryEntity{Id: parentCategoryId}
@@ -73,8 +94,9 @@ func TestCategoryTreeBuilder(t *testing.T) {
 		categoryEntities := []*entities.CategoryEntity{rootCategoryEntity, nodeCategoryEntity}
 
 		categoryTreeBuilder := new(categoryTreeBuilderImpl)
-		rootCategoryEntities, nodeCategoryEntities := categoryTreeBuilder.prepareCategoryEntities(categoryEntities)
+		rootCategoryEntities, nodeCategoryEntities, err := categoryTreeBuilder.prepareCategoryEntities(categoryEntities)
 
+		assert.Nil(t, err)
 		assert.Len(t, rootCategoryEntities, 1)
 		assert.Equal(t, rootCategoryEntity, rootCategoryEntities[0])
 

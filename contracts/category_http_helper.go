@@ -8,5 +8,6 @@ import (
 type (
 	CategoryHttpHelper interface {
 		ParseCategoryId(httpContext HttpContext) (*models.CategoryId, common.Error)
+		ParseParentCategoryId(httpContext HttpContext) (*models.CategoryId, common.Error)
 	}
 )

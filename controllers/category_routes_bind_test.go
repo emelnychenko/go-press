@@ -22,6 +22,8 @@ func TestCategoryRoutesBind(t *testing.T) {
 		router.EXPECT().AddRoute(http.MethodGet, "/category/:categoryId/tree", gomock.AssignableToTypeOf(categoryController.GetCategoryTree))
 		router.EXPECT().AddRoute(http.MethodPost, "/categories", gomock.AssignableToTypeOf(categoryController.CreateCategory))
 		router.EXPECT().AddRoute(http.MethodPost, "/category/:categoryId", gomock.AssignableToTypeOf(categoryController.UpdateCategory))
+		router.EXPECT().AddRoute(http.MethodPut, "/category/:categoryId/parent/:parentCategoryId", gomock.AssignableToTypeOf(categoryController.ChangeCategoryParent))
+		router.EXPECT().AddRoute(http.MethodDelete, "/category/:categoryId/parent", gomock.AssignableToTypeOf(categoryController.RemoveCategoryParent))
 		router.EXPECT().AddRoute(http.MethodDelete, "/category/:categoryId", gomock.AssignableToTypeOf(categoryController.DeleteCategory))
 
 		BindCategoryRoutes(router, categoryController)

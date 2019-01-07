@@ -1,6 +1,7 @@
 package builders
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 )
@@ -19,9 +20,15 @@ func NewCategoryNestedSetBuilder(categoryTreeBuilder contracts.CategoryTreeBuild
 //BuildCategoryEntityNestedSet
 func (b *categoryNestedSetBuilderImpl) BuildCategoryEntityNestedSet(
 	categoryEntities []*entities.CategoryEntity,
-) *entities.CategoryEntityNestedSet {
-	categoryEntityTree := b.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
-	return b.BuildCategoryEntityNestedSetFromTree(categoryEntityTree)
+) (categoryEntityNestedSet *entities.CategoryEntityNestedSet, err common.Error) {
+	categoryEntityTree, err := b.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
+
+	if nil != err {
+		return
+	}
+
+	categoryEntityNestedSet = b.BuildCategoryEntityNestedSetFromTree(categoryEntityTree)
+	return
 }
 
 //BuildCategoryEntityNestedSetFromTree

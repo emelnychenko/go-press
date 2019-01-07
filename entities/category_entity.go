@@ -41,6 +41,7 @@ type (
 	}
 )
 
+//NewCategoryEntity
 func NewCategoryEntity() *CategoryEntity {
 	created := time.Now().UTC()
 	return &CategoryEntity{
@@ -49,6 +50,29 @@ func NewCategoryEntity() *CategoryEntity {
 	}
 }
 
+//TableName
 func (*CategoryEntity) TableName() string {
 	return CategoryTableName
+}
+
+//SetParentCategory
+func (e *CategoryEntity) SetParentCategory(categoryEntity *CategoryEntity) {
+	e.ParentCategoryId = categoryEntity.Id
+}
+
+//RemoveParentCategory
+func (e *CategoryEntity) RemoveParentCategory() {
+	e.ParentCategoryId = nil
+}
+
+//EdgesDifferent
+func (n *CategoryEntityNestedSetNode) EdgesDifferent() bool {
+	return n.Left != n.CategoryEntity.Left ||
+		n.Right != n.CategoryEntity.Right
+}
+
+//SetEntityEdges
+func (n *CategoryEntityNestedSetNode) SetEntityEdges() {
+	n.CategoryEntity.Left = n.Left
+	n.CategoryEntity.Right = n.Right
 }

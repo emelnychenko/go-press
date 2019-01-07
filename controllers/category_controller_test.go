@@ -354,6 +354,141 @@ func TestCategoryController(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("ChangeCategoryParent", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		parentCategoryId := new(models.CategoryId)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+		categoryHttpHelper.EXPECT().ParseParentCategoryId(httpContext).Return(parentCategoryId, nil)
+
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().ChangeCategoryParent(categoryId, parentCategoryId).Return(nil)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+			categoryApi:        categoryApi,
+		}
+		_, err := categoryController.ChangeCategoryParent(httpContext)
+
+		assert.Nil(t, err)
+	})
+
+	t.Run("ChangeCategoryParent:ParseCategoryIdError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(nil, systemErr)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+		}
+		_, err := categoryController.ChangeCategoryParent(httpContext)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangeCategoryParent:ParseParentCategoryIdError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+		categoryHttpHelper.EXPECT().ParseParentCategoryId(httpContext).Return(nil, systemErr)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+		}
+		_, err := categoryController.ChangeCategoryParent(httpContext)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangeCategoryParent:ApiChangeCategoryParentError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		parentCategoryId := new(models.CategoryId)
+
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+		categoryHttpHelper.EXPECT().ParseParentCategoryId(httpContext).Return(parentCategoryId, nil)
+
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().ChangeCategoryParent(categoryId, parentCategoryId).Return(systemErr)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+			categoryApi:        categoryApi,
+		}
+		_, err := categoryController.ChangeCategoryParent(httpContext)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemoveCategoryParent", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().RemoveCategoryParent(categoryId).Return(nil)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+			categoryApi:        categoryApi,
+		}
+		_, err := categoryController.RemoveCategoryParent(httpContext)
+
+		assert.Nil(t, err)
+	})
+
+	t.Run("RemoveCategoryParent:ParseCategoryIdError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(nil, systemErr)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+		}
+		_, err := categoryController.RemoveCategoryParent(httpContext)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemoveCategoryParent:ApiRemoveCategoryParentError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+
+		categoryHttpHelper := mocks.NewMockCategoryHttpHelper(ctrl)
+		categoryHttpHelper.EXPECT().ParseCategoryId(httpContext).Return(categoryId, nil)
+
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().RemoveCategoryParent(categoryId).Return(systemErr)
+
+		categoryController := &categoryControllerImpl{
+			categoryHttpHelper: categoryHttpHelper,
+			categoryApi:        categoryApi,
+		}
+		_, err := categoryController.RemoveCategoryParent(httpContext)
+
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("DeleteCategory", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
 

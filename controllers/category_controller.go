@@ -11,6 +11,7 @@ type categoryControllerImpl struct {
 	categoryApi          contracts.CategoryApi
 }
 
+//NewCategoryController
 func NewCategoryController(
 	categoryHttpHelper contracts.CategoryHttpHelper,
 	categoryModelFactory contracts.CategoryModelFactory,
@@ -102,6 +103,36 @@ func (c *categoryControllerImpl) UpdateCategory(httpContext contracts.HttpContex
 	}
 
 	err = c.categoryApi.UpdateCategory(categoryId, data)
+	return
+}
+
+//ChangeCategoryParent
+func (c *categoryControllerImpl) ChangeCategoryParent(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
+
+	if err != nil {
+		return
+	}
+
+	parentCategoryId, err := c.categoryHttpHelper.ParseParentCategoryId(httpContext)
+
+	if err != nil {
+		return
+	}
+
+	err = c.categoryApi.ChangeCategoryParent(categoryId, parentCategoryId)
+	return
+}
+
+//RemoveCategoryParent
+func (c *categoryControllerImpl) RemoveCategoryParent(httpContext contracts.HttpContext) (_ interface{}, err common.Error) {
+	categoryId, err := c.categoryHttpHelper.ParseCategoryId(httpContext)
+
+	if err != nil {
+		return
+	}
+
+	err = c.categoryApi.RemoveCategoryParent(categoryId)
 	return
 }
 

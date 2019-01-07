@@ -14,5 +14,7 @@ func BindCategoryRoutes(r contracts.Router, c contracts.CategoryController) {
 	r.AddRoute(http.MethodGet, fmt.Sprintf("/category/:%s/tree", helpers.CategoryIdParameterName), c.GetCategoryTree)
 	r.AddRoute(http.MethodPost, "/categories", c.CreateCategory)
 	r.AddRoute(http.MethodPost, fmt.Sprintf("/category/:%s", helpers.CategoryIdParameterName), c.UpdateCategory)
+	r.AddRoute(http.MethodPut, fmt.Sprintf("/category/:%s/parent/:%s", helpers.CategoryIdParameterName, helpers.ParentCategoryIdParameterName), c.ChangeCategoryParent)
+	r.AddRoute(http.MethodDelete, fmt.Sprintf("/category/:%s/parent", helpers.CategoryIdParameterName), c.RemoveCategoryParent)
 	r.AddRoute(http.MethodDelete, fmt.Sprintf("/category/:%s", helpers.CategoryIdParameterName), c.DeleteCategory)
 }

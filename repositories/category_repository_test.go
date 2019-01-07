@@ -22,14 +22,17 @@ func TestCategoryRepository(t *testing.T) {
 
 	dbPaginator := mocks.NewMockDbPaginator(ctrl)
 	categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
+	categoryNestedSetBuilder := mocks.NewMockCategoryNestedSetBuilder(ctrl)
 	db, _ := gorm.Open(mocket.DriverName, "")
 
 	categoryRepository, isCategoryRepository := NewCategoryRepository(
-		db, dbPaginator, categoryTreeBuilder).(*categoryRepositoryImpl)
+		db, dbPaginator, categoryTreeBuilder, categoryNestedSetBuilder).(*categoryRepositoryImpl)
 
 	assert.True(t, isCategoryRepository)
 	assert.Equal(t, db, categoryRepository.db)
 	assert.Equal(t, dbPaginator, categoryRepository.dbPaginator)
+	assert.Equal(t, categoryTreeBuilder, categoryRepository.categoryTreeBuilder)
+	assert.Equal(t, categoryNestedSetBuilder, categoryRepository.categoryNestedSetBuilder)
 
 	categoryId := common.NewModelId()
 	commonReply := []map[string]interface{}{{
@@ -65,11 +68,45 @@ func TestCategoryRepository(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("GetCategories", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		results, err := categoryRepository.GetCategories()
+		assert.NotNil(t, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategories:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery(`SELECT *`).WithError(gorm.ErrInvalidSQL)
+
+		results, err := categoryRepository.GetCategories()
+		assert.NotNil(t, results)
+		assert.Error(t, err)
+	})
+
+	t.Run("GetCategoriesExcept", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+
+		categoryEntity := &entities.CategoryEntity{Id: new(models.CategoryId)}
+		results, err := categoryRepository.GetCategoriesExcept(categoryEntity)
+		assert.NotNil(t, results)
+		assert.Nil(t, err)
+	})
+
+	t.Run("GetCategoriesExcept:GormError", func(t *testing.T) {
+		mocket.Catcher.Reset().NewMock().WithQuery(`SELECT *`).WithError(gorm.ErrInvalidSQL)
+
+		categoryEntity := &entities.CategoryEntity{Id: new(models.CategoryId)}
+		results, err := categoryRepository.GetCategoriesExcept(categoryEntity)
+		assert.NotNil(t, results)
+		assert.Error(t, err)
+	})
+
 	t.Run("GetCategoriesTree", func(t *testing.T) {
 		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
 
 		categoryEntityTree := new(entities.CategoryEntityTree)
-		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(gomock.Any()).Return(categoryEntityTree)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(gomock.Any()).Return(categoryEntityTree, nil)
 
 		result, err := categoryRepository.GetCategoriesTree()
 		assert.Equal(t, categoryEntityTree, result)
@@ -114,7 +151,7 @@ func TestCategoryRepository(t *testing.T) {
 		mocket.Catcher.NewMock().WithQuery("SELECT *").WithReply(commonReply)
 
 		categoryEntityTree := new(entities.CategoryEntityTree)
-		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(gomock.Any()).Return(categoryEntityTree)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(gomock.Any()).Return(categoryEntityTree, nil)
 
 		result, err := categoryRepository.GetCategoryTree(categoryId)
 		assert.Equal(t, categoryEntityTree, result)
@@ -156,7 +193,7 @@ func TestCategoryRepository(t *testing.T) {
 	})
 
 	t.Run("RemoveCategory", func(t *testing.T) {
-		mocket.Catcher.Reset()
+		mocket.Catcher.Reset().NewMock().WithQuery("DELETE")
 
 		categoryEntity := new(entities.CategoryEntity)
 		assert.Nil(t, categoryRepository.RemoveCategory(categoryEntity))

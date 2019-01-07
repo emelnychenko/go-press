@@ -258,6 +258,147 @@ func TestCategoryApi(t *testing.T) {
 		assert.Equal(t, systemErr, err)
 	})
 
+	t.Run("ChangeCategoryParent", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+
+		parentCategoryId := new(models.CategoryId)
+		parentCategoryEntity := new(entities.CategoryEntity)
+
+		categoryEvent := new(events.CategoryEvent)
+		categoryEventFactory := mocks.NewMockCategoryEventFactory(ctrl)
+		categoryEventFactory.EXPECT().CreateCategoryParentChangedEvent(categoryEntity).Return(categoryEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(categoryEvent)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(categoryEntity, nil)
+		categoryService.EXPECT().GetCategory(parentCategoryId).Return(parentCategoryEntity, nil)
+		categoryService.EXPECT().ChangeCategoryParent(categoryEntity, parentCategoryEntity).Return(nil)
+
+		categoryApi := &categoryApiImpl{
+			eventDispatcher:      eventDispatcher,
+			categoryEventFactory: categoryEventFactory,
+			categoryService:      categoryService,
+		}
+		err := categoryApi.ChangeCategoryParent(categoryId, parentCategoryId)
+		assert.Nil(t, err)
+	})
+
+	t.Run("ChangeCategoryParent:GetCategoryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		parentCategoryId := new(models.CategoryId)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(nil, systemErr)
+
+		categoryApi := &categoryApiImpl{
+			categoryService: categoryService,
+		}
+		err := categoryApi.ChangeCategoryParent(categoryId, parentCategoryId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangeCategoryParent:GetParentCategoryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+
+		parentCategoryId := new(models.CategoryId)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(categoryEntity, nil)
+		categoryService.EXPECT().GetCategory(parentCategoryId).Return(nil, systemErr)
+
+		categoryApi := &categoryApiImpl{
+			categoryService: categoryService,
+		}
+		err := categoryApi.ChangeCategoryParent(categoryId, parentCategoryId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangeCategoryParent:ServiceCallError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+
+		parentCategoryId := new(models.CategoryId)
+		parentCategoryEntity := new(entities.CategoryEntity)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(categoryEntity, nil)
+		categoryService.EXPECT().GetCategory(parentCategoryId).Return(parentCategoryEntity, nil)
+		categoryService.EXPECT().ChangeCategoryParent(categoryEntity, parentCategoryEntity).Return(systemErr)
+
+		categoryApi := &categoryApiImpl{
+			categoryService: categoryService,
+		}
+		err := categoryApi.ChangeCategoryParent(categoryId, parentCategoryId)
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemoveCategoryParent", func(t *testing.T) {
+		categoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+
+		categoryEvent := new(events.CategoryEvent)
+		categoryEventFactory := mocks.NewMockCategoryEventFactory(ctrl)
+		categoryEventFactory.EXPECT().CreateCategoryParentRemovedEvent(categoryEntity).Return(categoryEvent)
+
+		eventDispatcher := mocks.NewMockEventDispatcher(ctrl)
+		eventDispatcher.EXPECT().Dispatch(categoryEvent)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(categoryEntity, nil)
+		categoryService.EXPECT().RemoveCategoryParent(categoryEntity).Return(nil)
+
+		categoryApi := &categoryApiImpl{
+			eventDispatcher:      eventDispatcher,
+			categoryEventFactory: categoryEventFactory,
+			categoryService:      categoryService,
+		}
+		err := categoryApi.RemoveCategoryParent(categoryId)
+		assert.Nil(t, err)
+	})
+
+	t.Run("RemoveCategoryParent:GetCategoryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		categoryId := new(models.CategoryId)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(nil, systemErr)
+
+		categoryApi := &categoryApiImpl{
+			categoryService: categoryService,
+		}
+		err := categoryApi.RemoveCategoryParent(categoryId)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemoveCategoryParent:ApiRemoveCategoryParentError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		categoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().GetCategory(categoryId).Return(categoryEntity, nil)
+		categoryService.EXPECT().RemoveCategoryParent(categoryEntity).Return(systemErr)
+
+		categoryApi := &categoryApiImpl{
+			categoryService: categoryService,
+		}
+		err := categoryApi.RemoveCategoryParent(categoryId)
+
+		assert.Equal(t, systemErr, err)
+	})
+
 	t.Run("DeleteCategory", func(t *testing.T) {
 		categoryId := new(models.CategoryId)
 		categoryEntity := new(entities.CategoryEntity)

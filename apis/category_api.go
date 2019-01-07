@@ -117,6 +117,54 @@ func (a *categoryApiImpl) UpdateCategory(categoryId *models.CategoryId, data *mo
 	return
 }
 
+//ChangeCategoryParent
+func (a *categoryApiImpl) ChangeCategoryParent(
+	categoryId *models.CategoryId, parentCategoryId *models.CategoryId,
+) (err common.Error) {
+	categoryService := a.categoryService
+	categoryEntity, err := categoryService.GetCategory(categoryId)
+
+	if nil != err {
+		return
+	}
+
+	parentCategoryEntity, err := categoryService.GetCategory(parentCategoryId)
+
+	if nil != err {
+		return
+	}
+
+	err = categoryService.ChangeCategoryParent(categoryEntity, parentCategoryEntity)
+
+	if nil != err {
+		return
+	}
+
+	categoryParentChangedEvent := a.categoryEventFactory.CreateCategoryParentChangedEvent(categoryEntity)
+	a.eventDispatcher.Dispatch(categoryParentChangedEvent)
+	return
+}
+
+//RemoveCategoryParent
+func (a *categoryApiImpl) RemoveCategoryParent(categoryId *models.CategoryId) (err common.Error) {
+	categoryService := a.categoryService
+	categoryEntity, err := categoryService.GetCategory(categoryId)
+
+	if nil != err {
+		return
+	}
+
+	err = categoryService.RemoveCategoryParent(categoryEntity)
+
+	if nil != err {
+		return
+	}
+
+	categoryParentRemovedEvent := a.categoryEventFactory.CreateCategoryParentRemovedEvent(categoryEntity)
+	a.eventDispatcher.Dispatch(categoryParentRemovedEvent)
+	return
+}
+
 //DeleteCategory
 func (a *categoryApiImpl) DeleteCategory(categoryId *models.CategoryId) (err common.Error) {
 	categoryService := a.categoryService

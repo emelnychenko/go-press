@@ -10,8 +10,10 @@ import (
 
 type (
 	categoryServiceImpl struct {
-		categoryEntityFactory contracts.CategoryEntityFactory
-		categoryRepository    contracts.CategoryRepository
+		categoryEntityFactory   contracts.CategoryEntityFactory
+		categoryRepository      contracts.CategoryRepository
+		categoryTreeBuilder     contracts.CategoryTreeBuilder
+		categoryEdgesBuilderJob contracts.CategoryEdgesBuilderJob
 	}
 )
 
@@ -19,10 +21,14 @@ type (
 func NewCategoryService(
 	categoryEntityFactory contracts.CategoryEntityFactory,
 	categoryRepository contracts.CategoryRepository,
+	categoryTreeBuilder contracts.CategoryTreeBuilder,
+	categoryEdgesBuilderJob contracts.CategoryEdgesBuilderJob,
 ) (categoryService contracts.CategoryService) {
 	return &categoryServiceImpl{
 		categoryEntityFactory,
 		categoryRepository,
+		categoryTreeBuilder,
+		categoryEdgesBuilderJob,
 	}
 }
 
@@ -69,6 +75,46 @@ func (s *categoryServiceImpl) UpdateCategory(
 	categoryEntity.Updated = &updated
 
 	return s.categoryRepository.SaveCategory(categoryEntity)
+}
+
+//ChangeCategoryParent
+func (s *categoryServiceImpl) ChangeCategoryParent(
+	categoryEntity *entities.CategoryEntity, parentCategoryEntity *entities.CategoryEntity,
+) (err common.Error) {
+	categoryEntity.SetParentCategory(parentCategoryEntity)
+	categoryEntities, err := s.categoryRepository.GetCategoriesExcept(categoryEntity)
+
+	if nil != err {
+		return
+	}
+
+	categoryEntities = append(categoryEntities, categoryEntity)
+	// Assert circular dependency
+	_, err = s.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
+
+	if nil != err {
+		return
+	}
+
+	err = s.categoryRepository.SaveCategory(categoryEntity)
+
+	if nil != err {
+		return
+	}
+
+	return s.categoryEdgesBuilderJob.BuildCategoriesEdges()
+}
+
+//RemoveCategoryParent
+func (s *categoryServiceImpl) RemoveCategoryParent(categoryEntity *entities.CategoryEntity) (err common.Error) {
+	categoryEntity.RemoveParentCategory()
+	err = s.categoryRepository.SaveCategory(categoryEntity)
+
+	if nil != err {
+		return
+	}
+
+	return s.categoryEdgesBuilderJob.BuildCategoriesEdges()
 }
 
 //DeleteCategory

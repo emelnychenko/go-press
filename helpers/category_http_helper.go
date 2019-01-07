@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	CategoryIdParameterName = "categoryId"
+	CategoryIdParameterName       = "categoryId"
+	ParentCategoryIdParameterName = "parentCategoryId"
 )
 
 type (
@@ -15,10 +16,17 @@ type (
 	}
 )
 
+//NewCategoryHttpHelper
 func NewCategoryHttpHelper() contracts.CategoryHttpHelper {
 	return new(categoryHttpHelperImpl)
 }
 
+//ParseCategoryId
 func (*categoryHttpHelperImpl) ParseCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, common.Error) {
 	return common.ParseModelId(httpContext.Parameter(CategoryIdParameterName))
+}
+
+//ParseParentCategoryId
+func (*categoryHttpHelperImpl) ParseParentCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, common.Error) {
+	return common.ParseModelId(httpContext.Parameter(ParentCategoryIdParameterName))
 }

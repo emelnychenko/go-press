@@ -40,4 +40,22 @@ func TestCategoryEventFactory(t *testing.T) {
 		assert.Equal(t, events.CategoryDeletedEventName, categoryEvent.Name())
 		assert.Equal(t, categoryEntity, categoryEvent.CategoryEntity())
 	})
+
+	t.Run("CreateCategoryParentChangedEvent", func(t *testing.T) {
+		categoryEntity := new(entities.CategoryEntity)
+		categoryEventFactory := new(categoryEventFactoryImpl)
+		categoryEvent := categoryEventFactory.CreateCategoryParentChangedEvent(categoryEntity)
+
+		assert.Equal(t, events.CategoryParentChangedEventName, categoryEvent.Name())
+		assert.Equal(t, categoryEntity, categoryEvent.CategoryEntity())
+	})
+
+	t.Run("CreateCategoryParentRemovedEvent", func(t *testing.T) {
+		categoryEntity := new(entities.CategoryEntity)
+		categoryEventFactory := new(categoryEventFactoryImpl)
+		categoryEvent := categoryEventFactory.CreateCategoryParentRemovedEvent(categoryEntity)
+
+		assert.Equal(t, events.CategoryParentRemovedEventName, categoryEvent.Name())
+		assert.Equal(t, categoryEntity, categoryEvent.CategoryEntity())
+	})
 }

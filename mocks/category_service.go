@@ -124,6 +124,34 @@ func (mr *MockCategoryServiceMockRecorder) UpdateCategory(categoryEntity, data i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCategory", reflect.TypeOf((*MockCategoryService)(nil).UpdateCategory), categoryEntity, data)
 }
 
+// ChangeCategoryParent mocks base method
+func (m *MockCategoryService) ChangeCategoryParent(categoryEntity, parentCategoryEntity *entities.CategoryEntity) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangeCategoryParent", categoryEntity, parentCategoryEntity)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// ChangeCategoryParent indicates an expected call of ChangeCategoryParent
+func (mr *MockCategoryServiceMockRecorder) ChangeCategoryParent(categoryEntity, parentCategoryEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeCategoryParent", reflect.TypeOf((*MockCategoryService)(nil).ChangeCategoryParent), categoryEntity, parentCategoryEntity)
+}
+
+// RemoveCategoryParent mocks base method
+func (m *MockCategoryService) RemoveCategoryParent(categoryEntity *entities.CategoryEntity) common.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveCategoryParent", categoryEntity)
+	ret0, _ := ret[0].(common.Error)
+	return ret0
+}
+
+// RemoveCategoryParent indicates an expected call of RemoveCategoryParent
+func (mr *MockCategoryServiceMockRecorder) RemoveCategoryParent(categoryEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveCategoryParent", reflect.TypeOf((*MockCategoryService)(nil).RemoveCategoryParent), categoryEntity)
+}
+
 // DeleteCategory mocks base method
 func (m *MockCategoryService) DeleteCategory(categoryEntity *entities.CategoryEntity) common.Error {
 	m.ctrl.T.Helper()

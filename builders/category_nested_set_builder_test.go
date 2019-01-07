@@ -49,13 +49,14 @@ func TestCategoryNestedSetBuilder(t *testing.T) {
 		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
 		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(categoryEntities).DoAndReturn(func(
 			categoryEntities []*entities.CategoryEntity,
-		) (categoryEntityTree *entities.CategoryEntityTree) {
+		) (*entities.CategoryEntityTree, common.Error) {
 			return new(categoryTreeBuilderImpl).BuildCategoryEntityTree(categoryEntities)
 		})
 
 		categoryNestedSetBuilder := &categoryNestedSetBuilderImpl{categoryTreeBuilder: categoryTreeBuilder}
-		categoryEntityNestedSet := categoryNestedSetBuilder.BuildCategoryEntityNestedSet(categoryEntities)
+		categoryEntityNestedSet, err := categoryNestedSetBuilder.BuildCategoryEntityNestedSet(categoryEntities)
 
+		assert.Nil(t, err)
 		// Test Nodes
 		assert.Len(t, categoryEntityNestedSet.Nodes, 7)
 		// Test Node0
@@ -79,5 +80,19 @@ func TestCategoryNestedSetBuilder(t *testing.T) {
 		// Test Node6
 		assert.Equal(t, categoryEntityNestedSet.Nodes[6].Left, 12)
 		assert.Equal(t, categoryEntityNestedSet.Nodes[6].Right, 13)
+	})
+
+	t.Run("BuildCategoryEntityNestedSet:BuildCategoryEntityTreeError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		var categoryEntities []*entities.CategoryEntity
+
+		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(categoryEntities).Return(nil, systemErr)
+
+		categoryNestedSetBuilder := &categoryNestedSetBuilderImpl{categoryTreeBuilder: categoryTreeBuilder}
+		categoryEntityNestedSet, err := categoryNestedSetBuilder.BuildCategoryEntityNestedSet(categoryEntities)
+
+		assert.Nil(t, categoryEntityNestedSet)
+		assert.Equal(t, systemErr, err)
 	})
 }

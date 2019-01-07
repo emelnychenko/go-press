@@ -49,3 +49,18 @@ func (mr *MockCategoryHttpHelperMockRecorder) ParseCategoryId(httpContext interf
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseCategoryId", reflect.TypeOf((*MockCategoryHttpHelper)(nil).ParseCategoryId), httpContext)
 }
+
+// ParseParentCategoryId mocks base method
+func (m *MockCategoryHttpHelper) ParseParentCategoryId(httpContext contracts.HttpContext) (*models.CategoryId, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ParseParentCategoryId", httpContext)
+	ret0, _ := ret[0].(*models.CategoryId)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// ParseParentCategoryId indicates an expected call of ParseParentCategoryId
+func (mr *MockCategoryHttpHelperMockRecorder) ParseParentCategoryId(httpContext interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseParentCategoryId", reflect.TypeOf((*MockCategoryHttpHelper)(nil).ParseParentCategoryId), httpContext)
+}

@@ -12,6 +12,8 @@ type (
 		GetCategoryTree(httpContext HttpContext) (response interface{}, err common.Error)
 		CreateCategory(httpContext HttpContext) (response interface{}, err common.Error)
 		UpdateCategory(httpContext HttpContext) (_ interface{}, err common.Error)
+		ChangeCategoryParent(httpContext HttpContext) (_ interface{}, err common.Error)
+		RemoveCategoryParent(httpContext HttpContext) (_ interface{}, err common.Error)
 		DeleteCategory(httpContext HttpContext) (_ interface{}, err common.Error)
 	}
 )

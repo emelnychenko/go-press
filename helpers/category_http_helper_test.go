@@ -18,13 +18,24 @@ func TestCategoryHttpHelper(t *testing.T) {
 	})
 
 	t.Run("ParseCategoryId", func(t *testing.T) {
-		category := new(models.CategoryId)
+		categoryId := new(models.CategoryId)
 		httpContext := mocks.NewMockHttpContext(ctrl)
-		httpContext.EXPECT().Parameter(CategoryIdParameterName).Return(category.String())
+		httpContext.EXPECT().Parameter(CategoryIdParameterName).Return(categoryId.String())
 
 		categoryHttpHelper := &categoryHttpHelperImpl{}
 		parsedCategoryId, err := categoryHttpHelper.ParseCategoryId(httpContext)
-		assert.Equal(t, category.String(), parsedCategoryId.String())
+		assert.Equal(t, categoryId.String(), parsedCategoryId.String())
+		assert.Nil(t, err)
+	})
+
+	t.Run("ParseParentCategoryId", func(t *testing.T) {
+		categoryParentId := new(models.CategoryId)
+		httpContext := mocks.NewMockHttpContext(ctrl)
+		httpContext.EXPECT().Parameter(ParentCategoryIdParameterName).Return(categoryParentId.String())
+
+		categoryHttpHelper := &categoryHttpHelperImpl{}
+		parsedCategoryId, err := categoryHttpHelper.ParseParentCategoryId(httpContext)
+		assert.Equal(t, categoryParentId.String(), parsedCategoryId.String())
 		assert.Nil(t, err)
 	})
 }

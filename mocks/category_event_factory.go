@@ -75,3 +75,31 @@ func (mr *MockCategoryEventFactoryMockRecorder) CreateCategoryDeletedEvent(categ
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryDeletedEvent", reflect.TypeOf((*MockCategoryEventFactory)(nil).CreateCategoryDeletedEvent), categoryEntity)
 }
+
+// CreateCategoryParentChangedEvent mocks base method
+func (m *MockCategoryEventFactory) CreateCategoryParentChangedEvent(categoryEntity *entities.CategoryEntity) contracts.CategoryEvent {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateCategoryParentChangedEvent", categoryEntity)
+	ret0, _ := ret[0].(contracts.CategoryEvent)
+	return ret0
+}
+
+// CreateCategoryParentChangedEvent indicates an expected call of CreateCategoryParentChangedEvent
+func (mr *MockCategoryEventFactoryMockRecorder) CreateCategoryParentChangedEvent(categoryEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryParentChangedEvent", reflect.TypeOf((*MockCategoryEventFactory)(nil).CreateCategoryParentChangedEvent), categoryEntity)
+}
+
+// CreateCategoryParentRemovedEvent mocks base method
+func (m *MockCategoryEventFactory) CreateCategoryParentRemovedEvent(categoryEntity *entities.CategoryEntity) contracts.CategoryEvent {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateCategoryParentRemovedEvent", categoryEntity)
+	ret0, _ := ret[0].(contracts.CategoryEvent)
+	return ret0
+}
+
+// CreateCategoryParentRemovedEvent indicates an expected call of CreateCategoryParentRemovedEvent
+func (mr *MockCategoryEventFactoryMockRecorder) CreateCategoryParentRemovedEvent(categoryEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategoryParentRemovedEvent", reflect.TypeOf((*MockCategoryEventFactory)(nil).CreateCategoryParentRemovedEvent), categoryEntity)
+}

@@ -5,6 +5,7 @@
 package mocks
 
 import (
+	common "github.com/emelnychenko/go-press/common"
 	entities "github.com/emelnychenko/go-press/entities"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -34,11 +35,12 @@ func (m *MockCategoryNestedSetBuilder) EXPECT() *MockCategoryNestedSetBuilderMoc
 }
 
 // BuildCategoryEntityNestedSet mocks base method
-func (m *MockCategoryNestedSetBuilder) BuildCategoryEntityNestedSet(categoryEntities []*entities.CategoryEntity) *entities.CategoryEntityNestedSet {
+func (m *MockCategoryNestedSetBuilder) BuildCategoryEntityNestedSet(categoryEntities []*entities.CategoryEntity) (*entities.CategoryEntityNestedSet, common.Error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BuildCategoryEntityNestedSet", categoryEntities)
 	ret0, _ := ret[0].(*entities.CategoryEntityNestedSet)
-	return ret0
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
 }
 
 // BuildCategoryEntityNestedSet indicates an expected call of BuildCategoryEntityNestedSet

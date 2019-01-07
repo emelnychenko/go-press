@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/emelnychenko/go-press/common"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/mocks"
 	"github.com/emelnychenko/go-press/models"
@@ -16,14 +17,18 @@ func TestCategoryService(t *testing.T) {
 	t.Run("NewCategoryService", func(t *testing.T) {
 		categoryEntityFactory := mocks.NewMockCategoryEntityFactory(ctrl)
 		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
+		categoryEdgesBuilderJob := mocks.NewMockCategoryEdgesBuilderJob(ctrl)
 
 		categoryService, isCategoryService := NewCategoryService(
-			categoryEntityFactory, categoryRepository,
+			categoryEntityFactory, categoryRepository, categoryTreeBuilder, categoryEdgesBuilderJob,
 		).(*categoryServiceImpl)
 
 		assert.True(t, isCategoryService)
 		assert.Equal(t, categoryEntityFactory, categoryService.categoryEntityFactory)
 		assert.Equal(t, categoryRepository, categoryService.categoryRepository)
+		assert.Equal(t, categoryTreeBuilder, categoryService.categoryTreeBuilder)
+		assert.Equal(t, categoryEdgesBuilderJob, categoryService.categoryEdgesBuilderJob)
 	})
 
 	t.Run("ListCategories", func(t *testing.T) {
@@ -113,6 +118,132 @@ func TestCategoryService(t *testing.T) {
 
 		assert.Equal(t, data.Name, categoryEntity.Name)
 		assert.NotNil(t, categoryEntity.Updated)
+	})
+
+	t.Run("ChangeCategoryParent", func(t *testing.T) {
+		parentCategoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+		parentCategoryEntity := &entities.CategoryEntity{Id: parentCategoryId}
+		var categoryEntities []*entities.CategoryEntity
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoriesExcept(categoryEntity).Return(categoryEntities, nil)
+		categoryRepository.EXPECT().SaveCategory(categoryEntity).Return(nil)
+
+		categoryEntities = append(categoryEntities, categoryEntity)
+		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(categoryEntities).Return(nil, nil)
+
+		categoryEdgesBuilderJob := mocks.NewMockCategoryEdgesBuilderJob(ctrl)
+		categoryEdgesBuilderJob.EXPECT().BuildCategoriesEdges().Return(nil)
+
+		categoryService := &categoryServiceImpl{
+			categoryRepository:      categoryRepository,
+			categoryTreeBuilder:     categoryTreeBuilder,
+			categoryEdgesBuilderJob: categoryEdgesBuilderJob,
+		}
+		err := categoryService.ChangeCategoryParent(categoryEntity, parentCategoryEntity)
+
+		assert.Nil(t, err)
+		assert.Equal(t, parentCategoryId, categoryEntity.ParentCategoryId)
+	})
+
+	t.Run("ChangeCategoryParent:GetCategoriesExceptError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		parentCategoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+		parentCategoryEntity := &entities.CategoryEntity{Id: parentCategoryId}
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoriesExcept(categoryEntity).Return(nil, systemErr)
+
+		categoryService := &categoryServiceImpl{
+			categoryRepository: categoryRepository,
+		}
+		err := categoryService.ChangeCategoryParent(categoryEntity, parentCategoryEntity)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangeCategoryParent:BuildCategoryEntityTreeError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		parentCategoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+		parentCategoryEntity := &entities.CategoryEntity{Id: parentCategoryId}
+		var categoryEntities []*entities.CategoryEntity
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoriesExcept(categoryEntity).Return(categoryEntities, nil)
+
+		categoryEntities = append(categoryEntities, categoryEntity)
+		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(categoryEntities).Return(nil, systemErr)
+
+		categoryService := &categoryServiceImpl{
+			categoryRepository:  categoryRepository,
+			categoryTreeBuilder: categoryTreeBuilder,
+		}
+		err := categoryService.ChangeCategoryParent(categoryEntity, parentCategoryEntity)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("ChangeCategoryParent:SaveCategoryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+
+		parentCategoryId := new(models.CategoryId)
+		categoryEntity := new(entities.CategoryEntity)
+		parentCategoryEntity := &entities.CategoryEntity{Id: parentCategoryId}
+		var categoryEntities []*entities.CategoryEntity
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().GetCategoriesExcept(categoryEntity).Return(categoryEntities, nil)
+		categoryRepository.EXPECT().SaveCategory(categoryEntity).Return(systemErr)
+
+		categoryEntities = append(categoryEntities, categoryEntity)
+		categoryTreeBuilder := mocks.NewMockCategoryTreeBuilder(ctrl)
+		categoryTreeBuilder.EXPECT().BuildCategoryEntityTree(categoryEntities).Return(nil, nil)
+
+		categoryService := &categoryServiceImpl{
+			categoryRepository:  categoryRepository,
+			categoryTreeBuilder: categoryTreeBuilder,
+		}
+		err := categoryService.ChangeCategoryParent(categoryEntity, parentCategoryEntity)
+
+		assert.Equal(t, systemErr, err)
+	})
+
+	t.Run("RemoveCategoryParent", func(t *testing.T) {
+		categoryEntity := &entities.CategoryEntity{ParentCategoryId: new(models.CategoryId)}
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().SaveCategory(categoryEntity).Return(nil)
+
+		categoryEdgesBuilderJob := mocks.NewMockCategoryEdgesBuilderJob(ctrl)
+		categoryEdgesBuilderJob.EXPECT().BuildCategoriesEdges().Return(nil)
+
+		categoryService := &categoryServiceImpl{
+			categoryRepository:      categoryRepository,
+			categoryEdgesBuilderJob: categoryEdgesBuilderJob,
+		}
+		err := categoryService.RemoveCategoryParent(categoryEntity)
+
+		assert.Nil(t, err, categoryEntity.ParentCategoryId)
+	})
+
+	t.Run("RemoveCategoryParent:SaveCategoryError", func(t *testing.T) {
+		systemErr := common.NewUnknownError()
+		categoryEntity := &entities.CategoryEntity{ParentCategoryId: new(models.CategoryId)}
+
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().SaveCategory(categoryEntity).Return(systemErr)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		err := categoryService.RemoveCategoryParent(categoryEntity)
+
+		assert.Equal(t, systemErr, err)
 	})
 
 	t.Run("DeleteCategory", func(t *testing.T) {

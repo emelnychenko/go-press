@@ -11,17 +11,24 @@ import (
 
 type (
 	categoryRepositoryImpl struct {
-		db                  *gorm.DB
-		dbPaginator         contracts.DbPaginator
-		categoryTreeBuilder contracts.CategoryTreeBuilder
+		db                       *gorm.DB
+		dbPaginator              contracts.DbPaginator
+		categoryTreeBuilder      contracts.CategoryTreeBuilder
+		categoryNestedSetBuilder contracts.CategoryNestedSetBuilder
 	}
 )
 
 //NewCategoryRepository
 func NewCategoryRepository(
-	db *gorm.DB, dbPaginator contracts.DbPaginator, categoryTreeBuilder contracts.CategoryTreeBuilder,
+	db *gorm.DB, dbPaginator contracts.DbPaginator,
+	categoryTreeBuilder contracts.CategoryTreeBuilder,
+	categoryNestedSetBuilder contracts.CategoryNestedSetBuilder,
 ) contracts.CategoryRepository {
-	return &categoryRepositoryImpl{db, dbPaginator, categoryTreeBuilder}
+	return &categoryRepositoryImpl{
+		db,
+		dbPaginator,
+		categoryTreeBuilder,
+		categoryNestedSetBuilder}
 }
 
 //ListCategories
@@ -41,6 +48,28 @@ func (r *categoryRepositoryImpl) ListCategories(
 	return
 }
 
+//GetCategories
+func (r *categoryRepositoryImpl) GetCategories() (categoryEntities []*entities.CategoryEntity, err common.Error) {
+	if gormErr := r.db.Order("created asc").Find(&categoryEntities).Error; gormErr != nil {
+		err = common.NewSystemErrorFromBuiltin(gormErr)
+	}
+
+	return
+}
+
+//GetCategoriesExcept
+func (r *categoryRepositoryImpl) GetCategoriesExcept(categoryEntity *entities.CategoryEntity) (
+	categoryEntities []*entities.CategoryEntity, err common.Error,
+) {
+	gormErr := r.db.Where("id != ?", categoryEntity.Id).Order("created asc").Find(&categoryEntities).Error
+
+	if gormErr != nil {
+		err = common.NewSystemErrorFromBuiltin(gormErr)
+	}
+
+	return
+}
+
 //GetCategoriesTree
 func (r *categoryRepositoryImpl) GetCategoriesTree() (
 	categoryEntityTree *entities.CategoryEntityTree, err common.Error,
@@ -52,7 +81,7 @@ func (r *categoryRepositoryImpl) GetCategoriesTree() (
 		return
 	}
 
-	categoryEntityTree = r.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
+	categoryEntityTree, err = r.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
 	return
 }
 
@@ -93,7 +122,7 @@ func (r *categoryRepositoryImpl) GetCategoryTree(categoryId *models.CategoryId) 
 		return
 	}
 
-	categoryEntityTree = r.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
+	categoryEntityTree, err = r.categoryTreeBuilder.BuildCategoryEntityTree(categoryEntities)
 	return
 }
 

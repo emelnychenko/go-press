@@ -50,6 +50,36 @@ func (mr *MockCategoryRepositoryMockRecorder) ListCategories(categoryPaginationQ
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCategories", reflect.TypeOf((*MockCategoryRepository)(nil).ListCategories), categoryPaginationQuery)
 }
 
+// GetCategories mocks base method
+func (m *MockCategoryRepository) GetCategories() ([]*entities.CategoryEntity, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategories")
+	ret0, _ := ret[0].([]*entities.CategoryEntity)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategories indicates an expected call of GetCategories
+func (mr *MockCategoryRepositoryMockRecorder) GetCategories() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategories", reflect.TypeOf((*MockCategoryRepository)(nil).GetCategories))
+}
+
+// GetCategoriesExcept mocks base method
+func (m *MockCategoryRepository) GetCategoriesExcept(categoryEntity *entities.CategoryEntity) ([]*entities.CategoryEntity, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCategoriesExcept", categoryEntity)
+	ret0, _ := ret[0].([]*entities.CategoryEntity)
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// GetCategoriesExcept indicates an expected call of GetCategoriesExcept
+func (mr *MockCategoryRepositoryMockRecorder) GetCategoriesExcept(categoryEntity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCategoriesExcept", reflect.TypeOf((*MockCategoryRepository)(nil).GetCategoriesExcept), categoryEntity)
+}
+
 // GetCategoriesTree mocks base method
 func (m *MockCategoryRepository) GetCategoriesTree() (*entities.CategoryEntityTree, common.Error) {
 	m.ctrl.T.Helper()

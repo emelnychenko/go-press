@@ -9,6 +9,8 @@ import (
 type (
 	CategoryRepository interface {
 		ListCategories(categoryPaginationQuery *models.CategoryPaginationQuery) (*models.PaginationResult, common.Error)
+		GetCategories() ([]*entities.CategoryEntity, common.Error)
+		GetCategoriesExcept(categoryEntity *entities.CategoryEntity) ([]*entities.CategoryEntity, common.Error)
 		GetCategoriesTree() (*entities.CategoryEntityTree, common.Error)
 		GetCategory(categoryId *models.CategoryId) (categoryEntity *entities.CategoryEntity, err common.Error)
 		GetCategoryTree(categoryId *models.CategoryId) (*entities.CategoryEntityTree, common.Error)

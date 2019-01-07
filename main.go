@@ -81,6 +81,7 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(helpers.NewPollHttpHelper)
 	_ = container.Provide(paginators.NewDbPaginator)
 	_ = container.Provide(jobs.NewPostPublisherJob)
+	_ = container.Provide(jobs.NewCategoryEdgesBuilderJob)
 	_ = container.Provide(workers.NewPostPublisherWorker)
 	_ = container.Provide(validators.NewModelValidator)
 	_ = container.Provide(validators.NewContentTypeValidator)

@@ -124,6 +124,36 @@ func (mr *MockCategoryControllerMockRecorder) UpdateCategory(httpContext interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCategory", reflect.TypeOf((*MockCategoryController)(nil).UpdateCategory), httpContext)
 }
 
+// ChangeCategoryParent mocks base method
+func (m *MockCategoryController) ChangeCategoryParent(httpContext contracts.HttpContext) (interface{}, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangeCategoryParent", httpContext)
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// ChangeCategoryParent indicates an expected call of ChangeCategoryParent
+func (mr *MockCategoryControllerMockRecorder) ChangeCategoryParent(httpContext interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeCategoryParent", reflect.TypeOf((*MockCategoryController)(nil).ChangeCategoryParent), httpContext)
+}
+
+// RemoveCategoryParent mocks base method
+func (m *MockCategoryController) RemoveCategoryParent(httpContext contracts.HttpContext) (interface{}, common.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveCategoryParent", httpContext)
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(common.Error)
+	return ret0, ret1
+}
+
+// RemoveCategoryParent indicates an expected call of RemoveCategoryParent
+func (mr *MockCategoryControllerMockRecorder) RemoveCategoryParent(httpContext interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveCategoryParent", reflect.TypeOf((*MockCategoryController)(nil).RemoveCategoryParent), httpContext)
+}
+
 // DeleteCategory mocks base method
 func (m *MockCategoryController) DeleteCategory(httpContext contracts.HttpContext) (interface{}, common.Error) {
 	m.ctrl.T.Helper()

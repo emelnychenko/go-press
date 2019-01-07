@@ -6,9 +6,11 @@ import (
 )
 
 const (
-	CategoryCreatedEventName = "CategoryCreatedEvent"
-	CategoryUpdatedEventName = "CategoryUpdatedEvent"
-	CategoryDeletedEventName = "CategoryDeletedEvent"
+	CategoryCreatedEventName       = "CategoryCreatedEvent"
+	CategoryUpdatedEventName       = "CategoryUpdatedEvent"
+	CategoryDeletedEventName       = "CategoryDeletedEvent"
+	CategoryParentChangedEventName = "CategoryParentChangedEvent"
+	CategoryParentRemovedEventName = "CategoryParentRemovedEvent"
 )
 
 type (
@@ -34,5 +36,15 @@ func NewCategoryUpdatedEvent(categoryEntity *entities.CategoryEntity) contracts.
 
 func NewCategoryDeletedEvent(categoryEntity *entities.CategoryEntity) contracts.CategoryEvent {
 	event := &Event{name: CategoryDeletedEventName}
+	return &CategoryEvent{categoryEntity: categoryEntity, Event: event}
+}
+
+func NewCategoryParentChangedEvent(categoryEntity *entities.CategoryEntity) contracts.CategoryEvent {
+	event := &Event{name: CategoryParentChangedEventName}
+	return &CategoryEvent{categoryEntity: categoryEntity, Event: event}
+}
+
+func NewCategoryParentRemovedEvent(categoryEntity *entities.CategoryEntity) contracts.CategoryEvent {
+	event := &Event{name: CategoryParentRemovedEventName}
 	return &CategoryEvent{categoryEntity: categoryEntity, Event: event}
 }
