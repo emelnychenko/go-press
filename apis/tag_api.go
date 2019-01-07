@@ -105,3 +105,19 @@ func (a *tagApiImpl) DeleteTag(tagId *models.TagId) (err errors.Error) {
 
 	return
 }
+
+//ListObjectTags
+func (a *tagApiImpl) ListObjectTags(
+	tagObject models.Object, tagPaginationQuery *models.TagPaginationQuery,
+) (
+	paginationResult *models.PaginationResult, err errors.Error,
+) {
+	entityPaginationResult, err := a.tagService.ListObjectTags(tagObject, tagPaginationQuery)
+
+	if nil != err {
+		return
+	}
+
+	paginationResult = a.tagAggregator.AggregatePaginationResult(entityPaginationResult)
+	return
+}

@@ -31,9 +31,9 @@ func NewCategoryApi(
 }
 
 //ListCategories
-func (a *categoryApiImpl) ListCategories(
-	categoryPaginationQuery *models.CategoryPaginationQuery,
-) (paginationResult *models.PaginationResult, err errors.Error) {
+func (a *categoryApiImpl) ListCategories(categoryPaginationQuery *models.CategoryPaginationQuery) (
+	paginationResult *models.PaginationResult, err errors.Error,
+) {
 	entityPaginationResult, err := a.categoryService.ListCategories(categoryPaginationQuery)
 
 	if nil != err {
@@ -183,5 +183,21 @@ func (a *categoryApiImpl) DeleteCategory(categoryId *models.CategoryId) (err err
 	categoryDeletedEvent := a.categoryEventFactory.CreateCategoryDeletedEvent(categoryEntity)
 	a.eventDispatcher.Dispatch(categoryDeletedEvent)
 
+	return
+}
+
+//ListObjectCategories
+func (a *categoryApiImpl) ListObjectCategories(
+	categoryObject models.Object, categoryPaginationQuery *models.CategoryPaginationQuery,
+) (
+	paginationResult *models.PaginationResult, err errors.Error,
+) {
+	entityPaginationResult, err := a.categoryService.ListObjectCategories(categoryObject, categoryPaginationQuery)
+
+	if nil != err {
+		return
+	}
+
+	paginationResult = a.categoryAggregator.AggregatePaginationResult(entityPaginationResult)
 	return
 }

@@ -17,12 +17,29 @@ func TestPostAggregator(t *testing.T) {
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
 		fileApi := mocks.NewMockFileApi(ctrl)
-		postAggregator, isPostAggregator := NewPostAggregator(postModelFactory, subjectResolver, fileApi).(*postAggregatorImpl)
+		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
+		tagApi := mocks.NewMockTagApi(ctrl)
+
+		postAggregator, isPostAggregator := NewPostAggregator(
+			postModelFactory,
+			subjectResolver,
+			fileApi,
+			categoryModelFactory,
+			categoryApi,
+			tagModelFactory,
+			tagApi,
+		).(*postAggregatorImpl)
 
 		assert.True(t, isPostAggregator)
 		assert.Equal(t, postModelFactory, postAggregator.postModelFactory)
 		assert.Equal(t, subjectResolver, postAggregator.subjectResolver)
 		assert.Equal(t, fileApi, postAggregator.fileApi)
+		assert.Equal(t, categoryModelFactory, postAggregator.categoryModelFactory)
+		assert.Equal(t, categoryApi, postAggregator.categoryApi)
+		assert.Equal(t, tagModelFactory, postAggregator.tagModelFactory)
+		assert.Equal(t, tagApi, postAggregator.tagApi)
 	})
 
 	t.Run("AggregatePost", func(t *testing.T) {
@@ -35,19 +52,39 @@ func TestPostAggregator(t *testing.T) {
 		postVideo := new(models.File)
 		fileApi.EXPECT().GetFile(postVideoId).Return(postVideo, nil)
 
+		postEntity := &entities.PostEntity{PictureId: postPictureId, VideoId: postVideoId}
 		post := new(models.Post)
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
 		postModelFactory.EXPECT().CreatePost().Return(post)
+
+		categoryPaginationQuery := new(models.CategoryPaginationQuery)
+		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
+		categoryModelFactory.EXPECT().CreateCategoryPaginationQuery().Return(categoryPaginationQuery)
+
+		categoryPaginationResult := new(models.PaginationResult)
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		categoryApi.EXPECT().ListObjectCategories(postEntity, categoryPaginationQuery).Return(categoryPaginationResult, nil)
+
+		tagPaginationQuery := new(models.TagPaginationQuery)
+		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
+		tagModelFactory.EXPECT().CreateTagPaginationQuery().Return(tagPaginationQuery)
+
+		tagPaginationResult := new(models.PaginationResult)
+		tagApi := mocks.NewMockTagApi(ctrl)
+		tagApi.EXPECT().ListObjectTags(postEntity, tagPaginationQuery).Return(tagPaginationResult, nil)
 
 		systemUser := models.NewSystemUser()
 		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
 		subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
 
-		postEntity := &entities.PostEntity{PictureId: postPictureId, VideoId: postVideoId}
 		postAggregator := &postAggregatorImpl{
-			postModelFactory: postModelFactory,
-			subjectResolver:  subjectResolver,
-			fileApi:          fileApi,
+			postModelFactory:     postModelFactory,
+			subjectResolver:      subjectResolver,
+			fileApi:              fileApi,
+			categoryModelFactory: categoryModelFactory,
+			categoryApi:          categoryApi,
+			tagModelFactory:      tagModelFactory,
+			tagApi:               tagApi,
 		}
 		response := postAggregator.AggregatePost(postEntity)
 		assert.Equal(t, post, response)
@@ -56,16 +93,45 @@ func TestPostAggregator(t *testing.T) {
 	})
 
 	t.Run("AggregatePosts", func(t *testing.T) {
-		post := new(models.Post)
+		postEntities := []*entities.PostEntity{
+			entities.NewPostEntity(),
+		}
+
 		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
-		postModelFactory.EXPECT().CreatePost().Return(post)
-
-		systemUser := models.NewSystemUser()
 		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
-		subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
+		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
+		tagApi := mocks.NewMockTagApi(ctrl)
 
-		postEntities := []*entities.PostEntity{entities.NewPostEntity()}
-		postAggregator := &postAggregatorImpl{postModelFactory: postModelFactory, subjectResolver: subjectResolver}
+		for _, postEntity := range postEntities {
+			post := new(models.Post)
+			postModelFactory.EXPECT().CreatePost().Return(post)
+
+			systemUser := models.NewSystemUser()
+			subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
+
+			categoryPaginationQuery := new(models.CategoryPaginationQuery)
+			categoryModelFactory.EXPECT().CreateCategoryPaginationQuery().Return(categoryPaginationQuery)
+
+			categoryPaginationResult := new(models.PaginationResult)
+			categoryApi.EXPECT().ListObjectCategories(postEntity, categoryPaginationQuery).Return(categoryPaginationResult, nil)
+
+			tagPaginationQuery := new(models.TagPaginationQuery)
+			tagModelFactory.EXPECT().CreateTagPaginationQuery().Return(tagPaginationQuery)
+
+			tagPaginationResult := new(models.PaginationResult)
+			tagApi.EXPECT().ListObjectTags(postEntity, tagPaginationQuery).Return(tagPaginationResult, nil)
+		}
+
+		postAggregator := &postAggregatorImpl{
+			postModelFactory:     postModelFactory,
+			subjectResolver:      subjectResolver,
+			categoryModelFactory: categoryModelFactory,
+			categoryApi:          categoryApi,
+			tagModelFactory:      tagModelFactory,
+			tagApi:               tagApi,
+		}
 		posts := postAggregator.AggregatePosts(postEntities)
 
 		assert.IsType(t, []*models.Post{}, posts)
@@ -73,16 +139,43 @@ func TestPostAggregator(t *testing.T) {
 	})
 
 	t.Run("AggregatePaginationResult", func(t *testing.T) {
-		post := new(models.Post)
-		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
-		postModelFactory.EXPECT().CreatePost().Return(post)
-
-		systemUser := models.NewSystemUser()
-		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
-		subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
-
 		postEntities := []*entities.PostEntity{entities.NewPostEntity()}
-		postAggregator := &postAggregatorImpl{postModelFactory: postModelFactory, subjectResolver: subjectResolver}
+
+		postModelFactory := mocks.NewMockPostModelFactory(ctrl)
+		subjectResolver := mocks.NewMockSubjectResolver(ctrl)
+		categoryModelFactory := mocks.NewMockCategoryModelFactory(ctrl)
+		categoryApi := mocks.NewMockCategoryApi(ctrl)
+		tagModelFactory := mocks.NewMockTagModelFactory(ctrl)
+		tagApi := mocks.NewMockTagApi(ctrl)
+
+		for _, postEntity := range postEntities {
+			post := new(models.Post)
+			postModelFactory.EXPECT().CreatePost().Return(post)
+
+			systemUser := models.NewSystemUser()
+			subjectResolver.EXPECT().ResolveSubject(gomock.Any(), gomock.Any()).Return(systemUser, nil)
+
+			categoryPaginationQuery := new(models.CategoryPaginationQuery)
+			categoryModelFactory.EXPECT().CreateCategoryPaginationQuery().Return(categoryPaginationQuery)
+
+			categoryPaginationResult := new(models.PaginationResult)
+			categoryApi.EXPECT().ListObjectCategories(postEntity, categoryPaginationQuery).Return(categoryPaginationResult, nil)
+
+			tagPaginationQuery := new(models.TagPaginationQuery)
+			tagModelFactory.EXPECT().CreateTagPaginationQuery().Return(tagPaginationQuery)
+
+			tagPaginationResult := new(models.PaginationResult)
+			tagApi.EXPECT().ListObjectTags(postEntity, tagPaginationQuery).Return(tagPaginationResult, nil)
+		}
+
+		postAggregator := &postAggregatorImpl{
+			postModelFactory:     postModelFactory,
+			subjectResolver:      subjectResolver,
+			categoryModelFactory: categoryModelFactory,
+			categoryApi:          categoryApi,
+			tagModelFactory:      tagModelFactory,
+			tagApi:               tagApi,
+		}
 
 		entityPaginationResult := &models.PaginationResult{Data: postEntities}
 		paginationResult := postAggregator.AggregatePaginationResult(entityPaginationResult)

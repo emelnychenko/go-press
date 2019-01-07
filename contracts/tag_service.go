@@ -19,5 +19,7 @@ type (
 		GetTagXref(*entities.TagEntity, models.Object) (*entities.TagXrefEntity, errors.Error)
 		CreateTagXref(*entities.TagEntity, models.Object) (*entities.TagXrefEntity, errors.Error)
 		DeleteTagXref(*entities.TagXrefEntity) errors.Error
+
+		ListObjectTags(models.Object, *models.TagPaginationQuery) (*models.PaginationResult, errors.Error)
 	}
 )

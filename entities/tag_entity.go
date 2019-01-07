@@ -43,10 +43,10 @@ func (*TagEntity) TableName() string {
 func NewTagXrefEntity(tagEntity *TagEntity, tagObject models.Object) *TagXrefEntity {
 	created := time.Now().UTC()
 	return &TagXrefEntity{
-		TagId: tagEntity.Id,
+		TagId:      tagEntity.Id,
 		ObjectType: tagObject.ObjectType(),
-		ObjectId: tagObject.ObjectId(),
-		Created: &created,
+		ObjectId:   tagObject.ObjectId(),
+		Created:    &created,
 	}
 }
 

@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -213,5 +214,32 @@ func (r *categoryRepositoryImpl) RemoveCategoryXref(categoryXrefEntity *entities
 		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
+	return
+}
+
+//ListObjectCategories
+func (r *categoryRepositoryImpl) ListObjectCategories(
+	categoryObject models.Object, categoryPaginationQuery *models.CategoryPaginationQuery,
+) (paginationResult *models.PaginationResult, err errors.Error) {
+	paginationTotal, categoryEntities := 0, make([]*entities.CategoryEntity, categoryPaginationQuery.Limit)
+
+	db := r.db.Model(&categoryEntities).
+		Joins(fmt.Sprintf(
+			"inner join %s on %s.id = %s.category_id",
+			entities.CategoryXrefTableName,
+			entities.CategoryTableName,
+			entities.CategoryXrefTableName,
+		)).
+		Where(fmt.Sprintf("%s.object_type = ?", entities.CategoryXrefTableName), categoryObject.ObjectType()).
+		Where(fmt.Sprintf("%s.object_id = ?", entities.CategoryXrefTableName), categoryObject.ObjectId()).
+		Order(fmt.Sprintf("%s.created desc", entities.CategoryTableName))
+
+	err = r.dbPaginator.Paginate(db, categoryPaginationQuery.PaginationQuery, &categoryEntities, &paginationTotal)
+
+	if nil != err {
+		return
+	}
+
+	paginationResult = &models.PaginationResult{Total: paginationTotal, Data: categoryEntities}
 	return
 }

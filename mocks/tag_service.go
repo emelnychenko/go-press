@@ -181,3 +181,18 @@ func (mr *MockTagServiceMockRecorder) DeleteTagXref(arg0 interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTagXref", reflect.TypeOf((*MockTagService)(nil).DeleteTagXref), arg0)
 }
+
+// ListObjectTags mocks base method
+func (m *MockTagService) ListObjectTags(arg0 models.Object, arg1 *models.TagPaginationQuery) (*models.PaginationResult, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListObjectTags", arg0, arg1)
+	ret0, _ := ret[0].(*models.PaginationResult)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// ListObjectTags indicates an expected call of ListObjectTags
+func (mr *MockTagServiceMockRecorder) ListObjectTags(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListObjectTags", reflect.TypeOf((*MockTagService)(nil).ListObjectTags), arg0, arg1)
+}

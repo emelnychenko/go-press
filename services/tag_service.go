@@ -95,3 +95,10 @@ func (s *tagServiceImpl) CreateTagXref(tagEntity *entities.TagEntity, tagObject 
 func (s *tagServiceImpl) DeleteTagXref(tagXrefEntity *entities.TagXrefEntity) errors.Error {
 	return s.tagRepository.RemoveTagXref(tagXrefEntity)
 }
+
+//ListObjectTags
+func (s *tagServiceImpl) ListObjectTags(tagObject models.Object, tagPaginationQuery *models.TagPaginationQuery) (
+	*models.PaginationResult, errors.Error,
+) {
+	return s.tagRepository.ListObjectTags(tagObject, tagPaginationQuery)
+}

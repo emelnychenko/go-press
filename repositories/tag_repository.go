@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/emelnychenko/go-press/contracts"
 	"github.com/emelnychenko/go-press/entities"
 	"github.com/emelnychenko/go-press/errors"
@@ -69,7 +70,7 @@ func (r *tagRepositoryImpl) RemoveTag(tagEntity *entities.TagEntity) (err errors
 	return
 }
 
-//GetTagXrefs 
+//GetTagXrefs
 func (r *tagRepositoryImpl) GetTagXrefs(tagEntity *entities.TagEntity) (
 	tagXrefEntities []*entities.TagXrefEntity, err errors.Error,
 ) {
@@ -84,7 +85,7 @@ func (r *tagRepositoryImpl) GetTagXrefs(tagEntity *entities.TagEntity) (
 	return
 }
 
-//GetTagObjectXrefs 
+//GetTagObjectXrefs
 func (r *tagRepositoryImpl) GetTagObjectXrefs(tagObject models.Object) (
 	tagXrefEntities []*entities.TagXrefEntity, err errors.Error,
 ) {
@@ -139,5 +140,32 @@ func (r *tagRepositoryImpl) RemoveTagXref(tagXrefEntity *entities.TagXrefEntity)
 		err = errors.NewSystemErrorFromBuiltin(gormErr)
 	}
 
+	return
+}
+
+//ListObjectTags
+func (r *tagRepositoryImpl) ListObjectTags(
+	tagObject models.Object, tagPaginationQuery *models.TagPaginationQuery,
+) (paginationResult *models.PaginationResult, err errors.Error) {
+	paginationTotal, tagEntities := 0, make([]*entities.TagEntity, tagPaginationQuery.Limit)
+
+	db := r.db.Model(&tagEntities).
+		Joins(fmt.Sprintf(
+			"inner join %s on %s.id = %s.tag_id",
+			entities.TagXrefTableName,
+			entities.TagTableName,
+			entities.TagXrefTableName,
+		)).
+		Where(fmt.Sprintf("%s.object_type = ?", entities.TagXrefTableName), tagObject.ObjectType()).
+		Where(fmt.Sprintf("%s.object_id = ?", entities.TagXrefTableName), tagObject.ObjectId()).
+		Order(fmt.Sprintf("%s.created desc", entities.TagTableName))
+
+	err = r.dbPaginator.Paginate(db, tagPaginationQuery.PaginationQuery, &tagEntities, &paginationTotal)
+
+	if nil != err {
+		return
+	}
+
+	paginationResult = &models.PaginationResult{Total: paginationTotal, Data: tagEntities}
 	return
 }

@@ -16,5 +16,7 @@ type (
 		ChangeCategoryParent(categoryId *models.CategoryId, parentCategoryId *models.CategoryId) errors.Error
 		RemoveCategoryParent(categoryId *models.CategoryId) errors.Error
 		DeleteCategory(categoryId *models.CategoryId) (err errors.Error)
+
+		ListObjectCategories(models.Object, *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error)
 	}
 )

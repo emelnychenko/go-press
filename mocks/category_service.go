@@ -239,3 +239,18 @@ func (mr *MockCategoryServiceMockRecorder) DeleteCategoryXref(arg0 interface{}) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCategoryXref", reflect.TypeOf((*MockCategoryService)(nil).DeleteCategoryXref), arg0)
 }
+
+// ListObjectCategories mocks base method
+func (m *MockCategoryService) ListObjectCategories(arg0 models.Object, arg1 *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListObjectCategories", arg0, arg1)
+	ret0, _ := ret[0].(*models.PaginationResult)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// ListObjectCategories indicates an expected call of ListObjectCategories
+func (mr *MockCategoryServiceMockRecorder) ListObjectCategories(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListObjectCategories", reflect.TypeOf((*MockCategoryService)(nil).ListObjectCategories), arg0, arg1)
+}

@@ -7,19 +7,37 @@ import (
 )
 
 type postAggregatorImpl struct {
-	postModelFactory contracts.PostModelFactory
-	subjectResolver  contracts.SubjectResolver
-	fileApi          contracts.FileApi
+	postModelFactory     contracts.PostModelFactory
+	subjectResolver      contracts.SubjectResolver
+	fileApi              contracts.FileApi
+	categoryModelFactory contracts.CategoryModelFactory
+	categoryApi          contracts.CategoryApi
+	tagModelFactory      contracts.TagModelFactory
+	tagApi               contracts.TagApi
 }
 
+//NewPostAggregator
 func NewPostAggregator(
 	postModelFactory contracts.PostModelFactory,
 	subjectResolver contracts.SubjectResolver,
 	fileApi contracts.FileApi,
+	categoryModelFactory contracts.CategoryModelFactory,
+	categoryApi contracts.CategoryApi,
+	tagModelFactory contracts.TagModelFactory,
+	tagApi contracts.TagApi,
 ) contracts.PostAggregator {
-	return &postAggregatorImpl{postModelFactory, subjectResolver, fileApi}
+	return &postAggregatorImpl{
+		postModelFactory,
+		subjectResolver,
+		fileApi,
+		categoryModelFactory,
+		categoryApi,
+		tagModelFactory,
+		tagApi,
+	}
 }
 
+//AggregatePost
 func (a *postAggregatorImpl) AggregatePost(postEntity *entities.PostEntity) (post *models.Post) {
 	post = a.postModelFactory.CreatePost()
 	post.Id = postEntity.Id
@@ -32,29 +50,79 @@ func (a *postAggregatorImpl) AggregatePost(postEntity *entities.PostEntity) (pos
 	post.Views = postEntity.Views
 	post.Created = postEntity.Created
 	post.Updated = postEntity.Updated
-	post.Author, _ = a.subjectResolver.ResolveSubject(postEntity.AuthorId, postEntity.AuthorType)
+
+	queue := 0
+	done := make(chan bool)
+
+	queue++
+	// TODO: Add error log
+	go func(done chan bool) {
+		post.Author, _ = a.subjectResolver.ResolveSubject(postEntity.AuthorId, postEntity.AuthorType)
+		done <- true
+	}(done)
+
+	queue++
+	// TODO: Add error log
+	go func(done chan bool) {
+		categoryPaginationQuery := a.categoryModelFactory.CreateCategoryPaginationQuery()
+		post.Categories, _ = a.categoryApi.ListObjectCategories(postEntity, categoryPaginationQuery)
+		done <- true
+	}(done)
+
+	queue++
+	// TODO: Add error log
+	go func(done chan bool) {
+		tagPaginationQuery := a.tagModelFactory.CreateTagPaginationQuery()
+		post.Tags, _ = a.tagApi.ListObjectTags(postEntity, tagPaginationQuery)
+		done <- true
+	}(done)
 
 	if nil != postEntity.PictureId {
-		post.Picture, _ = a.fileApi.GetFile(postEntity.PictureId)
+		queue++
+		// TODO: Add error log
+		go func(done chan bool) {
+			post.Picture, _ = a.fileApi.GetFile(postEntity.PictureId)
+			done <- true
+		}(done)
 	}
 
 	if nil != postEntity.VideoId {
-		post.Video, _ = a.fileApi.GetFile(postEntity.VideoId)
+		queue++
+		// TODO: Add error log
+		go func(done chan bool) {
+			post.Video, _ = a.fileApi.GetFile(postEntity.VideoId)
+			done <- true
+		}(done)
 	}
 
+	for i := 0; i < queue; i++ {
+		<-done
+	}
+
+	close(done)
 	return
 }
 
+//AggregatePosts
 func (a *postAggregatorImpl) AggregatePosts(postEntities []*entities.PostEntity) (posts []*models.Post) {
 	posts = make([]*models.Post, len(postEntities))
+	post := make(chan *models.Post, len(postEntities))
 
-	for k, postEntity := range postEntities {
-		posts[k] = a.AggregatePost(postEntity)
+	for _, postEntity := range postEntities {
+		go func(postEntity *entities.PostEntity, post chan *models.Post) {
+			post <- a.AggregatePost(postEntity)
+		}(postEntity, post)
 	}
 
+	for k := range postEntities {
+		posts[k] = <-post
+	}
+
+	close(post)
 	return
 }
 
+//AggregatePaginationResult
 func (a *postAggregatorImpl) AggregatePaginationResult(
 	entityPaginationResult *models.PaginationResult,
 ) (

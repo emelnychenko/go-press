@@ -14,7 +14,6 @@ func NewTagByIdNotFoundError(tagId fmt.Stringer) Error {
 	return NewTagNotFoundError(request)
 }
 
-
 //NewTagXrefNotFoundError
 func NewTagXrefNotFoundError(request string) Error {
 	message := fmt.Sprintf("The tag reference was not found on request: %s", request)

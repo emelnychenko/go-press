@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	PostTableName = "posts"
+	PostTableName                          = "posts"
 	PostEntityObjectType models.ObjectType = "post"
 )
 

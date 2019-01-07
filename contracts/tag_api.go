@@ -12,5 +12,7 @@ type (
 		CreateTag(data *models.TagCreate) (tag *models.Tag, err errors.Error)
 		UpdateTag(tagId *models.TagId, data *models.TagUpdate) (err errors.Error)
 		DeleteTag(tagId *models.TagId) (err errors.Error)
+
+		ListObjectTags(models.Object, *models.TagPaginationQuery) (*models.PaginationResult, errors.Error)
 	}
 )

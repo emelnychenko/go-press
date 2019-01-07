@@ -171,4 +171,19 @@ func TestTagService(t *testing.T) {
 
 		assert.Nil(t, err)
 	})
+
+	t.Run("ListObjectTags", func(t *testing.T) {
+		tagPaginationQuery := new(models.TagPaginationQuery)
+		tagObject := mocks.NewMockObject(ctrl)
+
+		var tagEntities *models.PaginationResult
+		tagRepository := mocks.NewMockTagRepository(ctrl)
+		tagRepository.EXPECT().ListObjectTags(tagObject, tagPaginationQuery).Return(tagEntities, nil)
+
+		tagService := &tagServiceImpl{tagRepository: tagRepository}
+		response, err := tagService.ListObjectTags(tagObject, tagPaginationQuery)
+
+		assert.Equal(t, tagEntities, response)
+		assert.Nil(t, err)
+	})
 }

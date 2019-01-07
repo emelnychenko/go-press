@@ -156,3 +156,12 @@ func (s *categoryServiceImpl) CreateCategoryXref(categoryEntity *entities.Catego
 func (s *categoryServiceImpl) DeleteCategoryXref(categoryXrefEntity *entities.CategoryXrefEntity) errors.Error {
 	return s.categoryRepository.RemoveCategoryXref(categoryXrefEntity)
 }
+
+//ListObjectCategories
+func (s *categoryServiceImpl) ListObjectCategories(
+	categoryObject models.Object, categoryPaginationQuery *models.CategoryPaginationQuery,
+) (
+	*models.PaginationResult, errors.Error,
+) {
+	return s.categoryRepository.ListObjectCategories(categoryObject, categoryPaginationQuery)
+}

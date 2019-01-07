@@ -23,5 +23,7 @@ type (
 		GetCategoryXref(*entities.CategoryEntity, models.Object) (*entities.CategoryXrefEntity, errors.Error)
 		CreateCategoryXref(*entities.CategoryEntity, models.Object) (*entities.CategoryXrefEntity, errors.Error)
 		DeleteCategoryXref(*entities.CategoryXrefEntity) errors.Error
+
+		ListObjectCategories(models.Object, *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error)
 	}
 )

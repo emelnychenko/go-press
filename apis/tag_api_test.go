@@ -245,4 +245,39 @@ func TestTagApi(t *testing.T) {
 		err := tagApi.DeleteTag(tagId)
 		assert.Equal(t, systemErr, err)
 	})
+
+	t.Run("ListObjectTags", func(t *testing.T) {
+		tagObject := mocks.NewMockObject(ctrl)
+		paginationQuery := new(models.TagPaginationQuery)
+		entityPaginationResult := new(models.PaginationResult)
+		paginationResult := new(models.PaginationResult)
+
+		tagService := mocks.NewMockTagService(ctrl)
+		tagService.EXPECT().ListObjectTags(tagObject, paginationQuery).Return(entityPaginationResult, nil)
+
+		tagAggregator := mocks.NewMockTagAggregator(ctrl)
+		tagAggregator.EXPECT().AggregatePaginationResult(entityPaginationResult).Return(paginationResult)
+
+		tagApi := &tagApiImpl{tagService: tagService, tagAggregator: tagAggregator}
+		response, err := tagApi.ListObjectTags(tagObject, paginationQuery)
+
+		assert.Equal(t, paginationResult, response)
+		assert.Nil(t, err)
+	})
+
+	t.Run("ListObjectTags:ServiceListObjectTagsError", func(t *testing.T) {
+		systemErr := errors.NewUnknownError()
+
+		tagObject := mocks.NewMockObject(ctrl)
+		paginationQuery := new(models.TagPaginationQuery)
+
+		tagService := mocks.NewMockTagService(ctrl)
+		tagService.EXPECT().ListObjectTags(tagObject, paginationQuery).Return(nil, systemErr)
+
+		tagApi := &tagApiImpl{tagService: tagService}
+		response, err := tagApi.ListObjectTags(tagObject, paginationQuery)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
 }

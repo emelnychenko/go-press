@@ -73,8 +73,8 @@ func NewCategoryXrefEntity(categoryEntity *CategoryEntity, categoryObject models
 	return &CategoryXrefEntity{
 		CategoryId: categoryEntity.Id,
 		ObjectType: categoryObject.ObjectType(),
-		ObjectId: categoryObject.ObjectId(),
-		Created: &created,
+		ObjectId:   categoryObject.ObjectId(),
+		Created:    &created,
 	}
 }
 

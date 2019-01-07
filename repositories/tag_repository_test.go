@@ -218,4 +218,42 @@ func TestTagRepository(t *testing.T) {
 		tagXrefEntity := new(entities.TagXrefEntity)
 		assert.Error(t, tagRepository.RemoveTagXref(tagXrefEntity))
 	})
+
+	t.Run("ListObjectTags", func(t *testing.T) {
+		tagObject := mocks.NewMockObject(ctrl)
+		tagObject.EXPECT().ObjectType().Return(models.ObjectType("object"))
+		tagObject.EXPECT().ObjectId().Return(new(models.ObjectId))
+
+		tagPaginationQuery := &models.TagPaginationQuery{
+			PaginationQuery: &models.PaginationQuery{Limit: 20},
+		}
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+		dbPaginator.EXPECT().Paginate(
+			gomock.Any(), tagPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
+		).Return(nil)
+
+		paginationResult, err := tagRepository.ListObjectTags(tagObject, tagPaginationQuery)
+		assert.IsType(t, []*entities.TagEntity{}, paginationResult.Data)
+		assert.Nil(t, err)
+	})
+
+	t.Run("ListObjectTags:GormError", func(t *testing.T) {
+		systemErr := errors.NewUnknownError()
+
+		tagObject := mocks.NewMockObject(ctrl)
+		tagObject.EXPECT().ObjectType().Return(models.ObjectType("object"))
+		tagObject.EXPECT().ObjectId().Return(new(models.ObjectId))
+
+		tagPaginationQuery := &models.TagPaginationQuery{
+			PaginationQuery: &models.PaginationQuery{Limit: 20},
+		}
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+		dbPaginator.EXPECT().Paginate(
+			gomock.Any(), tagPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
+		).Return(systemErr)
+
+		tagEntities, err := tagRepository.ListObjectTags(tagObject, tagPaginationQuery)
+		assert.Nil(t, tagEntities)
+		assert.Equal(t, systemErr, err)
+	})
 }

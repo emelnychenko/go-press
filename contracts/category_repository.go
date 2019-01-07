@@ -22,5 +22,7 @@ type (
 		GetCategoryXref(*entities.CategoryEntity, models.Object) (*entities.CategoryXrefEntity, errors.Error)
 		SaveCategoryXref(*entities.CategoryXrefEntity) errors.Error
 		RemoveCategoryXref(*entities.CategoryXrefEntity) errors.Error
+
+		ListObjectCategories(models.Object, *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error)
 	}
 )

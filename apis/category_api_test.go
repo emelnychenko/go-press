@@ -449,4 +449,39 @@ func TestCategoryApi(t *testing.T) {
 		err := categoryApi.DeleteCategory(categoryId)
 		assert.Equal(t, systemErr, err)
 	})
+
+	t.Run("ListObjectCategories", func(t *testing.T) {
+		categoryObject := mocks.NewMockObject(ctrl)
+		paginationQuery := new(models.CategoryPaginationQuery)
+		entityPaginationResult := new(models.PaginationResult)
+		paginationResult := new(models.PaginationResult)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().ListObjectCategories(categoryObject, paginationQuery).Return(entityPaginationResult, nil)
+
+		categoryAggregator := mocks.NewMockCategoryAggregator(ctrl)
+		categoryAggregator.EXPECT().AggregatePaginationResult(entityPaginationResult).Return(paginationResult)
+
+		categoryApi := &categoryApiImpl{categoryService: categoryService, categoryAggregator: categoryAggregator}
+		response, err := categoryApi.ListObjectCategories(categoryObject, paginationQuery)
+
+		assert.Equal(t, paginationResult, response)
+		assert.Nil(t, err)
+	})
+
+	t.Run("ListObjectCategories:ServiceListObjectCategoriesError", func(t *testing.T) {
+		systemErr := errors.NewUnknownError()
+
+		categoryObject := mocks.NewMockObject(ctrl)
+		paginationQuery := new(models.CategoryPaginationQuery)
+
+		categoryService := mocks.NewMockCategoryService(ctrl)
+		categoryService.EXPECT().ListObjectCategories(categoryObject, paginationQuery).Return(nil, systemErr)
+
+		categoryApi := &categoryApiImpl{categoryService: categoryService}
+		response, err := categoryApi.ListObjectCategories(categoryObject, paginationQuery)
+
+		assert.Nil(t, response)
+		assert.Equal(t, systemErr, err)
+	})
 }

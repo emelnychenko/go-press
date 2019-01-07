@@ -312,4 +312,42 @@ func TestCategoryRepository(t *testing.T) {
 		categoryXrefEntity := new(entities.CategoryXrefEntity)
 		assert.Error(t, categoryRepository.RemoveCategoryXref(categoryXrefEntity))
 	})
+
+	t.Run("ListObjectCategories", func(t *testing.T) {
+		categoryObject := mocks.NewMockObject(ctrl)
+		categoryObject.EXPECT().ObjectType().Return(models.ObjectType("object"))
+		categoryObject.EXPECT().ObjectId().Return(new(models.ObjectId))
+
+		categoryPaginationQuery := &models.CategoryPaginationQuery{
+			PaginationQuery: &models.PaginationQuery{Limit: 20},
+		}
+		mocket.Catcher.Reset().NewMock().WithQuery("SELECT *").WithReply(commonReply)
+		dbPaginator.EXPECT().Paginate(
+			gomock.Any(), categoryPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
+		).Return(nil)
+
+		paginationResult, err := categoryRepository.ListObjectCategories(categoryObject, categoryPaginationQuery)
+		assert.IsType(t, []*entities.CategoryEntity{}, paginationResult.Data)
+		assert.Nil(t, err)
+	})
+
+	t.Run("ListObjectCategories:GormError", func(t *testing.T) {
+		systemErr := errors.NewUnknownError()
+
+		categoryObject := mocks.NewMockObject(ctrl)
+		categoryObject.EXPECT().ObjectType().Return(models.ObjectType("object"))
+		categoryObject.EXPECT().ObjectId().Return(new(models.ObjectId))
+
+		categoryPaginationQuery := &models.CategoryPaginationQuery{
+			PaginationQuery: &models.PaginationQuery{Limit: 20},
+		}
+		mocket.Catcher.Reset().NewMock().Error = gorm.ErrInvalidSQL
+		dbPaginator.EXPECT().Paginate(
+			gomock.Any(), categoryPaginationQuery.PaginationQuery, gomock.Any(), gomock.Any(),
+		).Return(systemErr)
+
+		categoryEntities, err := categoryRepository.ListObjectCategories(categoryObject, categoryPaginationQuery)
+		assert.Nil(t, categoryEntities)
+		assert.Equal(t, systemErr, err)
+	})
 }

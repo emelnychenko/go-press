@@ -164,3 +164,18 @@ func (mr *MockCategoryApiMockRecorder) DeleteCategory(categoryId interface{}) *g
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCategory", reflect.TypeOf((*MockCategoryApi)(nil).DeleteCategory), categoryId)
 }
+
+// ListObjectCategories mocks base method
+func (m *MockCategoryApi) ListObjectCategories(arg0 models.Object, arg1 *models.CategoryPaginationQuery) (*models.PaginationResult, errors.Error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListObjectCategories", arg0, arg1)
+	ret0, _ := ret[0].(*models.PaginationResult)
+	ret1, _ := ret[1].(errors.Error)
+	return ret0, ret1
+}
+
+// ListObjectCategories indicates an expected call of ListObjectCategories
+func (mr *MockCategoryApiMockRecorder) ListObjectCategories(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListObjectCategories", reflect.TypeOf((*MockCategoryApi)(nil).ListObjectCategories), arg0, arg1)
+}

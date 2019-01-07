@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	UserTableName         = "users"
+	UserTableName                            = "users"
 	UserEntitySubjectType models.SubjectType = "user"
 )
 

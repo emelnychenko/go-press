@@ -20,6 +20,8 @@ type (
 		Video       *File             `json:"video" xml:"video"`
 		Views       int               `json:"views" xml:"views"`
 		Published   *time.Time        `json:"published" xml:"published"`
+		Categories  *PaginationResult `json:"categories" xml:"categories"`
+		Tags        *PaginationResult `json:"tags" xml:"tags"`
 		Created     *time.Time        `json:"created" xml:"created"`
 		Updated     *time.Time        `json:"updated" xml:"updated"`
 	}

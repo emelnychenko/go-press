@@ -329,4 +329,19 @@ func TestCategoryService(t *testing.T) {
 
 		assert.Nil(t, err)
 	})
+
+	t.Run("ListObjectCategories", func(t *testing.T) {
+		categoryPaginationQuery := new(models.CategoryPaginationQuery)
+		tagObject := mocks.NewMockObject(ctrl)
+
+		var categoryEntities *models.PaginationResult
+		categoryRepository := mocks.NewMockCategoryRepository(ctrl)
+		categoryRepository.EXPECT().ListObjectCategories(tagObject, categoryPaginationQuery).Return(categoryEntities, nil)
+
+		categoryService := &categoryServiceImpl{categoryRepository: categoryRepository}
+		response, err := categoryService.ListObjectCategories(tagObject, categoryPaginationQuery)
+
+		assert.Equal(t, categoryEntities, response)
+		assert.Nil(t, err)
+	})
 }
