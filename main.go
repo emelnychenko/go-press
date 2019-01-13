@@ -103,6 +103,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(factories.NewPostPictureEventFactory)
 	_ = container.Provide(factories.NewPostVideoEventFactory)
 	_ = container.Provide(factories.NewPostAuthorEventFactory)
+	_ = container.Provide(factories.NewPostCategoryEventFactory)
+	_ = container.Provide(factories.NewPostTagEventFactory)
 	_ = container.Provide(factories.NewPostModelFactory)
 	_ = container.Provide(factories.NewFileEntityFactory)
 	_ = container.Provide(factories.NewFileEventFactory)
@@ -147,6 +149,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(services.NewPostAuthorService)
 	_ = container.Provide(services.NewPostPictureService)
 	_ = container.Provide(services.NewPostVideoService)
+	_ = container.Provide(services.NewPostCategoryService)
+	_ = container.Provide(services.NewPostTagService)
 	_ = container.Provide(services.NewChannelService)
 	_ = container.Provide(services.NewCategoryService)
 	_ = container.Provide(services.NewTagService)
@@ -168,6 +172,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(apis.NewPostAuthorApi)
 	_ = container.Provide(apis.NewPostPictureApi)
 	_ = container.Provide(apis.NewPostVideoApi)
+	_ = container.Provide(apis.NewPostCategoryApi)
+	_ = container.Provide(apis.NewPostTagApi)
 	_ = container.Provide(apis.NewFileApi)
 	_ = container.Provide(apis.NewCommentApi)
 	_ = container.Provide(apis.NewCategoryApi)
@@ -181,6 +187,8 @@ func BuildContainer() (container *dig.Container) {
 	_ = container.Provide(controllers.NewPostAuthorController)
 	_ = container.Provide(controllers.NewPostPictureController)
 	_ = container.Provide(controllers.NewPostVideoController)
+	_ = container.Provide(controllers.NewPostCategoryController)
+	_ = container.Provide(controllers.NewPostTagController)
 	_ = container.Provide(controllers.NewFileController)
 	_ = container.Provide(controllers.NewCommentController)
 	_ = container.Provide(controllers.NewCategoryController)
@@ -191,41 +199,38 @@ func BuildContainer() (container *dig.Container) {
 	return
 }
 
-func BindRoutes(
-	router contracts.Router,
-	userController contracts.UserController,
-	userPictureController contracts.UserPictureController,
-	postController contracts.PostController,
-	postAuthorController contracts.PostAuthorController,
-	postPictureController contracts.PostPictureController,
-	PostVideoController contracts.PostVideoController,
-	fileController contracts.FileController,
-	commentController contracts.CommentController,
-	categoryController contracts.CategoryController,
-	tagController contracts.TagController,
-	channelController contracts.ChannelController,
-	bannerController contracts.BannerController,
-	pollController contracts.PollController,
-) {
-	controllers.BindUserRoutes(router, userController)
-	controllers.BindUserPictureRoutes(router, userPictureController)
-	controllers.BindPostRoutes(router, postController)
-	controllers.BindPostAuthorRoutes(router, postAuthorController)
-	controllers.BindPostPictureRoutes(router, postPictureController)
-	controllers.BindPostVideoRoutes(router, PostVideoController)
-	controllers.BindFileRoutes(router, fileController)
-	controllers.BindCommentRoutes(router, commentController)
-	controllers.BindCategoryRoutes(router, categoryController)
-	controllers.BindTagRoutes(router, tagController)
-	controllers.BindChannelRoutes(router, channelController)
-	controllers.BindBannerRoutes(router, bannerController)
-	controllers.BindPollRoutes(router, pollController)
+func BindRoutes(container *dig.Container) (err error) {
+	binders := []interface{}{
+		controllers.BindUserRoutes,
+		controllers.BindUserPictureRoutes,
+		controllers.BindPostRoutes,
+		controllers.BindPostAuthorRoutes,
+		controllers.BindPostPictureRoutes,
+		controllers.BindPostVideoRoutes,
+		controllers.BindPostCategoryRoutes,
+		controllers.BindPostTagRoutes,
+		controllers.BindFileRoutes,
+		controllers.BindCommentRoutes,
+		controllers.BindCategoryRoutes,
+		controllers.BindTagRoutes,
+		controllers.BindChannelRoutes,
+		controllers.BindBannerRoutes,
+		controllers.BindPollRoutes,
+	}
+
+	for _, binder := range binders {
+		if err = container.Invoke(binder); nil != err {
+			return
+		}
+	}
+
+	return
 }
 
 func main() {
 	container := BuildContainer()
 
-	if err := container.Invoke(BindRoutes); err != nil {
+	if err := BindRoutes(container); err != nil {
 		panic(err)
 	}
 
@@ -233,7 +238,7 @@ func main() {
 		panic(err)
 	}
 
-	err := container.Invoke(func(e *echo.Echo, db *gorm.DB, worker contracts.PostPublisherWorker) {
+	err := container.Invoke(func(e *echo.Echo, db *gorm.DB) {
 		defer db.Close()
 		db.LogMode(true)
 		e.Logger.Fatal(e.Start(":1323"))
