@@ -4,6 +4,6 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
-# Golang Press
+# Golang Press (WIP)
 
 Content Management System API on Golang for any purpose. Built on the integration of cloud services.
